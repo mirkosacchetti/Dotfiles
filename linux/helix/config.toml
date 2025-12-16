@@ -11,7 +11,7 @@ normal = "block"
 select = "underline"
 
 [editor.file-picker]
-hidden = false
+hidden = true
 
 [editor.soft-wrap]
 enable = true

@@ -8,6 +8,7 @@ set recolor               true
 # set guioptions none
 set selection-notification false
 set statusbar-at-top true
+set continuous-hist-save true
 
 unmap h
 unmap j
@@ -63,6 +64,4 @@ set recolor-darkcolor           "#ECEFF4"
 
 set highlight-color            "rgba(126, 136, 159, 0.2)"
 set highlight-active-color     "rgba(126, 136, 159, 0.2)"
-
-
 

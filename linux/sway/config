@@ -23,7 +23,7 @@ output * bg /home/m/Dotfiles/Nighthawks_by_Edward_Hopper_1942.jpg fill
 ###########  
 ### i/o
 ###########  
-set $laptop_display "eDP-1"
+set $laptop_display "Lenovo Group Limited 0x414B Unknown"
 set $laptop_keyboard "1:1:AT_Translated_Set_2_keyboard"
 # check inputs names with: swaymsg -t get_intputs
 # check outputs names with: swaymsg -t get_outputs
@@ -38,19 +38,18 @@ input "2:10:TPPS/2_Elan_TrackPoint" {
 }
 # 27" external displays
 output "Dell Inc. DELL U2725QE GNM6C34" {
-    resolution 3840x2160@120.000Hz
+    resolution 3840x2160@120.000Hz 
     scale 1.358333
     position 0 0
 }
 # 27" second vertical external displays
 output "LG Electronics LG HDR 4K 0x00006D62" {
-    resolution 2560x1440@30.000Hz
+    scale 1.358333
     transform 90
-    scale 1.4
 }
 # 14" notebook display
 output $laptop_display {
-    res 2880x1800@120.000Hz
+    resolution 2880x1800@120.000Hz 
     scale 2
 }
 # Clamshell mode for laptop
@@ -79,13 +78,16 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
-bindsym XF86Display exec swaymsg output $laptop_display toggle
+bindsym XF86Display exec swaymsg output "eDP-1" toggle
 # save screenshots in the clipboard (secondary selection)
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym control+Print exec grim - | wl-copy
+# pick color and save in the clipboard (secondary selection)
 #bindsym $mod+grave exec hyprpicker | wl-copy
+# video with no audio
+#bindsym $mod+v exec wf-recorder -g "$(slurp)" -f "$HOME/Videos/screencast-$(date +%Y%m%d-%H%M%S).mp4"
 # zen mode
-bindsym $mod+z exec fish -c 'if pgrep -x waybar >/dev/null 2>&1; killall waybar; dunstctl set-paused true; else; nohup waybar >/dev/null 2>&1 & dunstctl set-paused false; end'
+bindsym $mod+z exec /home/m/.local/bin/pomidore zen-toggle
 
 ###########  
 ### workspaces
@@ -134,8 +136,8 @@ bindsym $mod+control+9 move container to workspace number 9
 bindsym $mod+control+m move container to workspace $ws_main
 # change layout mode for the focused container
 bindsym $mod+a split horizontal
-bindsym $mod+w layout toggle tabbed stacking
-bindsym $mod+s layout toggle split
+bindsym $mod+w layout toggle stacking tabbed 
+bindsym $mod+s layout toggle splitv splith
 
 ###########  
 ### windows
@@ -239,10 +241,9 @@ bar {
 ###########  
 # My notification daemon
 exec dunst
-# Adjust screen color temperature based on location/time
+# Adjust screen color temperature based on location/time (lat/lon in .config/gammastaep/config.ini)
 exec gammastep
 # My apps
 exec chromium
-exec $term
 exec betterbird
 exec Telegram

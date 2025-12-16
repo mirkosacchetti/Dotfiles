@@ -69,3 +69,41 @@ button:hover {
     font-style: italic;
     color: #bf616a;
 }
+
+/* Pomidore Timer Styles */
+#custom-pomidore {
+    padding: 0 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+#custom-pomidore.pomodoro-work {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.2);
+}
+
+#custom-pomidore.pomodoro-short_break {
+    color: #4ecdc4;
+    background: rgba(78, 205, 196, 0.2);
+}
+
+#custom-pomidore.pomodoro-long_break {
+    color: #45b7d1;
+    background: rgba(69, 183, 209, 0.2);
+}
+
+#custom-pomidore.pomodoro-paused {
+    color: #f7b731;
+    background: rgba(247, 183, 49, 0.2);
+}
+
+#custom-pomidore.pomodoro-idle {
+    color: #95a5a6;
+    background: rgba(149, 165, 166, 0.15);
+}
+
+#custom-pomidore.pomodoro-timer {
+    color: #9b59b6;
+    background: rgba(155, 89, 182, 0.2);
+}

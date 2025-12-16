@@ -6,17 +6,10 @@
     "modules-left": [
         "sway/workspaces",
         "sway/mode",
-        "sway/scratchpad",
-        "hyprland/workspaces"
+        "sway/scratchpad"
     ],
-    //"modules-center": [
-   //     "custom/launcher",
-  //      "custom/split-toggle",
-//        "custom/layout-toggle",
- //       "custom/new-layout-split",
-    //    "custom/kill-window"
-    //],
     "modules-right": [
+        "custom/pomidore",
         "wireplumber",
         "bluetooth",
         "network",
@@ -26,35 +19,8 @@
         "tray",
         "clock"
     ],
-    "mpris": {
-        "format": "{player_icon}",
-        "format-paused": "{status_icon}",
-        "player-icons": {
-            "default": "⏸" 
-        },
-        "status-icons": {
-            "paused": "▶"
-        }
-    },
     "sway/mode": {
         "format": "{}"
-    },
-    "hyprland/workspaces": {
-    "on-click": "activate",
-    "format": "{icon}",
-    "format-icons": {
-      "default": "",
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
-      "9": "9",
-      "active": "󱓻"
-    }
     },
     "sway/scratchpad": {
         "format": "{icon} {count}",
@@ -74,7 +40,7 @@
     },
     "tray": { },
     "clock": {
-        "on-click" : "/home/m/Projects/deca/build/deca",
+        "on-click" : "/home/m/Projects/calendar/build/deca",
         "format": "{:%Y-%m-%d %A %H:%M}",
         "locale": "it_IT.UTF-8",
         "tooltip": false
@@ -134,30 +100,19 @@
         "menu": "on-click",
         "menu-file": "$HOME/.config/waybar/power_menu.xml",
         "menu-actions": {
-            "shutdown": "sudo poweroff",
-            "reboot": "sudo reboot",
+            "shutdown": "systemctl poweroff",
+            "reboot": "systemctl reboot",
             "suspend": "systemctl suspend",
             "hibernate": "systemctl hibernate"
         }
     },
-    "custom/launcher":{
-        "format" : "▢",
-        "on-click" : "fuzzel "
-    },
-    "custom/split-toggle":{
-        "format" : "🜂",
-        "on-click" : "swaymsg layout toggle split"
-    },
-    "custom/layout-toggle":{
-        "format" : "🜃",
-        "on-click" : "swaymsg layout toggle tabbed stacking"
-    },
-    "custom/kill-window":{
-        "format" : "◎",
-        "on-click" : "swaymsg kill"
-    },
-    "custom/new-layout-split":{
-        "format" : "🜉",
-        "on-click" : "swaymsg split horizontal"
+    "custom/pomidore": {
+        "exec": "pomidore status --waybar",
+        "interval": 1,
+        "format": "{}",
+        "return-type": "json",
+        "on-click": "pomidore toggle",
+        "on-click-right": "pomidore stop",
+        "tooltip": true
     }
 }
