@@ -83,7 +83,7 @@ bindsym XF86Display exec swaymsg output "eDP-1" toggle
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym control+Print exec grim - | wl-copy
 # pick color and save in the clipboard (secondary selection)
-#bindsym $mod+grave exec hyprpicker | wl-copy
+bindsym $mod+grave exec hyprpicker | wl-copy
 # video with no audio
 #bindsym $mod+v exec wf-recorder -g "$(slurp)" -f "$HOME/Videos/screencast-$(date +%Y%m%d-%H%M%S).mp4"
 # zen mode
@@ -120,6 +120,9 @@ bindsym $mod+comma workspace prev
 bindsym $mod+period workspace next
 bindsym $mod+Tab workspace back_and_forth
 
+bindsym $mod+bracketleft move workspace to output left
+bindsym $mod+bracketright move workspace to output right
+
 ###########  
 ### containers
 ###########  
@@ -152,11 +155,12 @@ assign [app_id="com.transmissionbt*"] $ws_stuff
 # floating windows for daemonized programs 
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
 for_window [app_id="blueberry.py"] floating enable
+for_window [app_id="org.gnome.Calculator"] floating enable
 # resize window 
 bindsym $mod+equal resize grow width 10 px or 10 ppt
 bindsym $mod+minus resize shrink width 10 px or 10 ppt
-bindsym $mod+shift+equal resize grow height 10 px or 10 ppt
-bindsym $mod+shift+minus resize shrink height 10 px or 10 ppt
+bindsym $mod+x resize grow height 10 px or 10 ppt
+bindsym $mod+c resize shrink height 10 px or 10 ppt
 # focus
 bindsym $mod+j focus left
 bindsym $mod+k focus down
@@ -164,14 +168,14 @@ bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
 # focus parent/child container
 bindsym $mod+p focus parent
-bindsym $mod+c focus child
+bindsym $mod+n focus child
 # move focused window
 bindsym $mod+control+j move left
 bindsym $mod+control+k move down
 bindsym $mod+control+l move up
 bindsym $mod+control+semicolon move right
 # kill focused window
-bindsym $mod+control+q kill
+bindsym $mod+q kill
 # fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 # floating mode for the focused container
