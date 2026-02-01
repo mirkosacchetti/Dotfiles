@@ -14,6 +14,7 @@ alias dl="cd ~/Downloads"
 alias do="cd ~/Dotfiles"
 alias wn="cd ~/Code/WiNet"
 alias ms="cd ~/Writings/MS/"
+alias rr="cd ~/Writings/RR/"
 alias co="cd ~/Code"
 # Sunday as first day of the week is a bestemmia
 alias cal="cal -3m"

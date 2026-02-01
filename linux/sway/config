@@ -44,6 +44,7 @@ output "Dell Inc. DELL U2725QE GNM6C34" {
 }
 # 27" second vertical external displays
 output "LG Electronics LG HDR 4K 0x00006D62" {
+    resolution 3840x2160@60.000Hz 
     scale 1.358333
     transform 90
 }
@@ -67,7 +68,7 @@ bindsym button6 nop
 # start my terminal
 bindsym $mod+Return exec $term
 # start my launcher
-bindsym $mod+d exec $menu
+bindsym $mod+space exec $menu
 # media key/syms
 bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.2
 bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
@@ -93,17 +94,14 @@ bindsym $mod+z exec /home/m/.local/bin/pomidore zen-toggle
 ### workspaces
 ###########  
 # move current workspace to different monitor
-bindsym $mod+Prior move workspace to output left
-bindsym $mod+Next move workspace to output right
-bindsym $mod+left move workspace to output left
-bindsym $mod+right move workspace to output right
+bindsym $mod+x move workspace to output right
+bindsym $mod+c move workspace to output left
 # Allow switching between workspaces with left and right swipes
 bindgesture swipe:right workspace prev
 bindgesture swipe:left workspace next
 # switch to workspace
 set $ws_office 5
 set $ws_stuff 6
-set $ws_media 9
 set $ws_main M
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
@@ -114,14 +112,13 @@ bindsym $mod+6 workspace number 6
 bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
 bindsym $mod+m workspace $ws_main
 # navigate active workspaces
 bindsym $mod+comma workspace prev
 bindsym $mod+period workspace next
 bindsym $mod+Tab workspace back_and_forth
 
-bindsym $mod+bracketleft move workspace to output left
-bindsym $mod+bracketright move workspace to output right
 
 ###########  
 ### containers
@@ -136,11 +133,12 @@ bindsym $mod+control+6 move container to workspace number 6
 bindsym $mod+control+7 move container to workspace number 7
 bindsym $mod+control+8 move container to workspace number 8
 bindsym $mod+control+9 move container to workspace number 9
+bindsym $mod+control+0 move container to workspace number 10
 bindsym $mod+control+m move container to workspace $ws_main
 # change layout mode for the focused container
 bindsym $mod+a split horizontal
-bindsym $mod+w layout toggle stacking tabbed 
 bindsym $mod+s layout toggle splitv splith
+bindsym $mod+d layout toggle stacking tabbed 
 
 ###########  
 ### windows
@@ -159,8 +157,8 @@ for_window [app_id="org.gnome.Calculator"] floating enable
 # resize window 
 bindsym $mod+equal resize grow width 10 px or 10 ppt
 bindsym $mod+minus resize shrink width 10 px or 10 ppt
-bindsym $mod+x resize grow height 10 px or 10 ppt
-bindsym $mod+c resize shrink height 10 px or 10 ppt
+bindsym $mod+bracketleft resize shrink height 10 px or 10 ppt
+bindsym $mod+bracketright move resize grow height 10 px or 10 ppt
 # focus
 bindsym $mod+j focus left
 bindsym $mod+k focus down
@@ -179,11 +177,13 @@ bindsym $mod+q kill
 # fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 # floating mode for the focused container
-bindsym $mod+space focus mode_toggle
-bindsym $mod+control+space floating toggle
+bindsym $mod+r focus mode_toggle
+bindsym $mod+e floating toggle
+bindsym $mod+w sticky toggle
 # reload sway conf
-bindsym button7 nop  
 bindsym $mod+control+r reload
+
+bindsym button7 nop  
 
 ###########  
 ### style
@@ -192,7 +192,6 @@ font pango:Ubuntu Nerd Font, bold 10
 gaps inner 2
 gaps outer 2
 smart_gaps on
-default_border pixel 0
 #2E3440  nord0    black
 #3B4252  nord1    dark_gray
 #434C5E  nord2    gray
