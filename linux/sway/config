@@ -18,7 +18,7 @@ set $menu fuzzel
 # My terminal emulator
 set $term alacritty
 # My background image
-output * bg /home/m/Dotfiles/Nighthawks_by_Edward_Hopper_1942.jpg fill
+output * bg /home/m/Dotfiles/images/boccioni.jpg fill
 
 ###########  
 ### i/o
@@ -30,7 +30,7 @@ set $laptop_keyboard "1:1:AT_Translated_Set_2_keyboard"
 # My laptop i/o 
 input * xkb_options compose:ralt
 input  $laptop_keyboard {
-    xkb_options caps:ctrl_modifier,altwin:swap_alt_win
+    xkb_options caps:ctrl_modifier,altwin:swap_alt_win,shift:both_capslock
 }
 # ThinkPad red nipple
 input "2:10:TPPS/2_Elan_TrackPoint" {
@@ -65,6 +65,7 @@ bindswitch --reload --locked lid:off output $laptop_display enable
 bindsym button4 nop
 bindsym button5 nop
 bindsym button6 nop
+bindsym button7 nop  
 # start my terminal
 bindsym $mod+Return exec $term
 # start my launcher
@@ -88,21 +89,14 @@ bindsym $mod+grave exec hyprpicker | wl-copy
 # video with no audio
 #bindsym $mod+v exec wf-recorder -g "$(slurp)" -f "$HOME/Videos/screencast-$(date +%Y%m%d-%H%M%S).mp4"
 # zen mode
-bindsym $mod+z exec /home/m/.local/bin/pomidore zen-toggle
 
 ###########  
 ### workspaces
 ###########  
-# move current workspace to different monitor
-bindsym $mod+x move workspace to output right
-bindsym $mod+c move workspace to output left
-# Allow switching between workspaces with left and right swipes
-bindgesture swipe:right workspace prev
-bindgesture swipe:left workspace next
 # switch to workspace
 set $ws_office 5
 set $ws_stuff 6
-set $ws_main M
+set $ws_main ◊
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
 bindsym $mod+3 workspace number 3
@@ -113,17 +107,56 @@ bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
-bindsym $mod+m workspace $ws_main
+bindsym $mod+h workspace $ws_main
 # navigate active workspaces
+bindsym $mod+Tab workspace back_and_forth
+bindgesture swipe:right workspace prev
+bindgesture swipe:left workspace next
+
+bindsym $mod+control+r reload
+
+bindsym $mod+q kill
+bindsym $mod+w sticky toggle
+bindsym $mod+e floating toggle
+bindsym $mod+r focus mode_toggle
+
+bindsym $mod+a split horizontal
+bindsym $mod+s layout toggle splitv splith
+bindsym $mod+d layout toggle stacking tabbed
+bindsym $mod+f fullscreen toggle
+
+bindsym $mod+z resize shrink width 10 px or 10 ppt
+bindsym $mod+x resize shrink height 10 px or 10 ppt
+bindsym $mod+c resize grow height 10 px or 10 ppt
+bindsym $mod+v resize grow width 10 px or 10 ppt
+
+###
+
+bindsym $mod+u move workspace to output right
+bindsym $mod+i focus parent
+bindsym $mod+o focus child
+bindsym $mod+p move workspace to output left
+
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
+
+#bindsym $mod+m
 bindsym $mod+comma workspace prev
 bindsym $mod+period workspace next
-bindsym $mod+Tab workspace back_and_forth
+#bindsym $mod+slash 
 
 
 ###########  
 ### containers
 ###########  
-# move focused container to workspace
+# move focused container 
+bindsym $mod+control+j move left
+bindsym $mod+control+k move down
+bindsym $mod+control+l move up
+bindsym $mod+control+semicolon move right
+
 bindsym $mod+control+1 move container to workspace number 1
 bindsym $mod+control+2 move container to workspace number 2
 bindsym $mod+control+3 move container to workspace number 3
@@ -134,11 +167,7 @@ bindsym $mod+control+7 move container to workspace number 7
 bindsym $mod+control+8 move container to workspace number 8
 bindsym $mod+control+9 move container to workspace number 9
 bindsym $mod+control+0 move container to workspace number 10
-bindsym $mod+control+m move container to workspace $ws_main
-# change layout mode for the focused container
-bindsym $mod+a split horizontal
-bindsym $mod+s layout toggle splitv splith
-bindsym $mod+d layout toggle stacking tabbed 
+bindsym $mod+control+h move container to workspace $ws_main
 
 ###########  
 ### windows
@@ -150,40 +179,11 @@ assign [app_id="betterbird"] $ws_main
 assign [app_id="org.telegram.desktop"] $ws_main
 assign [app_id="libreoffice"] $ws_office
 assign [app_id="com.transmissionbt*"] $ws_stuff
-# floating windows for daemonized programs 
+
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
 for_window [app_id="blueberry.py"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
-# resize window 
-bindsym $mod+equal resize grow width 10 px or 10 ppt
-bindsym $mod+minus resize shrink width 10 px or 10 ppt
-bindsym $mod+bracketleft resize shrink height 10 px or 10 ppt
-bindsym $mod+bracketright move resize grow height 10 px or 10 ppt
-# focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
-# focus parent/child container
-bindsym $mod+p focus parent
-bindsym $mod+n focus child
-# move focused window
-bindsym $mod+control+j move left
-bindsym $mod+control+k move down
-bindsym $mod+control+l move up
-bindsym $mod+control+semicolon move right
-# kill focused window
-bindsym $mod+q kill
-# fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
-# floating mode for the focused container
-bindsym $mod+r focus mode_toggle
-bindsym $mod+e floating toggle
-bindsym $mod+w sticky toggle
-# reload sway conf
-bindsym $mod+control+r reload
 
-bindsym button7 nop  
 
 ###########  
 ### style
@@ -191,6 +191,7 @@ bindsym button7 nop
 font pango:Ubuntu Nerd Font, bold 10
 gaps inner 2
 gaps outer 2
+default_border pixel 0
 smart_gaps on
 #2E3440  nord0    black
 #3B4252  nord1    dark_gray
@@ -224,14 +225,15 @@ set $orange               #D08770
 set $yellow               #EBCB8B
 set $green                #A3BE8C
 set $purple               #B48EAD
-#light_graycolor_class    border          backgrount      text            indicator       child_border
-client.focused            $darkest_white  $darkest_white  $black          $darkest_white  $darkest_white
-client.focused_tab_title  $black          $darkest_white  $black                          
-client.focused_inactive   $black          $black          $darkest_white  $darkest_white  $black
-client.unfocused          $black          $black          $darkest_white  $darkest_white  $darkest_white
-client.urgent             $darkest_white  $darkest_white  $black          $darkest_white  $darkest_white
-client.placeholder        $black          $black          $darkest_white  $darkest_white  $darkest_white
-client.background         $black                                                          
+#                          border           background      text            indicator       child_border
+ client.focused            $black           $darker_white   $black          $darkest_white  $darkest_white
+ client.focused_tab_title  $black           $darker_white   $black                          
+ client.focused_inactive   $black           $black          $darkest_white  $darkest_white  $black
+ client.unfocused          $black           $black          $darkest_white  $darkest_white  $darkest_white
+ client.urgent             $black           $red            $black          $darkest_white  $darkest_white
+ client.placeholder        $black           $black          $darkest_white  $darkest_white  $darkest_white
+ client.background         $black                                                          
+
 ###########  
 ### bar
 ###########  
