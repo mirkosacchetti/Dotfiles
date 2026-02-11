@@ -9,7 +9,6 @@
         "sway/scratchpad"
     ],
     "modules-right": [
-        "custom/pomidore",
         "wireplumber",
         "bluetooth",
         "network",
@@ -100,6 +99,7 @@
         "menu": "on-click",
         "menu-file": "$HOME/.config/waybar/power_menu.xml",
         "menu-actions": {
+            "logout": "sway exit",
             "shutdown": "systemctl poweroff",
             "reboot": "systemctl reboot",
             "suspend": "systemctl suspend",

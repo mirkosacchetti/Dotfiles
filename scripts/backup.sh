@@ -2,10 +2,10 @@
 # backup_external.sh - Script for incremental backup to encrypted external disk using duplicity
 
 # Configuration
-DISK_NAME="RED"  
+DISK_NAME="red"  
 BACKUP_DIR="backup"
-LOGFILE="$HOME/Desktop/duplicity_backup.log"
-SOURCE="$HOME"
+LOGFILE="/home/m/Desktop/duplicity_backup.log"
+SOURCE="/home/m"
 
 # Function for logging messages
 log() {

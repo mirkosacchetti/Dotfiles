@@ -1,0 +1,15 @@
+[Unit]
+Description=Disables the red logo LED and micmute LED at startup
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target resume.target
+Requires=sys-devices-platform-thinkpad_acpi.device
+
+[Service]
+Type=exec
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'echo 0 > /sys/class/leds/tpacpi::power/brightness && echo 0 > /sys/class/leds/tpacpi::lid_logo_dot/brightness && echo 0 > /sys/class/leds/platform::micmute/brightness'
+ExecStartPost=/bin/sh -c '[ "$(cat /sys/class/leds/tpacpi::power/brightness)" = "0" ] && [ "$(cat /sys/class/leds/tpacpi::lid_logo_dot/brightness)" = "0" ] && [ "$(cat /sys/class/leds/platform::micmute/brightness)" = "0" ]'
+Restart=on-failure
+RestartSec=1s
+
+[Install]
+WantedBy=basic.target suspend.target sleep.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target resume.target

@@ -11,6 +11,8 @@ include /etc/sway/config.d/*
 # xwayland disable
 set $mod Mod4
 set $alt Mod1
+
+floating_modifier $mod normal
 tiling_drag disabled
 focus_follows_mouse yes
 # My app launcher
@@ -110,10 +112,12 @@ bindsym $mod+0 workspace number 10
 bindsym $mod+h workspace $ws_main
 # navigate active workspaces
 bindsym $mod+Tab workspace back_and_forth
-bindgesture swipe:right workspace prev
-bindgesture swipe:left workspace next
-
+bindgesture swipe:right workspace next
+bindgesture swipe:left workspace prev
+# reload configuration
 bindsym $mod+control+r reload
+
+### right hand: edit end resize
 
 bindsym $mod+q kill
 bindsym $mod+w sticky toggle
@@ -130,33 +134,33 @@ bindsym $mod+x resize shrink height 10 px or 10 ppt
 bindsym $mod+c resize grow height 10 px or 10 ppt
 bindsym $mod+v resize grow width 10 px or 10 ppt
 
-###
+### left hand: focus and moving
 
-bindsym $mod+u move workspace to output right
-bindsym $mod+i focus parent
-bindsym $mod+o focus child
-bindsym $mod+p move workspace to output left
+bindsym $mod+u focus parent
+bindsym $mod+i focus prev
+bindsym $mod+o focus next
+bindsym $mod+p focus child
 
 bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
 
-#bindsym $mod+m
-bindsym $mod+comma workspace prev
-bindsym $mod+period workspace next
-#bindsym $mod+slash 
+bindsym $mod+control+j move left
+bindsym $mod+control+k move down
+bindsym $mod+control+l move up
+bindsym $mod+control+semicolon move right
+
+bindsym $mod+m move workspace to output right
+bindsym $mod+comma workspace prev_on_output
+bindsym $mod+period workspace next_on_output
+bindsym $mod+slash move workspace to output left
 
 
 ###########  
 ### containers
 ###########  
 # move focused container 
-bindsym $mod+control+j move left
-bindsym $mod+control+k move down
-bindsym $mod+control+l move up
-bindsym $mod+control+semicolon move right
-
 bindsym $mod+control+1 move container to workspace number 1
 bindsym $mod+control+2 move container to workspace number 2
 bindsym $mod+control+3 move container to workspace number 3

@@ -75,7 +75,6 @@ bindings = [
 { key = "Tab", mods = "Control|Shift", action = "SelectPreviousTab" },
 #disable macos shit
 { key = "w", mods= "Command", action = "None"},
-{ key = "Return", mods = "Shift", chars = "\\x1b\r" },
 ]
 
 [mouse]
@@ -83,3 +82,6 @@ hide_when_typing = true
 
 [selection]
 save_to_clipboard = true
+
+[terminal]
+
