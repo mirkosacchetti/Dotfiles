@@ -1,0 +1,10 @@
+#!/bin/bash
+# systemd-sleep hook for ThinkPad
+# Place this in /lib/systemd/system-sleep/
+
+case $1/$2 in
+  post/*)
+    # After resume from suspend/hibernate
+    /usr/local/bin/system-resume.sh
+    ;;
+esac

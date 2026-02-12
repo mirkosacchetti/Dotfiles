@@ -1,0 +1,11 @@
+[Unit]
+Description=ThinkPad System Setup (LEDs and Power Profile)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/system-resume.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
