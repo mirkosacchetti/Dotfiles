@@ -1,6 +1,6 @@
-anchor=top-center
+anchor=top-right
 icon-location=left
-default-timeout=1500
+default-timeout=2000
 format=<b>%s</b>\n%b
 max-icon-size=48
 outer-margin=6,6,6,6
@@ -16,3 +16,6 @@ border-color=#d8dee9
 text-color=#bf616a
 border-color=#bf616a
 default-timeout=0
+
+[mode=do-not-disturb]
+invisible=1

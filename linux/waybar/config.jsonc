@@ -1,4 +1,4 @@
-// -*- m ode: jsonc -*-
+// -*- mode: jsonc -*-
 {
     "reload_style_on_change": true,
     "height": 28,
@@ -9,6 +9,7 @@
         "sway/scratchpad"
     ],
     "modules-right": [
+        "custom/pomidore",
         "wireplumber",
         "bluetooth",
         "network",
@@ -35,7 +36,7 @@
         "tooltip-format": "{controller_alias}\t{controller_address}",
         "tooltip-format-connected": "{device_alias} (battery {device_battery_percentage}%)",
         "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-        "on-click": "blueberry"
+        "on-click": "blueman-manager"
     },
     "tray": { },
     "clock": {
@@ -107,12 +108,12 @@
         }
     },
     "custom/pomidore": {
-        "exec": "pomidore status --waybar",
+        "exec": "/home/m/.local/bin/pomidore status -w",
         "interval": 1,
         "format": "{}",
         "return-type": "json",
-        "on-click": "pomidore toggle",
-        "on-click-right": "pomidore stop",
+        "on-click": "/home/m/.local/bin/pomidore toggle",
+        "on-click-right": "/home/m/.local/bin/pomidore stop",
         "tooltip": true
     }
 }
