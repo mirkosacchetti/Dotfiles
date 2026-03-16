@@ -6,8 +6,9 @@ export TERM=xterm-256color
 export EDITOR=nvim
 # Aliases
 alias jn="jupyter notebook"
-alias python="python3"
-alias vim="nvim"
+alias vi="nvim"
+alias hx="helix"
+alias zd="zeditor"
 #alias vi="vim"
 # Aliases as Shortcuts
 alias dl="cd ~/Downloads"
@@ -137,12 +138,3 @@ function load_my_api_keys
         end
     end
 end
-
-
-# BEGIN opam configuration
-# This is useful if you're using opam as it adds:
-#   - the correct directories to the PATH
-#   - auto-completion for the opam binary
-# This section can be safely removed at any time if needed.
-test -r '/home/m/.opam/opam-init/init.fish' && source '/home/m/.opam/opam-init/init.fish' > /dev/null 2> /dev/null; or true
-# END opam configuration
