@@ -6,7 +6,7 @@ export TERM=xterm-256color
 export EDITOR=nvim
 # Aliases
 alias jn="jupyter notebook"
-alias vi="nvim"
+alias vim="nvim"
 alias hx="helix"
 alias zd="zeditor"
 #alias vi="vim"
