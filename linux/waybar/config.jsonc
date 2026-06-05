@@ -13,9 +13,9 @@
     "modules-right": [
         "custom/pomidore",
         "wireplumber",
-        "backlight",
         "bluetooth",
         "network",
+        "backlight",
         "power-profiles-daemon",
         "battery",
         "custom/power",
@@ -34,7 +34,8 @@
     },
     "backlight": {
         "device": "intel_backlight",
-        "format": "{percent}% {icon}",
+        "format": "{icon}",
+        "tooltip-format": "{percent}% {icon}",
         "format-icons": ["", ""],
         "scroll-step": 2
     },
@@ -117,11 +118,11 @@
         }
     },
     "custom/pomidore": {
-        "exec": "/home/m/.local/bin/pomidore status -w",
+        "exec": "/home/m/.local/bin/pomidore waybar",
         "interval": 1,
         "format": "{}",
         "return-type": "json",
-        "on-click": "/home/m/.local/bin/pomidore toggle",
+        "on-click": "/home/m/.local/bin/pomidore pause",
         "on-click-right": "/home/m/.local/bin/pomidore stop",
         "tooltip": true
     }

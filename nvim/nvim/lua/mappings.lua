@@ -21,6 +21,9 @@ vim.keymap.set('n', '<Leader>o', "<cmd>lua require('fzf-lua').files()<CR>",opts)
 vim.keymap.set('n', '<Leader>i', "<cmd>lua require('fzf-lua').live_grep()<CR>",opts)
 vim.keymap.set('n', '<Leader>y', "<cmd>lua require('fzf-lua').quickfix()<CR>",opts)
 
+vim.keymap.set('n', '<C-,>', ':tabprevious<CR>', { desc = 'Previous tab' })
+vim.keymap.set('n', '<C-.>', ':tabnext<CR>', { desc = 'Next tab' })
+
 vim.keymap.set('n', '<C-w>j', '<C-w>h',opts)
 vim.keymap.set('n', '<C-w>k', '<C-w>j',opts)
 vim.keymap.set('n', '<C-w>l', '<C-w>k',opts)

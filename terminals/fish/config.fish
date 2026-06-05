@@ -4,13 +4,18 @@ set -g theme_nerd_fonts yes
 set -g TERM xterm-256color
 export TERM=xterm-256color
 export EDITOR=nvim
+set -g fish_key_bindings fish_hybrid_key_bindings
+
+
 # Aliases
 alias jn="jupyter notebook"
 alias vim="nvim"
+alias vi="nvim"
 alias hx="helix"
 alias zd="zeditor"
 #alias vi="vim"
 # Aliases as Shortcuts
+alias d="cd ~/Desktop"
 alias dl="cd ~/Downloads"
 alias do="cd ~/Dotfiles"
 alias wn="cd ~/Code/WiNet"
@@ -19,6 +24,8 @@ alias rr="cd ~/Writings/RR/"
 alias co="cd ~/Code"
 # Sunday as first day of the week is a bestemmia
 alias cal="cal -3m"
+alias gray 'sudo mount -t nfs 192.168.2.8:/media/grey /mnt/gray;cd /mnt/gray'
+
 
 # Set Environment Variables
 # NPM
@@ -138,3 +145,4 @@ function load_my_api_keys
         end
     end
 end
+

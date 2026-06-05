@@ -10,13 +10,18 @@ border-radius=6
 padding=8,8,8,8
 text-color=#d8dee9
 border-color=#d8dee9
-default-timeout=4000
-
-[mode=default]
-default-timeout=4000
-border-color=#aaaaaa
-default-timeout=1000
+default-timeout=3000
 
 [urgency=critical]
 text-color=#bf616a
 border-color=#bf616a
+default-timeout=3000
+
+[mode=default]
+default-timeout=3000
+border-color=#aaaaaa
+
+[mode=do-not-disturb]
+default-timeout=3000
+border-color=#d8dee9
+

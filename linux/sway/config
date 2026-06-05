@@ -14,14 +14,12 @@ set $alt Mod1
 
 floating_modifier $mod normal
 tiling_drag disabled
-focus_follows_mouse yes
-# My app launcher
+focus_follows_mouse no
 set $menu fuzzel
-# My terminal emulator
 set $term alacritty
 set $browser chromium
-# My background image
-output * bg /home/m/Dotfiles/images/boccioni.jpg fill
+
+output * bg /home/m/Dotfiles/images/Nighthawks_by_Edward_Hopper_1942.jpg fill
 
 ###########  
 ### i/o
@@ -31,30 +29,36 @@ set $laptop_keyboard "1:1:AT_Translated_Set_2_keyboard"
 # check inputs names with: swaymsg -t get_intputs
 # check outputs names with: swaymsg -t get_outputs
 # My laptop i/o 
-input * xkb_options compose:ralt
+input * {
+    xkb_options compose:ralt,shift:both_capslock
+}
 input  $laptop_keyboard {
-    xkb_options caps:ctrl_modifier,altwin:swap_alt_win,shift:both_capslock
+    xkb_options compose:ralt,shift:both_capslock,caps:ctrl_modifier,altwin:swap_alt_win
 }
 # ThinkPad red nipple
 input "2:10:TPPS/2_Elan_TrackPoint" {
     pointer_accel -1
 }
-# 27" external displays
-output "Dell Inc. DELL U2725QE GNM6C34" {
-    resolution 3840x2160@120.000Hz 
-    scale 1.358333
-    position 0 0
-}
-# 27" second vertical external displays
-output "LG Electronics LG HDR 4K 0x00006D62" {
-    resolution 3840x2160@60.000Hz 
-    scale 1.358333
-    transform 90
+# Generic External display
+output * {
+    scale 1
 }
 # 14" notebook display
 output $laptop_display {
     resolution 2880x1800@120.000Hz 
     scale 2
+}
+# 27" external displays
+output "Dell Inc. DELL U2725QE GNM6C34" {
+    resolution 3840x2160@120.000Hz 
+    scale 1.25
+    position 0 0
+}
+# 27" second vertical external displays
+output "LG Electronics LG HDR 4K 0x00006D62" {
+    resolution 3840x2160@60.000Hz 
+    scale 1.25
+    transform 90
 }
 # Clamshell mode for laptop
 # if the lid is closed whith an external monitor then disable it
@@ -99,13 +103,13 @@ bindsym $mod+grave exec hyprpicker | wl-copy
 ### workspaces
 ###########  
 # switch to workspace
-set $ws_data 4
+set $ws_docs 4
 set $ws_office 5
 set $ws_stuff 6
 set $ws_ai 7
 set $ws_media 8
 set $ws_home ◊
-set $ws_zero ☡
+set $ws_zero ♙
 
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
@@ -123,11 +127,6 @@ bindgesture swipe:right workspace next
 bindgesture swipe:left workspace prev
 # reload configuration
 bindsym $mod+control+r reload
-bindsym $mod+t exec /home/m/.local/bin/pomidore zen-toggle
-bindsym $mod+y exec /home/m/.local/bin/pomidore toggle
-
-##############################
-##############################
 
 ### right hand: edit end resize
 bindsym $mod+q kill
@@ -135,7 +134,7 @@ bindsym $mod+w focus mode_toggle
 bindsym $mod+e floating toggle
 bindsym $mod+r sticky toggle
 
-bindsym $mod+a split vertica
+bindsym $mod+a split vertical
 bindsym $mod+s layout toggle splitv splith
 bindsym $mod+d layout toggle stacking tabbed
 bindsym $mod+f fullscreen toggle
@@ -147,28 +146,28 @@ bindsym $mod+v resize grow width 10 px or 10 ppt
 
 ### left hand: focus and moving
 bindsym $mod+u focus prev
-bindsym $mod+i focus parent
-bindsym $mod+o focus child
+bindsym $mod+o focus parent
+bindsym $mod+i focus child
 bindsym $mod+p focus next
 
 bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
-
 bindsym $mod+control+j move left
+bindsym $mod+k focus down
 bindsym $mod+control+k move down
+bindsym $mod+l focus up
 bindsym $mod+control+l move up
+bindsym $mod+semicolon focus right
 bindsym $mod+control+semicolon move right
 
-bindsym $mod+m move workspace to output right
+bindsym $mod+m focus output left
+bindsym $mod+control+m move container to output left
 bindsym $mod+comma workspace prev_on_output
+bindsym $mod+control+comma move workspace prev; move workspacde prev
 bindsym $mod+period workspace next_on_output
-bindsym $mod+slash move workspace to output left
+bindsym $mod+control+period move workspace next
+bindsym $mod+slash focus output right
+bindsym $mod+control+slash move workspace to output right
 
-
-##############################
-##############################
 
 ###########  
 ### containers
@@ -190,15 +189,13 @@ bindsym $mod+control+0 move container to workspace $ws_zero
 ###########  
 # assign window to a workspace with window criteria
 # use swaymsg -t get_tree 
-assign [app_id="mpv"] $ws_media
-assign [app_id="spotify"] $ws_media
-assign [app_id="betterbird"] $ws_home
-assign [app_id="org.telegram.desktop"] $ws_home
-assign [app_id="libreoffice"] $ws_office
-assign [app_id="com.transmissionbt*"] $ws_stuff
-assign [app_id="Bitwarden"] $ws_data
-assign [app_id="beekeeper-studio"] workspace $ws_data
-assign [app_id="sublime_merge"] workspace $ws_data
+assign [app_id="betterbird"] workspace $ws_home
+assign [app_id="org.telegram.desktop"] workspace $ws_home
+assign [app_id="libreoffice"] workspace $ws_office
+assign [app_id="com.transmissionbt*"] workspace $ws_stuff
+assign [app_id="Bitwarden"] workspace $ws_stuff
+assign [app_id="beekeeper-studio"] workspace $ws_stuff
+assign [app_id="sublime_merge"] workspace $ws_stuff
 # web apps match the title set at launch
 assign [title="Claude"] workspace $ws_ai
 assign [title="Open WebUI"] workspace $ws_ai
@@ -270,7 +267,7 @@ bar {
 ### apps
 ###########  
 # My notification daemon
-exec mako
+#exec mako
 # Adjust screen color temperature based on location/time (lat/lon in .config/gammastaep/config.ini)
 #exec gammastep
 # My apps
