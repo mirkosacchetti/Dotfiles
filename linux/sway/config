@@ -108,8 +108,8 @@ set $ws_office 5
 set $ws_stuff 6
 set $ws_ai 7
 set $ws_media 8
-set $ws_home ◊
-set $ws_zero ♙
+set $ws_mess 9
+set $ws_main " 0 "
 
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
@@ -119,8 +119,8 @@ bindsym $mod+5 workspace number 5
 bindsym $mod+6 workspace number 6
 bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8
-bindsym $mod+9 workspace $ws_home
-bindsym $mod+0 workspace $ws_zero
+bindsym $mod+9 workspace $ws_mess
+bindsym $mod+0 workspace $ws_main
 # navigate active workspaces
 bindsym $mod+Tab workspace back_and_forth
 bindgesture swipe:right workspace next
@@ -181,25 +181,20 @@ bindsym $mod+control+5 move container to workspace number 5
 bindsym $mod+control+6 move container to workspace number 6
 bindsym $mod+control+7 move container to workspace number 7
 bindsym $mod+control+8 move container to workspace number 8
-bindsym $mod+control+9 move container to workspace $ws_home
-bindsym $mod+control+0 move container to workspace $ws_zero
+bindsym $mod+control+9 move container to workspace $ws_mess
+bindsym $mod+control+0 move container to workspace $ws_main
 
 ###########  
 ### windows
 ###########  
 # assign window to a workspace with window criteria
 # use swaymsg -t get_tree 
-assign [app_id="betterbird"] workspace $ws_home
-assign [app_id="org.telegram.desktop"] workspace $ws_home
-assign [app_id="libreoffice"] workspace $ws_office
+assign [app_id="betterbird"] workspace $ws_mess
+assign [app_id="org.telegram.desktop"] workspace $ws_mess
 assign [app_id="com.transmissionbt*"] workspace $ws_stuff
 assign [app_id="Bitwarden"] workspace $ws_stuff
 assign [app_id="beekeeper-studio"] workspace $ws_stuff
 assign [app_id="sublime_merge"] workspace $ws_stuff
-# web apps match the title set at launch
-assign [title="Claude"] workspace $ws_ai
-assign [title="Open WebUI"] workspace $ws_ai
-
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
