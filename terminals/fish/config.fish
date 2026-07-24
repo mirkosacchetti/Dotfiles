@@ -6,6 +6,8 @@ export TERM=xterm-256color
 export EDITOR=nvim
 set -g fish_key_bindings fish_hybrid_key_bindings
 
+bind -M insert ctrl-p up-or-search
+bind -M insert ctrl-n down-or-search
 
 # Aliases
 alias jn="jupyter notebook"

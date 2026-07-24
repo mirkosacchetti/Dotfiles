@@ -41,7 +41,7 @@ input "2:10:TPPS/2_Elan_TrackPoint" {
 }
 # Generic External display
 output * {
-    scale 1
+    scale 2
 }
 # 14" notebook display
 output $laptop_display {
@@ -51,13 +51,13 @@ output $laptop_display {
 # 27" external displays
 output "Dell Inc. DELL U2725QE GNM6C34" {
     resolution 3840x2160@120.000Hz 
-    scale 1.25
+    scale 1.5
     position 0 0
 }
 # 27" second vertical external displays
 output "LG Electronics LG HDR 4K 0x00006D62" {
     resolution 3840x2160@60.000Hz 
-    scale 1.25
+    scale 1.5
     transform 90
 }
 # Clamshell mode for laptop

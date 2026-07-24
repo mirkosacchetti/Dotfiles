@@ -4,6 +4,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.keymap.set('i', 'kj', '<Esc>',opts)
+vim.keymap.set("i", "<C-BS>", "<C-w>", { noremap = true })
 
 vim.keymap.set('n', 'k', 'gk',opts)
 vim.keymap.set('n', 'j', 'gj',opts)
