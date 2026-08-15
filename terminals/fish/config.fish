@@ -27,6 +27,7 @@ alias co="cd ~/Code"
 # Sunday as first day of the week is a bestemmia
 alias cal="cal -3m"
 alias gray 'sudo mount -t nfs 192.168.2.8:/media/grey /mnt/gray;cd /mnt/gray'
+alias claudio="claude --dangerously-skip-permissions --resume"
 
 
 # Set Environment Variables

@@ -35,7 +35,7 @@ input * {
 input  $laptop_keyboard {
     xkb_options compose:ralt,shift:both_capslock,caps:ctrl_modifier,altwin:swap_alt_win
 }
-# ThinkPad red nipple
+# Disable the ThinkPad red nipple
 input "2:10:TPPS/2_Elan_TrackPoint" {
     pointer_accel -1
 }
