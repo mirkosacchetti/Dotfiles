@@ -1,0 +1,8 @@
+beekeeper-studio-bin
+betterbird-bin
+brave-bin
+bruno-bin
+downgrade
+mongodb-compass-bin
+yay
+yay-debug
