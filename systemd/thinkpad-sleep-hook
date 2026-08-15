@@ -3,11 +3,6 @@
 # Place this in /lib/systemd/system-sleep/
 
 case $1/$2 in
-  pre/*)
-    # Arm WoWLAN so the ath12k firmware keeps its state across suspend;
-    # without it, post-resume scans stall ~7s while the firmware re-inits.
-    iw phy phy0 wowlan enable magic-packet 2>/dev/null
-    ;;
   post/*)
     # After resume from suspend/hibernate
     /usr/local/bin/system-resume.sh
