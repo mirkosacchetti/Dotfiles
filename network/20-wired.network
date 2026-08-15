@@ -1,0 +1,10 @@
+# /etc/systemd/network/20-wired.network — ethernet via systemd-networkd
+[Match]
+Name=enp1s0f0
+
+[Network]
+DHCP=yes
+
+[DHCP]
+# metrica più bassa del Wi-Fi di iwd (300): col cavo attaccato vince l'ethernet
+RouteMetric=100
