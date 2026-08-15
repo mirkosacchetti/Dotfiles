@@ -74,7 +74,6 @@ mtpfs
 nano
 nautilus
 neovim
-networkmanager-openvpn
 nfs-utils
 nmap
 nodejs
@@ -154,7 +153,6 @@ wireplumber
 wl-clipboard
 wmenu
 woff2-font-awesome
-wpa_supplicant
 xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
 xdg-utils
