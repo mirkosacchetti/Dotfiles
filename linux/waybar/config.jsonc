@@ -80,10 +80,11 @@
     "network": {
         "format-wifi": " ",
         "format-ethernet": "🖧",
-        "tooltip-format": "{essid} ({signalStrength}%) via {gwaddr}",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr} via {gwaddr}",
+        "tooltip-format-wifi": "IF: {ifname}\nID: {essid}\nSS: {signalStrength}% ({signaldBm} dBm, {frequency} GHz)\nIP: {ipaddr}/{cidr}\nGW: {gwaddr}",
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": "Disconnected",
-        "format-alt": "{ifname} {ipaddr}/{cidr}"
+        "on-click": "alacritty --class impala -e impala"
     },
     "wireplumber": {
         "format": "{volume}% {icon}",
