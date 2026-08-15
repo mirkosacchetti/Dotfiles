@@ -12,6 +12,7 @@ work:
 linux:
 	stow --verbose --target=$(HOME)/.config --restow linux
 	stow --verbose --target=$(HOME) --restow Xorg
+	stow --verbose --target=$(HOME) --restow bash
 
 font:
 	stow --verbose --target=$(HOME)/.config --restow fonts
