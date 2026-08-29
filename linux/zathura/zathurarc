@@ -26,41 +26,41 @@ set statusbar-v-padding 0
 set page-padding 0
 set show-scrollbars     false
 
-# NORD THEME
+# LUMON THEME
 # ----------
-set notification-error-bg       "#2E3440"
-set notification-error-fg       "#BF616A"
-set notification-warning-bg     "#2E3440"
-set notification-warning-fg     "#D08770"
-set notification-bg             "#2E3440"
-set notification-fg             "#D8DEE9"
+set notification-error-bg       "#16242d"
+set notification-error-fg       "#4d86b0"
+set notification-warning-bg     "#16242d"
+set notification-warning-fg     "#8bc9eb"
+set notification-bg             "#16242d"
+set notification-fg             "#d6e2ee"
 
-set completion-bg               "#2E3440"
-set completion-fg               "#D8DEE9"
-set completion-group-bg         "#3B4252"
-set completion-group-fg         "#D8DEE9"
-set completion-highlight-bg     "#88C0D0"
-set completion-highlight-fg     "#3B4252"
+set completion-bg               "#16242d"
+set completion-fg               "#d6e2ee"
+set completion-group-bg         "#1b2d40"
+set completion-group-fg         "#d6e2ee"
+set completion-highlight-bg     "#6fb8e3"
+set completion-highlight-fg     "#1b2d40"
 
-set index-bg                    "#2E3440"
-set index-fg                    "#8FBCBB"
-set index-active-bg             "#8FBCBB"
-set index-active-fg             "#2E3440"
+set index-bg                    "#16242d"
+set index-fg                    "#b4e4f6"
+set index-active-bg             "#b4e4f6"
+set index-active-fg             "#16242d"
 
-set inputbar-bg                 "#2E3440"
-set inputbar-fg                 "#E5E9F0"
+set inputbar-bg                 "#16242d"
+set inputbar-fg                 "#d6e2ee"
 
-set statusbar-bg                "#2E3440"
-set statusbar-fg                "#E5E9F0"
+set statusbar-bg                "#16242d"
+set statusbar-fg                "#d6e2ee"
 
-set default-bg                  "#2E3440"
-set default-fg                  "#D8DEE9"
+set default-bg                  "#16242d"
+set default-fg                  "#d6e2ee"
 set render-loading              "true"
-set render-loading-bg           "#2E3440"
-set render-loading-fg           "#434C5E"
+set render-loading-bg           "#16242d"
+set render-loading-fg           "#243d56"
 
-set recolor-lightcolor          "#2E3440"
-set recolor-darkcolor           "#ECEFF4"
+set recolor-lightcolor          "#16242d"
+set recolor-darkcolor           "#f2fcff"
 
 set highlight-color            "rgba(126, 136, 159, 0.2)"
 set highlight-active-color     "rgba(126, 136, 159, 0.2)"

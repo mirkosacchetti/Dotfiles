@@ -2,7 +2,7 @@
 Type=Application
 Name=Color Picker
 Comment=Pick a color from the screen to the clipboard
-Exec=sh -c 'pkill hyprpicker || hyprpicker -a'
+Exec=/home/m/Dotfiles/scripts/color-picker.sh
 Icon=/home/m/Dotfiles/applications/icons/color-picker.png
 Terminal=false
 Categories=Utility;
