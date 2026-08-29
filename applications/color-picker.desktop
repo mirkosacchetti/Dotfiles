@@ -3,6 +3,6 @@ Type=Application
 Name=Color Picker
 Comment=Pick a color from the screen to the clipboard
 Exec=sh -c 'pkill hyprpicker || hyprpicker -a'
-Icon=color-select-symbolic
+Icon=/home/m/Dotfiles/applications/icons/color-picker.png
 Terminal=false
 Categories=Utility;

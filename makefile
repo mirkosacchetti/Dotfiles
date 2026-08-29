@@ -13,6 +13,8 @@ linux:
 	stow --verbose --target=$(HOME)/.config --restow linux
 	stow --verbose --target=$(HOME) --restow Xorg
 	stow --verbose --target=$(HOME) --restow bash
+	mkdir -p $(HOME)/.local/share/applications
+	ln -sf $(HOME)/Dotfiles/applications/*.desktop $(HOME)/.local/share/applications/
 
 font:
 	stow --verbose --target=$(HOME)/.config --restow fonts
