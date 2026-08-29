@@ -26,7 +26,7 @@ button {
 .module:hover,
 button:hover {
     background: inherit;
-    box-shadow: inset 0 2px #d6e2ee;
+    box-shadow: inset 0 1px #f2fcff;
 }
 
 .modules-left>widget:first-child>#workspaces {
