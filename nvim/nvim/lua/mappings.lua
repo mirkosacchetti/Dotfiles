@@ -34,37 +34,26 @@ vim.keymap.set("t", "k", "<Down>", { noremap = true, silent = true, buffer = tru
 vim.keymap.set("t", "l", "<Up>", { noremap = true, silent = true, buffer = true })
 vim.keymap.set("t", ";", "<Right>", { noremap = true, silent = true, buffer = true })
 
--- =============================================================================
--- Quickfix List (:c... comandi)
--- =============================================================================
+-- Quickfix
+vim.keymap.set('n', '<leader>co', ':copen<CR>', vim.tbl_extend('force', opts, { desc = "Open quickfix window" }))
+vim.keymap.set('n', '<leader>cc', ':silent! cclose<Bar>silent! lclose<CR>', vim.tbl_extend('force', opts, { desc = "Close quickfix and location list" }))
+vim.keymap.set('n', '<leader>cw', ':cwindow<CR>', vim.tbl_extend('force', opts, { desc = "Toggle quickfix window" }))
 
--- Apri/Chiudi finestra Quickfix
-vim.keymap.set('n', '<leader>co', ':copen<CR>', vim.tbl_extend('force', opts, { desc = "Apri finestra Quickfix" }))
-vim.keymap.set('n', '<leader>cc', ':silent! cclose<Bar>silent! lclose<CR>', vim.tbl_extend('force', opts, { desc = "Chiudi finestra Quickfix/Location List" })) -- Chiude entrambe!
-vim.keymap.set('n', '<leader>cw', ':cwindow<CR>', vim.tbl_extend('force', opts, { desc = "Toggle finestra Quickfix" }))
+-- vim-unimpaired convention
+vim.keymap.set('n', ']q', ':cnext<CR>', vim.tbl_extend('force', opts, { desc = "Next quickfix item" }))
+vim.keymap.set('n', '[q', ':cprevious<CR>', vim.tbl_extend('force', opts, { desc = "Previous quickfix item" }))
+vim.keymap.set('n', ']Q', ':clast<CR>', vim.tbl_extend('force', opts, { desc = "Last quickfix item" }))
+vim.keymap.set('n', '[Q', ':cfirst<CR>', vim.tbl_extend('force', opts, { desc = "First quickfix item" }))
 
--- Naviga elementi Quickfix (convenzione vim-unimpaired)
-vim.keymap.set('n', ']q', ':cnext<CR>', vim.tbl_extend('force', opts, { desc = "Prossimo elemento Quickfix" }))
-vim.keymap.set('n', '[q', ':cprevious<CR>', vim.tbl_extend('force', opts, { desc = "Precedente elemento Quickfix" }))
-vim.keymap.set('n', ']Q', ':clast<CR>', vim.tbl_extend('force', opts, { desc = "Ultimo elemento Quickfix" })) -- Meno comune
-vim.keymap.set('n', '[Q', ':cfirst<CR>', vim.tbl_extend('force', opts, { desc = "Primo elemento Quickfix" }))  -- Meno comune
+-- Location list, often filled by LSP diagnostics. <leader>cc above closes it too.
+vim.keymap.set('n', '<leader>lo', ':lopen<CR>', vim.tbl_extend('force', opts, { desc = "Open location list" }))
+vim.keymap.set('n', '<leader>lw', ':lwindow<CR>', vim.tbl_extend('force', opts, { desc = "Toggle location list" }))
 
--- =============================================================================
--- Location List (:l... comandi) - Spesso usata da LSP per diagnostica
--- =============================================================================
+vim.keymap.set('n', ']l', ':lnext<CR>', vim.tbl_extend('force', opts, { desc = "Next location list item" }))
+vim.keymap.set('n', '[l', ':lprevious<CR>', vim.tbl_extend('force', opts, { desc = "Previous location list item" }))
+vim.keymap.set('n', ']L', ':llast<CR>', vim.tbl_extend('force', opts, { desc = "Last location list item" }))
+vim.keymap.set('n', '[L', ':lfirst<CR>', vim.tbl_extend('force', opts, { desc = "First location list item" }))
 
--- Apri/Chiudi finestra Location List
-vim.keymap.set('n', '<leader>lo', ':lopen<CR>', vim.tbl_extend('force', opts, { desc = "Apri finestra Location List" }))
--- Nota: <leader>cc sopra chiude anche questa. Se vuoi un comando separato:
--- vim.keymap.set('n', '<leader>lc', ':lclose<CR>', vim.tbl_extend('force', opts, { desc = "Chiudi finestra Location List" }))
-vim.keymap.set('n', '<leader>lw', ':lwindow<CR>', vim.tbl_extend('force', opts, { desc = "Toggle finestra Location List" }))
-
--- Naviga elementi Location List (convenzione vim-unimpaired)
-vim.keymap.set('n', ']l', ':lnext<CR>', vim.tbl_extend('force', opts, { desc = "Prossimo elemento Location List" }))
-vim.keymap.set('n', '[l', ':lprevious<CR>', vim.tbl_extend('force', opts, { desc = "Precedente elemento Location List" }))
-vim.keymap.set('n', ']L', ':llast<CR>', vim.tbl_extend('force', opts, { desc = "Ultimo elemento Location List" })) -- Meno comune
-vim.keymap.set('n', '[L', ':lfirst<CR>', vim.tbl_extend('force', opts, { desc = "Primo elemento Location List" }))  -- Meno comune
-
-
-vim.keymap.set('n', '<leader>co', ':colder<CR>', vim.tbl_extend('force', opts, { desc = "Vai a lista Quickfix precedente" })) -- Attenzione a conflitti
-vim.keymap.set('n', '<leader>cn', ':cnewer<CR>', vim.tbl_extend('force', opts, { desc = "Vai a lista Quickfix successiva" })) -- Attenzione a conflitti
+-- NOTE: this <leader>co overrides the :copen mapping above
+vim.keymap.set('n', '<leader>co', ':colder<CR>', vim.tbl_extend('force', opts, { desc = "Older quickfix list" }))
+vim.keymap.set('n', '<leader>cn', ':cnewer<CR>', vim.tbl_extend('force', opts, { desc = "Newer quickfix list" }))

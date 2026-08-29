@@ -1,6 +1,6 @@
 #!/bin/bash
-# Decode a QR code from a screenshot region, alla omarchy-capture-qr.
-# Requires: slurp, grim, zbarimg (pacchetto zbar), wl-copy.
+# Decode a QR code from a screenshot region, adapted from omarchy-capture-qr.
+# Requires: slurp, grim, zbarimg (zbar package), wl-copy.
 
 SELECTION=$(slurp 2>/dev/null)
 [[ -z $SELECTION ]] && exit 0

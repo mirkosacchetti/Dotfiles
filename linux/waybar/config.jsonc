@@ -36,7 +36,7 @@
         "tooltip": false
     },
     "custom/recording": {
-        "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"tooltip\":\"Registrazione in corso\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",
+        "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"tooltip\":\"Recording\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",
         "return-type": "json",
         "interval": "once",
         "signal": 3,
@@ -44,7 +44,7 @@
         "tooltip": true
     },
     "custom/dnd": {
-        "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifiche silenziate\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",
+        "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifications silenced\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",
         "return-type": "json",
         "interval": "once",
         "signal": 2,

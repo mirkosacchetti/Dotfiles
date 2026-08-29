@@ -81,12 +81,14 @@ bindsym XF86Display exec swaymsg output "eDP-1" toggle
 # capture: region/full to clipboard, with Shift to ~/Pictures/screenshots instead
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym control+Print exec grim - | wl-copy
-bindsym shift+Print exec mkdir -p ~/Pictures/screenshots && grim -g "$(slurp)" ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Regione salvata in ~/Pictures/screenshots"
-bindsym control+shift+Print exec mkdir -p ~/Pictures/screenshots && grim ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Schermo salvato in ~/Pictures/screenshots"
+bindsym shift+Print exec mkdir -p ~/Pictures/screenshots && grim -g "$(slurp)" ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Region saved to ~/Pictures/screenshots"
+bindsym control+shift+Print exec mkdir -p ~/Pictures/screenshots && grim ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Screen saved to ~/Pictures/screenshots"
 bindsym $alt+Print exec /home/m/Dotfiles/scripts/screenshot-window.sh
 bindsym $mod+shift+Print exec /home/m/Dotfiles/scripts/record-toggle.sh
 bindsym $mod+Print exec /home/m/Dotfiles/scripts/qr-capture.sh
-bindsym $mod+grave exec hyprpicker | wl-copy
+bindsym $mod+grave exec nautilus
+# color picker to clipboard (moved off $mod+grave for nautilus)
+bindsym $mod+shift+grave exec hyprpicker | wl-copy
 
 # TODO: video with no audio, zen mode
 
@@ -236,7 +238,7 @@ bar {
 ### apps
 ###########  
 exec dunst
-# notifications alla omarchy: dismiss / dismiss all / invoke / history replay / DND
+# omarchy-style notification controls: dismiss / dismiss all / invoke / history replay / DND
 bindsym $mod+shift+comma exec dunstctl close
 bindsym $mod+shift+control+comma exec dunstctl close-all
 bindsym $mod+alt+comma exec dunstctl action

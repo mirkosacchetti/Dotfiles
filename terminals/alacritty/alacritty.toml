@@ -64,7 +64,7 @@ y = 2
 bindings = [
 { key = "Tab", mods = "Control", action = "SelectNextTab" },
 { key = "Tab", mods = "Control|Shift", action = "SelectPreviousTab" },
-#disable macos shit
+# disable the macOS close-window shortcut
 { key = "w", mods= "Command", action = "None"},
 ]
 
