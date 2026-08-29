@@ -1,33 +1,28 @@
 #!/bin/bash
 # backup_external.sh - Script for incremental backup to encrypted external disk using duplicity
 
-# Configuration
 DISK_NAME="RED"  
 BACKUP_DIR="backup"
 LOGFILE="/home/m/Desktop/duplicity_backup.log"
 SOURCE="/home/m"
 
-# Function for logging messages
 log() {
   local message="[$(date)] $1"
   echo "$message" >> "$LOGFILE"
   echo "$message"
 }
 
-# Get disk path
 DISK=$(lsblk -o NAME,LABEL,PATH | grep "$DISK_NAME" | awk '{print $3}' | head -n1)
 if [ -z "$DISK" ]; then
   log "Disk with label $DISK_NAME not found. Exiting."
   exit 1
 fi
 
-# Set mount point
 MOUNT_POINT=$(findmnt -n -o TARGET -S "$DISK" 2>/dev/null)
 if [ -z "$MOUNT_POINT" ] || [ ! -d "$MOUNT_POINT" ]; then
   MOUNT_POINT="/mnt/backup"
 fi
 
-# Set mapper name and path
 MAPPER_NAME="$DISK_NAME"
 MAPPER="/dev/mapper/$MAPPER_NAME"
 log "Checking for disk $DISK..."

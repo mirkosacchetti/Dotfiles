@@ -16,7 +16,6 @@ linux:
 
 font:
 	stow --verbose --target=$(HOME)/.config --restow fonts
-	#cleaning 
 	rm -rf /tmp/fonts
 	mkdir -p /tmp/fonts
 	#ubuntu font

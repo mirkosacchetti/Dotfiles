@@ -1,13 +1,6 @@
-#### Default Sway startup scripts
-#### Synchronizes environment variables with systemd and D-Bus 
-#### Ensure proper Wayland session integration for user applications and services
+# Default startup scripts: sync env vars with systemd/D-Bus for proper session integration
 include /etc/sway/config.d/*
-#### Xwayland is an X server that runs as a Wayland client, translating X11 calls to Wayland
-#### so that applications built for X11 can still function even though the system is running on Wayland 
-#### Most applications don't need it es. Chromium or Firefox, but it is required by some applications es. Steam or VLC
-#### There is no reason to disable it unless for debugging or 'purist' purposes, is a lightweight process
-#### But when is enebled invalidate Wayland's security model
-#### Xwayland is enabled by default
+# Xwayland stays enabled: lightweight, and some apps (Steam, VLC) still need X11
 # xwayland disable
 set $mod Mod4
 set $alt Mod1
@@ -27,9 +20,7 @@ output * bg "#16242d" solid_color
 ###########  
 set $laptop_display "Lenovo Group Limited 0x414B Unknown"
 set $laptop_keyboard "1:1:AT_Translated_Set_2_keyboard"
-# check inputs names with: swaymsg -t get_intputs
-# check outputs names with: swaymsg -t get_outputs
-# My laptop i/o 
+# check input/output names with: swaymsg -t get_inputs / get_outputs
 input * {
     xkb_options compose:ralt,shift:both_capslock
 }
@@ -61,8 +52,7 @@ output "LG Electronics LG HDR 4K 0x00006D62" {
     scale 1.5
     transform 90
 }
-# Clamshell mode for laptop
-# if the lid is closed whith an external monitor then disable it
+# Clamshell: disable the laptop display when the lid closes with an external monitor
 bindswitch --reload --locked lid:on output $laptop_display disable
 bindswitch --reload --locked lid:off output $laptop_display enable
 
@@ -74,10 +64,8 @@ bindsym button4 nop
 bindsym button5 nop
 bindsym button6 nop
 bindsym button7 nop  
-# start my terminal
 bindsym $mod+Return exec $term
 bindsym $mod+g exec $browser
-# start my launcher
 bindsym $mod+space exec $menu
 # media key/syms
 bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.2
@@ -90,29 +78,21 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
 bindsym XF86Display exec swaymsg output "eDP-1" toggle
-# save screenshots in the clipboard (secondary selection)
+# capture: region/full to clipboard, with Shift to ~/Pictures/screenshots instead
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym control+Print exec grim - | wl-copy
-# con Shift salva su file invece che in clipboard
 bindsym shift+Print exec mkdir -p ~/Pictures/screenshots && grim -g "$(slurp)" ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Regione salvata in ~/Pictures/screenshots"
 bindsym control+shift+Print exec mkdir -p ~/Pictures/screenshots && grim ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Schermo salvato in ~/Pictures/screenshots"
-# finestra focusata in clipboard
 bindsym $alt+Print exec /home/m/Dotfiles/scripts/screenshot-window.sh
-# toggle registrazione video di una regione
 bindsym $mod+shift+Print exec /home/m/Dotfiles/scripts/record-toggle.sh
-# Decodifica un QR sullo schermo dritto in clipboard (alla omarchy)
 bindsym $mod+Print exec /home/m/Dotfiles/scripts/qr-capture.sh
-# pick color and save in the clipboard (secondary selection)
 bindsym $mod+grave exec hyprpicker | wl-copy
 
-# video with no audio
-#bindsym $mod+v exec wf-recorder -g "$(slurp)" -f "$HOME/Videos/screencast-$(date +%Y%m%d-%H%M%S).mp4"
-# zen mode
+# TODO: video with no audio, zen mode
 
-###########  
+###########
 ### workspaces
-###########  
-# switch to workspace
+###########
 set $ws_docs 4
 set $ws_office 5
 set $ws_stuff 6
@@ -135,10 +115,9 @@ bindsym $mod+0 workspace $ws_main
 bindsym $mod+Tab workspace back_and_forth
 bindgesture swipe:right workspace next
 bindgesture swipe:left workspace prev
-# reload configuration
 bindsym $mod+control+r reload
 
-### right hand: edit end resize
+### right hand: edit and resize
 bindsym $mod+q kill
 bindsym $mod+w focus mode_toggle
 bindsym $mod+e floating toggle
@@ -172,7 +151,7 @@ bindsym $mod+control+semicolon move right
 bindsym $mod+m focus output left
 bindsym $mod+control+m move container to output left
 bindsym $mod+comma workspace prev_on_output
-bindsym $mod+control+comma move workspace prev; move workspacde prev
+bindsym $mod+control+comma move workspace prev
 bindsym $mod+period workspace next_on_output
 bindsym $mod+control+period move workspace next
 bindsym $mod+slash focus output right
@@ -217,22 +196,7 @@ font pango:JetBrainsMono Nerd Font, bold 10
 #gaps outer 0
 default_border none
 default_floating_border normal
-#16242d  nord0    black
-#1b2d40  nord1    dark_gray
-#243d56  nord2    gray
-#304860  nord3    light_gray
-#d6e2ee  nord4    darkest_white
-#6fb8e3  nord5    darker_white
-#f2fcff  nord6    white
-#b4e4f6  nord7    teal
-#6fb8e3  nord8    off_blue
-#8bc9eb  nord9    glacier
-#5e95bc  nord10   blue
-#4d86b0  nord11   red
-#8bc9eb  nord12   orange
-#6fa4c9  nord13   yellow
-#5e95bc  nord14   green
-#8bc9eb  nord15   purple
+# Lumon palette (from Omarchy 4), keeping the original Nord-era variable names
 set $black                #16242d
 set $dark_gray            #1b2d40
 set $gray                 #243d56
@@ -271,17 +235,15 @@ bar {
 ###########  
 ### apps
 ###########  
-# My notification daemon
 exec dunst
-# Notifications, alla omarchy (dismiss/dismiss all/invoke/history/DND)
+# notifications alla omarchy: dismiss / dismiss all / invoke / history replay / DND
 bindsym $mod+shift+comma exec dunstctl close
 bindsym $mod+shift+control+comma exec dunstctl close-all
 bindsym $mod+alt+comma exec dunstctl action
 bindsym $mod+shift+alt+comma exec dunstctl history-pop
 bindsym $mod+control+alt+comma exec 'dunstctl set-paused toggle; pkill -RTMIN+2 waybar'
-# Adjust screen color temperature based on location/time (lat/lon in .config/gammastaep/config.ini)
+# Adjust screen color temperature based on location/time (lat/lon in .config/gammastep/config.ini)
 #exec gammastep
-# My apps
 exec chromium
 exec betterbird
 exec Telegram
