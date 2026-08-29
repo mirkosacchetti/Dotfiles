@@ -263,7 +263,13 @@ bar {
 ### apps
 ###########  
 # My notification daemon
-#exec mako
+exec dunst
+# Notifications, alla omarchy (dismiss/dismiss all/invoke/history/DND)
+bindsym $mod+shift+comma exec dunstctl close
+bindsym $mod+shift+control+comma exec dunstctl close-all
+bindsym $mod+alt+comma exec dunstctl action
+bindsym $mod+shift+alt+comma exec dunstctl history-pop
+bindsym $mod+control+alt+comma exec 'dunstctl set-paused toggle; pkill -RTMIN+2 waybar'
 # Adjust screen color temperature based on location/time (lat/lon in .config/gammastaep/config.ini)
 #exec gammastep
 # My apps

@@ -69,3 +69,11 @@ button:hover {
     font-style: italic;
     color: #4d86b0;
 }
+
+#window {
+    color: #8bc9eb;
+}
+
+#custom-dnd.paused {
+    color: #6fa4c9;
+}

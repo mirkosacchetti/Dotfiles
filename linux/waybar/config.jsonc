@@ -11,7 +11,11 @@
         "sway/mode",
         "sway/scratchpad"
     ],
+    "modules-center": [
+        "sway/window"
+    ],
     "modules-right": [
+        "custom/dnd",
         "wireplumber",
         "bluetooth",
         "network",
@@ -24,6 +28,20 @@
     ],
     "sway/mode": {
         "format": "{}"
+    },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 60,
+        "tooltip": false
+    },
+    "custom/dnd": {
+        "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifiche silenziate\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 2,
+        "on-click": "dunstctl set-paused toggle; pkill -RTMIN+2 waybar",
+        "on-click-right": "dunstctl history-pop",
+        "tooltip": true
     },
     "sway/scratchpad": {
         "format": "{icon} {count}",
