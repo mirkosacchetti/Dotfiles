@@ -11,7 +11,12 @@
         "sway/mode",
         "sway/scratchpad"
     ],
+    "modules-center": [
+        "sway/window"
+    ],
     "modules-right": [
+        "custom/recording",
+        "custom/dnd",
         "wireplumber",
         "bluetooth",
         "network",
@@ -25,6 +30,28 @@
     "sway/mode": {
         "format": "{}"
     },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 60,
+        "tooltip": false
+    },
+    "custom/recording": {
+        "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"tooltip\":\"Recording\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 3,
+        "on-click": "/home/m/Dotfiles/scripts/record-toggle.sh",
+        "tooltip": true
+    },
+    "custom/dnd": {
+        "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifications silenced\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 2,
+        "on-click": "dunstctl set-paused toggle; pkill -RTMIN+2 waybar",
+        "on-click-right": "dunstctl history-pop",
+        "tooltip": true
+    },
     "sway/scratchpad": {
         "format": "{icon} {count}",
         "show-empty": false,
@@ -35,7 +62,7 @@
     "backlight": {
         "device": "intel_backlight",
         "format": "{icon}",
-        "tooltip-format": "{percent}% {icon}",
+        "tooltip-format": "{percent}%",
         "format-icons": ["", ""],
         "scroll-step": 2
     },

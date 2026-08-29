@@ -17,19 +17,19 @@ alias vim="nvim"
 alias vi="nvim"
 alias hx="helix"
 alias zd="zeditor"
-#alias vi="vim"
-# Aliases as Shortcuts
+# Directory shortcuts
 alias d="cd ~/Desktop"
 alias dl="cd ~/Downloads"
 alias do="cd ~/Dotfiles"
 alias wn="cd ~/Code/WiNet"
+alias pr="cd ~/Projects"
 alias ms="cd ~/Writings/MS/"
 alias rr="cd ~/Writings/RR/"
 alias co="cd ~/Code"
-# Sunday as first day of the week is a bestemmia
+# Start weeks on Monday
 alias cal="cal -3m"
 alias gray 'sudo mount -t nfs 192.168.2.8:/media/grey /mnt/gray;cd /mnt/gray'
-alias claudio="claude --dangerously-skip-permissions --resume"
+alias claudio="claude --dangerously-skip-permissions"
 
 
 # Set Environment Variables

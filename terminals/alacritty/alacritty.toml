@@ -1,53 +1,44 @@
+# Lumon (Omarchy 4)
 [colors.primary]
-background = "#2e3440"
-foreground = "#d8dee9"
-dim_foreground = "#a5abb6"
+background = "#16242d"
+foreground = "#d6e2ee"
+dim_foreground = "#4d86b0"
 
 [colors.cursor]
-text = "#2e3440"
-cursor = "#d8dee9"
+text = "#16242d"
+cursor = "#f2fcff"
 
 [colors.vi_mode_cursor]
-text = "#2e3440"
-cursor = "#d8dee9"
+text = "#16242d"
+cursor = "#f2fcff"
 
 [colors.selection]
 text = "CellForeground"
-background = "#4c566a"
+background = "#243d56"
 
 [colors.search.matches]
 foreground = "CellBackground"
-background = "#88c0d0"
+background = "#6fa4c9"
 
 [colors.normal]
-black = "#3b4252"
-red = "#bf616a"
-green = "#a3be8c"
-yellow = "#ebcb8b"
-blue = "#81a1c1"
-magenta = "#b48ead"
-cyan = "#88c0d0"
-white = "#e5e9f0"
+black = "#16242d"
+red = "#4d86b0"
+green = "#5e95bc"
+yellow = "#6fa4c9"
+blue = "#6fb8e3"
+magenta = "#8bc9eb"
+cyan = "#b4e4f6"
+white = "#d6e2ee"
 
 [colors.bright]
-black = "#4c566a"
-red = "#bf616a"
-green = "#a3be8c"
-yellow = "#ebcb8b"
-blue = "#81a1c1"
-magenta = "#b48ead"
-cyan = "#8fbcbb"
-white = "#eceff4"
-
-[colors.dim]
-black = "#373e4d"
-red = "#94545d"
-green = "#809575"
-yellow = "#b29e75"
-blue = "#68809a"
-magenta = "#8c738c"
-cyan = "#6d96a5"
-white = "#aeb3bb"
+black = "#304860"
+red = "#73a6cb"
+green = "#86b7d8"
+yellow = "#9dcae5"
+blue = "#f2fcff"
+magenta = "#b1d8ee"
+cyan = "#d1eef8"
+white = "#f2fcff"
 
 [env]
 TERM = "xterm-256color"
@@ -59,7 +50,7 @@ program = "/usr/bin/fish"
 size = 11
 
 [font.normal]
-family = "FiraCode Nerd Font"
+family = "JetBrainsMono Nerd Font"
 
 [font.offset]
 y = 2
@@ -73,7 +64,7 @@ y = 2
 bindings = [
 { key = "Tab", mods = "Control", action = "SelectNextTab" },
 { key = "Tab", mods = "Control|Shift", action = "SelectPreviousTab" },
-#disable macos shit
+# disable the macOS close-window shortcut
 { key = "w", mods= "Command", action = "None"},
 ]
 

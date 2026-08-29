@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=QR Capture
+Comment=Decode a QR code from a screen region to the clipboard
+Exec=/home/m/Dotfiles/scripts/qr-capture.sh
+Icon=/home/m/Dotfiles/applications/icons/qr-capture.png
+Terminal=false
+Categories=Utility;

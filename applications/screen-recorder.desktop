@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Screen Recorder
+Comment=Start or stop a region screen recording
+Exec=/home/m/Dotfiles/scripts/record-toggle.sh
+Icon=/home/m/Dotfiles/applications/icons/screen-recorder.png
+Terminal=false
+Categories=Utility;

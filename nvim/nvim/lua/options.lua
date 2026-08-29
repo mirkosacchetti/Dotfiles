@@ -32,4 +32,5 @@ vim.opt.showcmd = false
 vim.opt.showmatch = false
 vim.opt.shortmess = vim.opt.shortmess + 'c'
 
-vim.cmd("colorscheme nord")
+require("lumon").setup({ transparent = true })
+vim.cmd("colorscheme lumon")

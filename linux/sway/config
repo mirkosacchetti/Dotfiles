@@ -1,13 +1,6 @@
-#### Default Sway startup scripts
-#### Synchronizes environment variables with systemd and D-Bus 
-#### Ensure proper Wayland session integration for user applications and services
+# Default startup scripts: sync env vars with systemd/D-Bus for proper session integration
 include /etc/sway/config.d/*
-#### Xwayland is an X server that runs as a Wayland client, translating X11 calls to Wayland
-#### so that applications built for X11 can still function even though the system is running on Wayland 
-#### Most applications don't need it es. Chromium or Firefox, but it is required by some applications es. Steam or VLC
-#### There is no reason to disable it unless for debugging or 'purist' purposes, is a lightweight process
-#### But when is enebled invalidate Wayland's security model
-#### Xwayland is enabled by default
+# Xwayland stays enabled: lightweight, and some apps (Steam, VLC) still need X11
 # xwayland disable
 set $mod Mod4
 set $alt Mod1
@@ -19,16 +12,15 @@ set $menu fuzzel
 set $term alacritty
 set $browser chromium
 
-output * bg /home/m/Dotfiles/images/Nighthawks_by_Edward_Hopper_1942.jpg fill
+#output * bg /home/m/Dotfiles/images/Nighthawks_by_Edward_Hopper_1942.jpg fill
+output * bg "#16242d" solid_color
 
 ###########  
 ### i/o
 ###########  
 set $laptop_display "Lenovo Group Limited 0x414B Unknown"
 set $laptop_keyboard "1:1:AT_Translated_Set_2_keyboard"
-# check inputs names with: swaymsg -t get_intputs
-# check outputs names with: swaymsg -t get_outputs
-# My laptop i/o 
+# check input/output names with: swaymsg -t get_inputs / get_outputs
 input * {
     xkb_options compose:ralt,shift:both_capslock
 }
@@ -60,8 +52,7 @@ output "LG Electronics LG HDR 4K 0x00006D62" {
     scale 1.5
     transform 90
 }
-# Clamshell mode for laptop
-# if the lid is closed whith an external monitor then disable it
+# Clamshell: disable the laptop display when the lid closes with an external monitor
 bindswitch --reload --locked lid:on output $laptop_display disable
 bindswitch --reload --locked lid:off output $laptop_display enable
 
@@ -73,11 +64,14 @@ bindsym button4 nop
 bindsym button5 nop
 bindsym button6 nop
 bindsym button7 nop  
-# start my terminal
 bindsym $mod+Return exec $term
 bindsym $mod+g exec $browser
-# start my launcher
 bindsym $mod+space exec $menu
+# omarchy-style app launches
+bindsym $mod+shift+f exec nautilus
+bindsym $mod+shift+n exec $term -e nvim
+bindsym $mod+shift+o exec obsidian
+bindsym $mod+shift+m exec spotify-launcher
 # media key/syms
 bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.2
 bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
@@ -89,20 +83,21 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
 bindsym XF86Display exec swaymsg output "eDP-1" toggle
-# save screenshots in the clipboard (secondary selection)
+# capture: region/full to clipboard, with Shift to ~/Pictures/screenshots instead
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym control+Print exec grim - | wl-copy
-# pick color and save in the clipboard (secondary selection)
-bindsym $mod+grave exec hyprpicker | wl-copy
+bindsym shift+Print exec mkdir -p ~/Pictures/screenshots && grim -g "$(slurp)" ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Region saved to ~/Pictures/screenshots"
+bindsym control+shift+Print exec mkdir -p ~/Pictures/screenshots && grim ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Screen saved to ~/Pictures/screenshots"
+bindsym $alt+Print exec /home/m/Dotfiles/scripts/screenshot-window.sh
+bindsym $mod+shift+Print exec /home/m/Dotfiles/scripts/record-toggle.sh
+bindsym $mod+Print exec /home/m/Dotfiles/scripts/qr-capture.sh
+bindsym $mod+grave exec nautilus
 
-# video with no audio
-#bindsym $mod+v exec wf-recorder -g "$(slurp)" -f "$HOME/Videos/screencast-$(date +%Y%m%d-%H%M%S).mp4"
-# zen mode
+# TODO: video with no audio, zen mode
 
-###########  
+###########
 ### workspaces
-###########  
-# switch to workspace
+###########
 set $ws_docs 4
 set $ws_office 5
 set $ws_stuff 6
@@ -125,10 +120,9 @@ bindsym $mod+0 workspace $ws_main
 bindsym $mod+Tab workspace back_and_forth
 bindgesture swipe:right workspace next
 bindgesture swipe:left workspace prev
-# reload configuration
 bindsym $mod+control+r reload
 
-### right hand: edit end resize
+### right hand: edit and resize
 bindsym $mod+q kill
 bindsym $mod+w focus mode_toggle
 bindsym $mod+e floating toggle
@@ -162,7 +156,7 @@ bindsym $mod+control+semicolon move right
 bindsym $mod+m focus output left
 bindsym $mod+control+m move container to output left
 bindsym $mod+comma workspace prev_on_output
-bindsym $mod+control+comma move workspace prev; move workspacde prev
+bindsym $mod+control+comma move workspace prev
 bindsym $mod+period workspace next_on_output
 bindsym $mod+control+period move workspace next
 bindsym $mod+slash focus output right
@@ -198,47 +192,35 @@ assign [app_id="sublime_merge"] workspace $ws_stuff
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
+# sushi file preview (space in nautilus)
+for_window [app_id="org.gnome.NautilusPreviewer"] floating enable
 
 ###########  
 ### style
 ###########  
-font pango:Ubuntu Nerd Font, bold 10
+font pango:JetBrainsMono Nerd Font, bold 10
 #gaps inner 2
 #gaps outer 0
 default_border none
 default_floating_border normal
-#2E3440  nord0    black
-#3B4252  nord1    dark_gray
-#434C5E  nord2    gray
-#4C566A  nord3    light_gray
-#D8DEE9  nord4    darkest_white
-#E5E9F0  nord5    darker_white
-#ECEFF4  nord6    white
-#8FBCBB  nord7    teal
-#88C0D0  nord8    off_blue
-#81A1C1  nord9    glacier
-#5E81AC  nord10   blue
-#BF616A  nord11   red
-#D08770  nord12   orange
-#EBCB8B  nord13   yellow
-#A3BE8C  nord14   green
-#B48EAD  nord15   purple
-set $black                #2E3440
-set $dark_gray            #3B4252
-set $gray                 #434C5E
-set $light_gray           #4C566A
-set $darkest_white        #D8DEE9
-set $darker_white         #E5E9F0
-set $white                #ECEFF4
-set $teal                 #8FBCBB
-set $off_blue             #88C0D0
-set $glacier              #81A1C1
-set $blue                 #5E81AC 
-set $red                  #BF616A
-set $orange               #D08770
-set $yellow               #EBCB8B
-set $green                #A3BE8C
-set $purple               #B48EAD
+# Lumon palette (from Omarchy 4), keeping the original Nord-era variable names
+set $black                #16242d
+set $dark_gray            #1b2d40
+set $gray                 #243d56
+set $light_gray           #304860
+set $darkest_white        #d6e2ee
+# focused tab/titlebar: inverted foreground/background instead of Lumon's bright active-tab blue
+set $darker_white         #d6e2ee
+set $white                #f2fcff
+set $teal                 #b4e4f6
+set $off_blue             #6fb8e3
+set $glacier              #8bc9eb
+set $blue                 #5e95bc 
+set $red                  #4d86b0
+set $orange               #8bc9eb
+set $yellow               #6fa4c9
+set $green                #5e95bc
+set $purple               #8bc9eb
 #                          border           background      text            indicator       child_border
  client.focused            $black           $darker_white   $black          $darkest_white  $darkest_white
  client.focused_tab_title  $black           $darker_white   $black                          
@@ -261,11 +243,22 @@ bar {
 ###########  
 ### apps
 ###########  
-# My notification daemon
-#exec mako
-# Adjust screen color temperature based on location/time (lat/lon in .config/gammastaep/config.ini)
+exec dunst
+# manual lock only; swayidle just powers displays off after 10 min idle
+bindsym $mod+Escape exec swaylock
+exec swayidle -w timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
+# clipboard history (omarchy-style manager on Super+Ctrl+V); sensitive copies are skipped
+exec wl-paste --type text --watch cliphist store
+exec wl-paste --type image --watch cliphist store
+bindsym $mod+control+v exec cliphist list | fuzzel --dmenu --lines 15 --width 60 | cliphist decode | wl-copy
+# omarchy-style notification controls: dismiss / dismiss all / invoke / history replay / DND
+bindsym $mod+shift+comma exec dunstctl close
+bindsym $mod+shift+control+comma exec dunstctl close-all
+bindsym $mod+alt+comma exec dunstctl action
+bindsym $mod+shift+alt+comma exec dunstctl history-pop
+bindsym $mod+control+alt+comma exec 'dunstctl set-paused toggle; pkill -RTMIN+2 waybar'
+# Adjust screen color temperature based on location/time (lat/lon in .config/gammastep/config.ini)
 #exec gammastep
-# My apps
 exec chromium
 exec betterbird
 exec Telegram
