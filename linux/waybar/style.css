@@ -77,3 +77,7 @@ button:hover {
 #custom-dnd.paused {
     color: #6fa4c9;
 }
+
+#custom-recording.recording {
+    color: #4d86b0;
+}

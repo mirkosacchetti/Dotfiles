@@ -93,6 +93,13 @@ bindsym XF86Display exec swaymsg output "eDP-1" toggle
 # save screenshots in the clipboard (secondary selection)
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym control+Print exec grim - | wl-copy
+# con Shift salva su file invece che in clipboard
+bindsym shift+Print exec mkdir -p ~/Pictures/screenshots && grim -g "$(slurp)" ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Regione salvata in ~/Pictures/screenshots"
+bindsym control+shift+Print exec mkdir -p ~/Pictures/screenshots && grim ~/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send -u low "Screenshot" "Schermo salvato in ~/Pictures/screenshots"
+# finestra focusata in clipboard
+bindsym $alt+Print exec /home/m/Dotfiles/scripts/screenshot-window.sh
+# toggle registrazione video di una regione
+bindsym $mod+shift+Print exec /home/m/Dotfiles/scripts/record-toggle.sh
 # Decodifica un QR sullo schermo dritto in clipboard (alla omarchy)
 bindsym $mod+Print exec /home/m/Dotfiles/scripts/qr-capture.sh
 # pick color and save in the clipboard (secondary selection)

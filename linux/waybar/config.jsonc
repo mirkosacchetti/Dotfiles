@@ -15,6 +15,7 @@
         "sway/window"
     ],
     "modules-right": [
+        "custom/recording",
         "custom/dnd",
         "wireplumber",
         "bluetooth",
@@ -33,6 +34,14 @@
         "format": "{title}",
         "max-length": 60,
         "tooltip": false
+    },
+    "custom/recording": {
+        "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"tooltip\":\"Registrazione in corso\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 3,
+        "on-click": "/home/m/Dotfiles/scripts/record-toggle.sh",
+        "tooltip": true
     },
     "custom/dnd": {
         "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifiche silenziate\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",
