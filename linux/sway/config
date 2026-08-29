@@ -187,6 +187,8 @@ assign [app_id="sublime_merge"] workspace $ws_stuff
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
+# sushi file preview (space in nautilus)
+for_window [app_id="org.gnome.NautilusPreviewer"] floating enable
 
 ###########  
 ### style
