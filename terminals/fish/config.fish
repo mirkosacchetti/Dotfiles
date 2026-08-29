@@ -8,6 +8,8 @@ set -g fish_key_bindings fish_hybrid_key_bindings
 
 bind -M insert ctrl-p up-or-search
 bind -M insert ctrl-n down-or-search
+export OLLAMA_KEEP_ALIVE=50m
+export LLAMA_ARG_HOST=0.0.0.0
 
 # Aliases
 alias jn="jupyter notebook"
