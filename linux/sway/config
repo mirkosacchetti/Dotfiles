@@ -19,7 +19,8 @@ set $menu fuzzel
 set $term alacritty
 set $browser chromium
 
-output * bg /home/m/Dotfiles/images/Nighthawks_by_Edward_Hopper_1942.jpg fill
+#output * bg /home/m/Dotfiles/images/Nighthawks_by_Edward_Hopper_1942.jpg fill
+output * bg "#16242d" solid_color
 
 ###########  
 ### i/o
@@ -202,43 +203,43 @@ for_window [app_id="org.gnome.Calculator"] floating enable
 ###########  
 ### style
 ###########  
-font pango:Ubuntu Nerd Font, bold 10
+font pango:JetBrainsMono Nerd Font, bold 10
 #gaps inner 2
 #gaps outer 0
 default_border none
 default_floating_border normal
-#2E3440  nord0    black
-#3B4252  nord1    dark_gray
-#434C5E  nord2    gray
-#4C566A  nord3    light_gray
-#D8DEE9  nord4    darkest_white
-#E5E9F0  nord5    darker_white
-#ECEFF4  nord6    white
-#8FBCBB  nord7    teal
-#88C0D0  nord8    off_blue
-#81A1C1  nord9    glacier
-#5E81AC  nord10   blue
-#BF616A  nord11   red
-#D08770  nord12   orange
-#EBCB8B  nord13   yellow
-#A3BE8C  nord14   green
-#B48EAD  nord15   purple
-set $black                #2E3440
-set $dark_gray            #3B4252
-set $gray                 #434C5E
-set $light_gray           #4C566A
-set $darkest_white        #D8DEE9
-set $darker_white         #E5E9F0
-set $white                #ECEFF4
-set $teal                 #8FBCBB
-set $off_blue             #88C0D0
-set $glacier              #81A1C1
-set $blue                 #5E81AC 
-set $red                  #BF616A
-set $orange               #D08770
-set $yellow               #EBCB8B
-set $green                #A3BE8C
-set $purple               #B48EAD
+#16242d  nord0    black
+#1b2d40  nord1    dark_gray
+#243d56  nord2    gray
+#304860  nord3    light_gray
+#d6e2ee  nord4    darkest_white
+#6fb8e3  nord5    darker_white
+#f2fcff  nord6    white
+#b4e4f6  nord7    teal
+#6fb8e3  nord8    off_blue
+#8bc9eb  nord9    glacier
+#5e95bc  nord10   blue
+#4d86b0  nord11   red
+#8bc9eb  nord12   orange
+#6fa4c9  nord13   yellow
+#5e95bc  nord14   green
+#8bc9eb  nord15   purple
+set $black                #16242d
+set $dark_gray            #1b2d40
+set $gray                 #243d56
+set $light_gray           #304860
+set $darkest_white        #d6e2ee
+set $darker_white         #6fb8e3
+set $white                #f2fcff
+set $teal                 #b4e4f6
+set $off_blue             #6fb8e3
+set $glacier              #8bc9eb
+set $blue                 #5e95bc 
+set $red                  #4d86b0
+set $orange               #8bc9eb
+set $yellow               #6fa4c9
+set $green                #5e95bc
+set $purple               #8bc9eb
 #                          border           background      text            indicator       child_border
  client.focused            $black           $darker_white   $black          $darkest_white  $darkest_white
  client.focused_tab_title  $black           $darker_white   $black                          

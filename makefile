@@ -29,6 +29,11 @@ font:
 	unzip /tmp/font.zip -d /tmp/fonts/
 	cp -R /tmp/fonts/* ~/.local/share/fonts/
 	rm -rf /tmp/fonts/*
+	#jetbrainsmono font (omarchy/lumon)
+	wget -O /tmp/font.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+	unzip /tmp/font.zip -d /tmp/fonts/
+	cp -R /tmp/fonts/* ~/.local/share/fonts/
+	rm -rf /tmp/fonts/*
 	#reload font cache
 	fc-cache -f -v
 	

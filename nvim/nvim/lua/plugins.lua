@@ -13,5 +13,6 @@ return require("packer").startup(function()
     use "ibhagwan/fzf-lua"
     use "stevearc/oil.nvim"
     use 'shaunsingh/nord.nvim'
+    use 'omacom-io/lumon.nvim'
     use 'nvim-lualine/lualine.nvim'
 end)
