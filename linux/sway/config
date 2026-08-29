@@ -93,6 +93,8 @@ bindsym XF86Display exec swaymsg output "eDP-1" toggle
 # save screenshots in the clipboard (secondary selection)
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym control+Print exec grim - | wl-copy
+# Decodifica un QR sullo schermo dritto in clipboard (alla omarchy)
+bindsym $mod+Print exec /home/m/Dotfiles/scripts/qr-capture.sh
 # pick color and save in the clipboard (secondary selection)
 bindsym $mod+grave exec hyprpicker | wl-copy
 
