@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Emoji Picker
+Comment=Pick an emoji and copy it to the clipboard
+Exec=/home/m/Dotfiles/scripts/emoji-picker.sh
+Icon=/home/m/Dotfiles/applications/icons/emoji-picker.png
+Terminal=false
+Categories=Utility;
