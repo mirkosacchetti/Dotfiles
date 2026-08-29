@@ -1,0 +1,18 @@
+# Lumon (Omarchy 4)
+ignore-empty-password
+daemonize
+indicator-radius=80
+font=JetBrainsMono Nerd Font
+color=16242d
+inside-color=16242d
+inside-ver-color=16242d
+inside-wrong-color=16242d
+ring-color=304860
+ring-ver-color=6fb8e3
+ring-wrong-color=4d86b0
+key-hl-color=8bc9eb
+text-color=d6e2ee
+text-ver-color=d6e2ee
+text-wrong-color=f2fcff
+line-color=00000000
+separator-color=00000000

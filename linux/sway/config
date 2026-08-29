@@ -238,6 +238,9 @@ bar {
 ### apps
 ###########  
 exec dunst
+# manual lock only; swayidle just powers displays off after 10 min idle
+bindsym $mod+Escape exec swaylock
+exec swayidle -w timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
 # omarchy-style notification controls: dismiss / dismiss all / invoke / history replay / DND
 bindsym $mod+shift+comma exec dunstctl close
 bindsym $mod+shift+control+comma exec dunstctl close-all
