@@ -10,6 +10,7 @@ return require("packer").startup(function()
     use 'neovim/nvim-lspconfig'
     use 'tpope/vim-commentary'
     use 'tpope/vim-fugitive'
+    use 'kdheepak/lazygit.nvim'
     use "ibhagwan/fzf-lua"
     use "stevearc/oil.nvim"
     use 'shaunsingh/nord.nvim'

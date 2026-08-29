@@ -62,7 +62,7 @@
     "backlight": {
         "device": "intel_backlight",
         "format": "{icon}",
-        "tooltip-format": "{percent}% {icon}",
+        "tooltip-format": "{percent}%",
         "format-icons": ["", ""],
         "scroll-step": 2
     },
