@@ -87,8 +87,6 @@ bindsym $alt+Print exec /home/m/Dotfiles/scripts/screenshot-window.sh
 bindsym $mod+shift+Print exec /home/m/Dotfiles/scripts/record-toggle.sh
 bindsym $mod+Print exec /home/m/Dotfiles/scripts/qr-capture.sh
 bindsym $mod+grave exec nautilus
-# color picker to clipboard, toggle style like omarchy (moved off $mod+grave for nautilus)
-bindsym $mod+shift+grave exec pkill hyprpicker || hyprpicker -a
 
 # TODO: video with no audio, zen mode
 
