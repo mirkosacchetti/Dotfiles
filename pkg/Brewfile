@@ -1,0 +1,46 @@
+# Create and run Linux containers using lightweight virtual machines
+brew "container"
+# Pack, ship and run any application as a lightweight container
+brew "docker", link: false
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Language server for the Go language
+brew "gopls"
+# LLM inference in C/C++
+brew "llama.cpp"
+# Apple Silicon Monitor Top written in Go Lang
+brew "mactop"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Create, run, and share large language models (LLMs)
+brew "ollama"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# AI coding agent, built for the terminal
+brew "opencode"
+# Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "stow"
+# Terminal multiplexer
+brew "tmux"
+# Lightweight BitTorrent client
+brew "transmission-cli"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Internet file retriever
+brew "wget"
+# Free and open-source web browser
+cask "chromium"
+# Browser for SQLite databases
+cask "db-browser-for-sqlite"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Open-source BitTorrent client
+cask "transmission"
+npm "@openai/codex"
+npm "pyright"

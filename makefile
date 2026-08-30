@@ -2,7 +2,13 @@
 # and override specific apps with their own version (mac/, server/).
 .PHONY: linux mac server font
 
+# default target follows the OS: `make` does the right thing everywhere
+UNAME := $(shell uname -s)
+ifeq ($(UNAME),Darwin)
+all: mac
+else
 all: linux font
+endif
 
 linux:
 	# remember to install fzf and ripgrep!
