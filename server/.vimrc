@@ -32,7 +32,7 @@ set lbr
 set shortmess+=c
 set updatetime=300
 set completeopt=longest,menuone
-set clipboard^=unnamed,unnamedplus
+set clipboard=unnamed
 set backspace=indent,eol,start
 
 let mapleader=";"

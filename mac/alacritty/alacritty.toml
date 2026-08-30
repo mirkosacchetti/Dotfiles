@@ -1,0 +1,6 @@
+# macOS: inherit the shared linux config, override only what differs
+[general]
+import = ["~/Dotfiles/linux/alacritty/alacritty.toml"]
+
+[terminal.shell]
+program = "/opt/homebrew/bin/fish"

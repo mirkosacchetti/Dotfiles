@@ -1,6 +1,6 @@
 # Environments: linux is the base; mac and server reuse its shared configs
 # and override specific apps with their own version (mac/, server/).
-.PHONY: linux mac server font
+.PHONY: linux mac server font font-mac relink clean-links
 
 # default target follows the OS: `make` does the right thing everywhere
 UNAME := $(shell uname -s)
@@ -9,6 +9,13 @@ all: mac
 else
 all: linux font
 endif
+
+# drop dangling symlinks pointing into Dotfiles, then restow for this OS
+relink: clean-links all
+
+clean-links:
+	find $(HOME)/.config -maxdepth 2 -type l -lname '*Dotfiles*' ! -exec test -e '{}' \; -print -delete
+	find $(HOME) -maxdepth 1 -type l -lname '*Dotfiles*' ! -exec test -e '{}' \; -print -delete
 
 linux:
 	# remember to install fzf and ripgrep!
@@ -27,10 +34,13 @@ mac:
 	stow --verbose --target=$(HOME)/.config --restow nvim
 	mkdir -p $(HOME)/.config/alacritty $(HOME)/.config/tmux $(HOME)/.config/fish
 	# shared from the linux base
-	stow --verbose --dir=linux --target=$(HOME)/.config/alacritty --restow alacritty
 	stow --verbose --dir=linux --target=$(HOME)/.config/fish --restow fish
 	# mac-specific overrides
+	stow --verbose --dir=mac --target=$(HOME)/.config/alacritty --restow alacritty
 	stow --verbose --dir=mac --target=$(HOME)/.config/tmux --restow tmux
+
+font-mac:
+	brew install --cask font-jetbrains-mono-nerd-font font-fira-code-nerd-font font-ubuntu-nerd-font
 
 server:
 	stow --verbose --target=$(HOME) --restow server
