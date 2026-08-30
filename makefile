@@ -1,20 +1,33 @@
-.PHONY: work linux font
+# Environments: linux is the base; mac and server reuse its shared configs
+# and override specific apps with their own version (mac/, server/).
+.PHONY: linux mac server font
 
-all: work linux font
+all: linux font
 
-work:
+linux:
 	# remember to install fzf and ripgrep!
 	-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 	stow --verbose --target=$(HOME)/.config --restow nvim
-	stow --verbose --target=$(HOME)/.config --restow terminals
-	stow --verbose --target=$(HOME) --restow npm
-
-linux:
 	stow --verbose --target=$(HOME)/.config --restow linux
+	stow --verbose --target=$(HOME) --restow npm
 	stow --verbose --target=$(HOME) --restow Xorg
 	stow --verbose --target=$(HOME) --restow bash
 	mkdir -p $(HOME)/.local/share/applications
 	ln -sf $(HOME)/Dotfiles/applications/*.desktop $(HOME)/.local/share/applications/
+
+mac:
+	# remember to install stow, fzf and ripgrep (brew)!
+	-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+	stow --verbose --target=$(HOME)/.config --restow nvim
+	mkdir -p $(HOME)/.config/alacritty $(HOME)/.config/tmux $(HOME)/.config/fish
+	# shared from the linux base
+	stow --verbose --dir=linux --target=$(HOME)/.config/alacritty --restow alacritty
+	stow --verbose --dir=linux --target=$(HOME)/.config/fish --restow fish
+	# mac-specific overrides
+	stow --verbose --dir=mac --target=$(HOME)/.config/tmux --restow tmux
+
+server:
+	stow --verbose --target=$(HOME) --restow server
 
 font:
 	stow --verbose --target=$(HOME)/.config --restow fonts
@@ -37,4 +50,3 @@ font:
 	rm -rf /tmp/fonts/*
 	#reload font cache
 	fc-cache -f -v
-	
