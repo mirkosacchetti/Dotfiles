@@ -33,7 +33,8 @@
     "sway/window": {
         "format": "{title}",
         "max-length": 60,
-        "tooltip": false
+        "tooltip": false,
+        "on-click-right": "swaymsg kill"
     },
     "custom/recording": {
         "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"tooltip\":\"Recording\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",

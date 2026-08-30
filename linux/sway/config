@@ -93,8 +93,6 @@ bindsym $mod+shift+Print exec /home/m/Dotfiles/scripts/record-toggle.sh
 bindsym $mod+Print exec /home/m/Dotfiles/scripts/qr-capture.sh
 bindsym $mod+grave exec nautilus
 
-# TODO: video with no audio, zen mode
-
 ###########
 ### workspaces
 ###########
@@ -244,6 +242,9 @@ bar {
 ### apps
 ###########  
 exec dunst
+exec chromium
+exec betterbird
+exec Telegram
 # manual lock only; swayidle just powers displays off after 10 min idle
 bindsym $mod+Escape exec swaylock
 exec swayidle -w timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"'
@@ -257,8 +258,4 @@ bindsym $mod+shift+control+comma exec dunstctl close-all
 bindsym $mod+alt+comma exec dunstctl action
 bindsym $mod+shift+alt+comma exec dunstctl history-pop
 bindsym $mod+control+alt+comma exec 'dunstctl set-paused toggle; pkill -RTMIN+2 waybar'
-# Adjust screen color temperature based on location/time (lat/lon in .config/gammastep/config.ini)
-#exec gammastep
-exec chromium
-exec betterbird
-exec Telegram
+

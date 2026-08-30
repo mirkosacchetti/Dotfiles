@@ -20,20 +20,18 @@ clean-links:
 linux:
 	# remember to install fzf and ripgrep!
 	-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-	stow --verbose --target=$(HOME)/.config --restow nvim
-	stow --verbose --target=$(HOME)/.config --restow linux
-	stow --verbose --target=$(HOME) --restow npm
-	stow --verbose --target=$(HOME) --restow Xorg
-	stow --verbose --target=$(HOME) --restow bash
+	# everything in linux/ targets ~/.config, except the $$HOME dotfile packages below
+	stow --verbose --target=$(HOME)/.config --restow --ignore='^(Xorg|bash|npm)$$' linux
+	stow --verbose --dir=linux --target=$(HOME) --restow Xorg bash npm
 	mkdir -p $(HOME)/.local/share/applications
 	ln -sf $(HOME)/Dotfiles/applications/*.desktop $(HOME)/.local/share/applications/
 
 mac:
 	# remember to install stow, fzf and ripgrep (brew)!
 	-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-	stow --verbose --target=$(HOME)/.config --restow nvim
-	mkdir -p $(HOME)/.config/alacritty $(HOME)/.config/tmux $(HOME)/.config/fish
+	mkdir -p $(HOME)/.config/alacritty $(HOME)/.config/tmux $(HOME)/.config/fish $(HOME)/.config/nvim
 	# shared from the linux base
+	stow --verbose --dir=linux --target=$(HOME)/.config/nvim --restow nvim
 	stow --verbose --dir=linux --target=$(HOME)/.config/fish --restow fish
 	# mac-specific overrides
 	stow --verbose --dir=mac --target=$(HOME)/.config/alacritty --restow alacritty

@@ -26,11 +26,9 @@ alias pr="cd ~/Projects"
 alias ms="cd ~/Writings/MS/"
 alias rr="cd ~/Writings/RR/"
 alias co="cd ~/Code"
-# Start weeks on Monday
-alias cal="cal -3m"
+alias cal="cal -3m" # Start weeks on Monday
 alias gray 'sudo mount -t nfs 192.168.2.8:/media/grey /mnt/gray;cd /mnt/gray'
 alias claudio="claude --dangerously-skip-permissions"
-
 
 # Set Environment Variables
 # NPM
