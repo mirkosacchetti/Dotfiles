@@ -34,6 +34,7 @@
         "format": "{title}",
         "max-length": 60,
         "tooltip": false,
+        "on-click": "/home/m/Dotfiles/scripts/float-toggle.sh",
         "on-click-right": "swaymsg kill"
     },
     "custom/recording": {
@@ -130,7 +131,8 @@
             "car": "",
             "default": ["", "", " "]
         },
-        "on-click": "pavucontrol", 
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "scroll-step": 2
     },
     "custom/power": {

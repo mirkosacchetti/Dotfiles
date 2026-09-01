@@ -123,7 +123,7 @@ bindsym $mod+control+r reload
 ### right hand: edit and resize
 bindsym $mod+q kill
 bindsym $mod+w focus mode_toggle
-bindsym $mod+e floating toggle
+bindsym $mod+e exec /home/m/Dotfiles/scripts/float-toggle.sh
 bindsym $mod+r sticky toggle
 
 bindsym $mod+a split vertical
