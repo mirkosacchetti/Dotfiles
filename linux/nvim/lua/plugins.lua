@@ -16,4 +16,5 @@ return require("packer").startup(function()
     use 'shaunsingh/nord.nvim'
     use 'omacom-io/lumon.nvim'
     use 'nvim-lualine/lualine.nvim'
+    use 'Olical/conjure'
 end)

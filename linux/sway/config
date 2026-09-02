@@ -52,8 +52,9 @@ output "LG Electronics LG HDR 4K 0x00006D62" {
     scale 1.5
     transform 90
 }
-# Clamshell: disable the laptop display when the lid closes with an external monitor
-bindswitch --reload --locked lid:on output $laptop_display disable
+# Clamshell: lid close keeps running with an external monitor (panel off),
+# suspends standalone; logind lid handling is off (systemd/logind-lid.conf)
+bindswitch --reload --locked lid:on exec /home/m/Dotfiles/scripts/lid-close.sh
 bindswitch --reload --locked lid:off output $laptop_display enable
 
 ###########  

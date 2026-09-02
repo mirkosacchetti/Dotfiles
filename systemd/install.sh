@@ -13,17 +13,22 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 # Install scripts
-echo "[1/4] Installing scripts to /usr/local/bin/..."
+echo "[1/5] Installing scripts to /usr/local/bin/..."
 sudo install -m 755 disable-leds.sh /usr/local/bin/
 sudo install -m 755 power-mode.sh /usr/local/bin/
 sudo install -m 755 system-resume.sh /usr/local/bin/
 
 # Install systemd sleep hook
-echo "[2/4] Installing systemd sleep hook..."
+echo "[2/5] Installing systemd sleep hook..."
 sudo install -m 755 thinkpad-sleep-hook /lib/systemd/system-sleep/
 
+# Install logind drop-in: lid handling is owned by sway (scripts/lid-close.sh)
+echo "[3/5] Installing logind lid drop-in..."
+sudo install -m 644 -D logind-lid.conf /etc/systemd/logind.conf.d/logind-lid.conf
+sudo systemctl restart systemd-logind
+
 # Disable and remove old services
-echo "[3/4] Cleaning up old services..."
+echo "[4/5] Cleaning up old services..."
 for old_service in thinkpad-disable-led.service thinkpad-power-mode.service; do
     if systemctl list-unit-files | grep -q "^$old_service"; then
         echo "  - Removing $old_service"
@@ -34,7 +39,7 @@ for old_service in thinkpad-disable-led.service thinkpad-power-mode.service; do
 done
 
 # Install and enable new service
-echo "[4/4] Installing and enabling thinkpad-system-setup.service..."
+echo "[5/5] Installing and enabling thinkpad-system-setup.service..."
 sudo install -m 644 thinkpad-system-setup.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable thinkpad-system-setup.service
