@@ -233,7 +233,7 @@ set $purple               #8bc9eb
 ### bar
 ###########  
 bar {
-    swaybar_command waybar
+    swaybar_command /home/m/Dotfiles/scripts/bar-loop.sh
     mode dock
     hidden_state hide
     modifier none
