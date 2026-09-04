@@ -7,6 +7,7 @@ cd "$(dirname "$0")"
 echo "== installo i config"
 install -Dm644 iwd-main.conf /etc/iwd/main.conf
 install -Dm644 20-wired.network /etc/systemd/network/20-wired.network
+install -Dm644 resolved-no-mdns.conf /etc/systemd/resolved.conf.d/no-mdns.conf
 
 echo "== abilito networkd + resolved"
 systemctl enable --now systemd-networkd systemd-resolved
