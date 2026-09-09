@@ -53,9 +53,12 @@ output "LG Electronics LG HDR 4K 0x00006D62" {
     transform 90
 }
 # Clamshell: lid close keeps running with an external monitor (panel off),
-# suspends standalone; logind lid handling is off (systemd/logind-lid.conf)
-bindswitch --reload --locked lid:on exec /home/m/Dotfiles/scripts/lid-close.sh
+# suspends standalone; logind lid handling is off (systemd/logind-lid.conf).
+# output-watch.sh re-runs the same decision on monitor hotplug, so undocking
+# with the lid already closed suspends instead of leaving the machine awake.
+bindswitch --reload --locked lid:on exec /home/m/Dotfiles/scripts/lid-eval.sh
 bindswitch --reload --locked lid:off output $laptop_display enable
+exec /home/m/Dotfiles/scripts/output-watch.sh
 
 ###########  
 ### system
