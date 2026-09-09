@@ -1,0 +1,26 @@
+# T14 Gen 5 AMD: stop the machine waking itself seconds after suspend.
+#
+# Closing the lid presses the display against the TrackPoint cap and the
+# touchpad. Both report through the embedded controller, which raises the
+# ACPI SCI and resumes the machine 3-13 s after it entered s2idle; it then
+# stays on for hours in the bag. It fired on 7 of the last 38 lid-close
+# suspends, always with the lid shut.
+#
+# The TrackPoint's own PS/2 node (serio1) already has wakeup disabled, so the
+# press does not arrive through it: the wake comes through the ACPI Sleep
+# Button, which is the wake source the firmware maps those EC events onto.
+# Diagnosis and fix for this exact model:
+# https://nobuto-m.github.io/post/2025/how-to-prevent-trackpoint-events-from-waking-up-thinkpad-t14-gen-5-amd-from-suspend/
+#
+# Lid switch and power button keep waking the machine, which is how it is
+# meant to be woken.
+
+# ACPI Sleep Button: the path TrackPoint/EC events take to resume the system.
+# It is the *platform* node that carries power/wakeup; the acpi bus node of the
+# same name has no such attribute, so matching on SUBSYSTEM=="acpi" silently
+# does nothing.
+KERNEL=="PNP0C0E:00", SUBSYSTEM=="platform", ATTR{power/wakeup}="disabled"
+
+# Touchpad (Synaptics I2C-HID, wakes over GPIO pin 8 / IRQ 76). Pressed by the
+# closed lid just like the TrackPoint.
+KERNEL=="i2c-SYNA8018:00", SUBSYSTEM=="i2c", ATTR{power/wakeup}="disabled"

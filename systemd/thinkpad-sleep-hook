@@ -6,5 +6,8 @@ case $1/$2 in
   post/*)
     # After resume from suspend/hibernate
     /usr/local/bin/system-resume.sh
+    # Spurious-wake safety net, detached: systemd-sleep is still running
+    # here, so `systemctl suspend` must be issued from another unit later.
+    systemd-run --quiet --collect --no-block /usr/local/bin/resuspend-if-lid-closed.sh
     ;;
 esac
