@@ -34,13 +34,34 @@ external_active() {
         jq -e '[.[] | select(.name != "eDP-1" and .active)] | length > 0' >/dev/null
 }
 
+internal_active() {
+    swaymsg -t get_outputs |
+        jq -e '[.[] | select(.name == "eDP-1" and .active)] | length > 0' >/dev/null
+}
+
+# Drop the internal panel for clamshell -- but only if it is still on.
+#
+# Sway emits an "output" IPC event for every output command it accepts,
+# including one that changes nothing. Disabling eDP-1 unconditionally
+# therefore fed output-watch.sh an event, which ran this script again, which
+# disabled the already-disabled panel again: a loop that spun at ~27 Hz for as
+# long as the lid stayed shut, reconfiguring the outputs on every turn. The
+# desktop stayed up but every frame and every input event queued behind that
+# churn, so the pointer moved while clicks, hover and keystrokes lagged
+# seconds behind. Checking first makes the second call a no-op that emits
+# nothing, which is what breaks the cycle.
+go_clamshell() {
+    internal_active || exit 0
+    exec swaymsg -q output eDP-1 disable
+}
+
 lid_closed || exit 0
-external_active && exec swaymsg -q output eDP-1 disable
+external_active && go_clamshell
 
 if [ "$SETTLE" -gt 0 ]; then
     sleep "$SETTLE"
     lid_closed || exit 0
-    external_active && exec swaymsg -q output eDP-1 disable
+    external_active && go_clamshell
 fi
 
 # Re-enable the internal panel before sleeping: it was disabled for clamshell,
