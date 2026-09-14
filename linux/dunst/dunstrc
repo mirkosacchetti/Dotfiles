@@ -1,24 +1,78 @@
+# Lumon (Omarchy 4) palette, same as fuzzel/waybar/sway
+
 [global]
-    timeout = 3
-    gap_size = 2
-    font = JetBrainsMono Nerd Font 11
+    # geometry: wider box, clear of the bar, room to breathe
+    origin = top-right
+    offset = (16, 16)
+    width = (320, 460)
+    height = (0, 320)
+    notification_limit = 5
+    indicate_hidden = yes
+    gap_size = 6
+
+    # text
+    font = JetBrainsMono Nerd Font 12
+    line_height = 2
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    ellipsize = end
+    ignore_newline = no
+    show_age_threshold = 60
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = no
+
+    # spacing
+    padding = 12
+    horizontal_padding = 14
+    text_icon_padding = 12
     frame_width = 1
-    history_length = 10
+    separator_height = 1
+    separator_color = frame
+    corner_radius = 0
+
+    # icons
+    enable_recursive_icon_lookup = true
+    icon_theme = Adwaita
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 48
+
+    # progress bar (volume/brightness style notifications)
+    progress_bar = true
+    progress_bar_height = 8
+    progress_bar_frame_width = 0
+    progress_bar_min_width = 200
+    progress_bar_max_width = 420
+    highlight = "#8bc9eb"
+
+    # behaviour: leave time to read, never expire while idle
+    timeout = 6
+    idle_threshold = 120
+    sticky_history = yes
+    history_length = 20
+    sort = yes
+
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
 
 [urgency_low]
     background = "#16242d"
-    foreground = "#4d86b0"
+    foreground = "#6fa4c9"
     frame_color = "#304860"
-    timeout = 3
+    timeout = 4
 
 [urgency_normal]
     background = "#16242d"
     foreground = "#d6e2ee"
     frame_color = "#d6e2ee"
-    timeout = 3
+    timeout = 6
 
 [urgency_critical]
     background = "#16242d"
     foreground = "#f2fcff"
-    frame_color = "#4d86b0"
-    timeout = 5
+    frame_color = "#8bc9eb"
+    timeout = 0
