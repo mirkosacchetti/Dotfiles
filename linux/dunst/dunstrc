@@ -11,7 +11,7 @@
     gap_size = 6
 
     # text
-    font = JetBrainsMono Nerd Font 12
+    font = JetBrainsMono Nerd Font 10.5
     line_height = 2
     markup = full
     format = "<b>%s</b>\n%b"
