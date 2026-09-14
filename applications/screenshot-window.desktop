@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Screenshot Window
+Comment=Capture the focused window to the clipboard
+Exec=/home/m/Dotfiles/scripts/screenshot-window.sh
+Icon=/home/m/Dotfiles/applications/icons/screenshot-window.png
+Terminal=false
+Categories=Utility;
