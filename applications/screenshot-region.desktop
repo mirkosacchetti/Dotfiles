@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Screenshot Region
+Comment=Capture a selected region to the clipboard
+Exec=/home/m/Dotfiles/scripts/screenshot-region.sh
+Icon=/home/m/Dotfiles/applications/icons/screenshot-region.png
+Terminal=false
+Categories=Utility;
