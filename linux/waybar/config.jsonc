@@ -15,6 +15,7 @@
         "sway/window"
     ],
     "modules-right": [
+        "tray",
         "custom/recording",
         "custom/dnd",
         "wireplumber",
@@ -24,7 +25,6 @@
         "power-profiles-daemon",
         "battery",
         "custom/power",
-        "tray",
         "clock"
     ],
     "sway/mode": {
@@ -90,9 +90,9 @@
             "critical": 15
         },
         "interval": 1,
-        "format": "{capacity}% {icon} ",
-        "format-charging": "{capacity}%  ",
-        "format-plugged": "{capacity}%  ",
+        "format": "{capacity}% {icon}",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
         "format-icons": ["", "", "", "", ""]
     },
     "power-profiles-daemon": {
@@ -116,8 +116,8 @@
         "on-click": "alacritty --class impala -e impala"
     },
     "wireplumber": {
-        "format": "{volume}% {icon}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {format_source} {volume}%",
         "format-bluetooth-muted": " {icon} {format_source}",
         "format-muted": "",
         "format-source": "{volume}% ",
