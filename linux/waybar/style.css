@@ -82,3 +82,7 @@ button:hover {
 #custom-recording.recording {
     color: #4d86b0;
 }
+
+#mpris.paused {
+    color: #6fa4c9;
+}
