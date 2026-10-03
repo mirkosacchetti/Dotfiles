@@ -7,7 +7,6 @@
     "ipc": true,
     "id": "bar-0",
     "modules-left": [
-        "custom/launcher",
         "sway/workspaces",
         "sway/mode",
         "sway/scratchpad",
@@ -17,6 +16,7 @@
         "mpris"
     ],
     "modules-right": [
+        "custom/launcher",
         "tray",
         "custom/recording",
         "custom/dnd",
@@ -64,9 +64,10 @@
         "tooltip": true
     },
     "custom/launcher": {
-        "format": "󰍉",
+        "format": "",
         "tooltip": false,
-        "on-click": "pkill -x fuzzel || fuzzel"
+        "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/launcher.sh",
+        "on-click-right": "pkill -x fuzzel || /home/m/Dotfiles/scripts/window-switcher.sh"
     },
     "custom/dnd": {
         "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifications silenced\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",

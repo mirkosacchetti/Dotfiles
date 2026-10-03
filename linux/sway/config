@@ -8,7 +8,7 @@ set $alt Mod1
 floating_modifier $mod normal
 tiling_drag disabled
 focus_follows_mouse no
-set $menu fuzzel
+set $menu /home/m/Dotfiles/scripts/launcher.sh
 set $term alacritty
 set $browser chromium
 
@@ -262,7 +262,7 @@ exec swayidle -w timeout 600 'swaymsg "output * power off"' resume 'swaymsg "out
 # clipboard history (omarchy-style manager on Super+Ctrl+V); sensitive copies are skipped
 exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
-bindsym $mod+control+v exec cliphist list | fuzzel --dmenu --lines 15 --width 60 | cliphist decode | wl-copy
+bindsym $mod+control+v exec /home/m/Dotfiles/scripts/clipboard-picker.sh
 # omarchy-style notification controls: dismiss / dismiss all / invoke / history replay / DND
 bindsym $mod+shift+comma exec dunstctl close
 bindsym $mod+shift+control+comma exec dunstctl close-all

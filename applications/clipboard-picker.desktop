@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Clipboard History
+Comment=Pick a clipboard history entry and copy it again
+Exec=/home/m/Dotfiles/scripts/clipboard-picker.sh
+Icon=/home/m/Dotfiles/applications/icons/clipboard-picker.png
+Terminal=false
+Categories=Utility;
