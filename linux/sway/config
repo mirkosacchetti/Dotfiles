@@ -27,6 +27,10 @@ input * {
 input  $laptop_keyboard {
     xkb_options compose:ralt,shift:both_capslock,caps:ctrl_modifier,altwin:swap_alt_win
 }
+# same cursor in sway and GTK apps (waybar): sway defaults to 24, GTK read 32 from gsettings
+seat * xcursor_theme Adwaita 24
+exec gsettings set org.gnome.desktop.interface cursor-theme Adwaita
+exec gsettings set org.gnome.desktop.interface cursor-size 24
 # Disable the ThinkPad red nipple
 input "2:10:TPPS/2_Elan_TrackPoint" {
     pointer_accel -1
