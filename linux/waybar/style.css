@@ -1,40 +1,35 @@
+@define-color fg #d6e2ee;
+@define-color bg #16242d;
+@define-color accent #4d86b0;
+@define-color dim #6fa4c9;
+@define-color title #8bc9eb;
+
 * {
-    font-family: JetBrainsMono Nerd Font;
+    font-family: "JetBrainsMono Nerd Font";
     font-size: 14px;
-    color: #d6e2ee;
+    color: @fg;
 }
 
 window#waybar {
-    background-color: #16242d;
+    background-color: @bg;
 }
 
 button {
-    box-shadow: inset 0 2px transparent;
     border: none;
     border-radius: 0;
+    box-shadow: none;
 }
 
 .module {
-    margin: 0 .3rem;
-    padding: 0 .3rem;
-}
-
-.modules:last-child>#workspaces {
-    margin-right: 0;
+    margin: 0;
+    padding: 0 0.5rem;
 }
 
 .module:hover,
-button:hover {
+button:hover,
+#workspaces button.focused {
     background: inherit;
-    box-shadow: inset 0 1px #d6e2ee;
-}
-
-.modules-left>widget:first-child>#workspaces {
-    margin-left: 0;
-}
-
-.modules-right>widget:last-child>#workspaces {
-    margin-right: 0;
+    box-shadow: inset 0 1px @fg;
 }
 
 #workspaces {
@@ -49,13 +44,23 @@ button:hover {
     padding: 0 0.5rem;
 }
 
-/* match fuzzel's border: same color, same 1px width, top edge only */
-#workspaces button.focused {
-    box-shadow: inset 0 1px #d6e2ee;
+#mode {
+    font-style: italic;
+    color: @accent;
 }
 
+#window {
+    color: @title;
+}
+
+#mpris.paused,
+#custom-dnd.paused {
+    color: @dim;
+}
+
+#custom-recording.recording,
 #battery.critical:not(.charging) {
-    color: #4d86b0;
+    color: @accent;
 }
 
 #tray>.passive {
@@ -64,25 +69,4 @@ button:hover {
 
 #tray>.needs-attention {
     -gtk-icon-effect: highlight;
-}
-
-#mode {
-    font-style: italic;
-    color: #4d86b0;
-}
-
-#window {
-    color: #8bc9eb;
-}
-
-#custom-dnd.paused {
-    color: #6fa4c9;
-}
-
-#custom-recording.recording {
-    color: #4d86b0;
-}
-
-#mpris.paused {
-    color: #6fa4c9;
 }
