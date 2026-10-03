@@ -2,5 +2,6 @@ beekeeper-studio-bin
 betterbird-bin
 brave-bin
 bruno-bin
+elephant
 mongodb-compass-bin
 yay

@@ -20,6 +20,7 @@ cantarell-fonts
 chromium
 clang
 cliphist
+clojure
 cmus
 deja-dup
 dnsmasq
@@ -59,8 +60,10 @@ impala
 iptables
 iw
 iwd
+jdk-openjdk
 jq
 lazygit
+leiningen
 libmicrohttpd
 libpulse
 libreoffice-still
@@ -93,6 +96,7 @@ openvpn
 otf-font-awesome
 papers
 pavucontrol
+picard
 pipewire
 pipewire-alsa
 pipewire-jack
@@ -107,6 +111,8 @@ python-pymongo
 python-requests
 qt5-wayland
 ripgrep
+rlwrap
+rofi
 rsync
 ruby
 rust-analyzer
@@ -128,6 +134,8 @@ swaybg
 swayidle
 swaylock
 swtpm
+syncthing
+tailscale
 telegram-desktop
 terminus-font
 tmux
