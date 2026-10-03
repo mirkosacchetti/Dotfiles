@@ -7,13 +7,14 @@
     "ipc": true,
     "id": "bar-0",
     "modules-left": [
+        "custom/launcher",
         "sway/workspaces",
         "sway/mode",
         "sway/scratchpad",
-        "mpris"
+        "sway/window"
     ],
     "modules-center": [
-        "sway/window"
+        "mpris"
     ],
     "modules-right": [
         "tray",
@@ -61,6 +62,11 @@
         "signal": 3,
         "on-click": "/home/m/Dotfiles/scripts/record-toggle.sh",
         "tooltip": true
+    },
+    "custom/launcher": {
+        "format": "󰍉",
+        "tooltip": false,
+        "on-click": "pkill -x fuzzel || fuzzel"
     },
     "custom/dnd": {
         "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifications silenced\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",
