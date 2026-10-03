@@ -75,6 +75,11 @@ bindsym button7 nop
 bindsym $mod+Return exec $term
 bindsym $mod+g exec $browser
 bindsym $mod+space exec $menu
+# modifier-only chord, either press order; --release so $mod+control+<key> combos keep working
+bindsym --release $mod+Control_L exec /home/m/Dotfiles/scripts/window-switcher.sh
+bindsym --release control+Super_L exec /home/m/Dotfiles/scripts/window-switcher.sh
+# laptop CapsLock is caps:ctrl_modifier: Control modifier but Caps_Lock keysym
+bindsym --release $mod+Caps_Lock exec /home/m/Dotfiles/scripts/window-switcher.sh
 # omarchy-style app launches
 bindsym $mod+shift+f exec nautilus
 bindsym $mod+shift+n exec $term -e nvim
