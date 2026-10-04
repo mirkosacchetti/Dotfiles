@@ -84,9 +84,9 @@
     "custom/scratchpad": {
         "exec": "/home/m/Dotfiles/scripts/scratchpad.sh",
         "return-type": "json",
-        "on-click": "swaymsg scratchpad show",
-        "on-scroll-up": "swaymsg 'scratchpad show, scratchpad show'",
-        "on-scroll-down": "swaymsg 'scratchpad show, scratchpad show'"
+        "on-click": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh toggle",
+        "on-scroll-up": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh prev",
+        "on-scroll-down": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh next"
     },
     "backlight": {
         "device": "intel_backlight",
@@ -107,7 +107,7 @@
     "tray": { },
     "clock": {
         "on-click" : "/home/m/Projects/calendar/build/deca",
-        "format": "{:%Y-%m-%d %A %H:%M}",
+        "format": "{:%H:%M %A %Y-%m-%d}",
         "locale": "it_IT.UTF-8",
         "tooltip": false
     },

@@ -136,7 +136,7 @@ bindsym $mod+w focus mode_toggle
 bindsym $mod+e exec /home/m/Dotfiles/scripts/float-toggle.sh
 bindsym $mod+r sticky toggle
 bindsym $mod+control+minus move scratchpad
-bindsym $mod+minus scratchpad show
+bindsym $mod+minus exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh toggle
 
 bindsym $mod+a split vertical
 bindsym $mod+s layout toggle splitv splith
@@ -156,9 +156,10 @@ bindsym $mod+p focus next
 
 bindsym $mod+j focus left
 bindsym $mod+control+j move left
-bindsym $mod+k focus down
+# on a scratchpad window k/l step through the scratchpad instead
+bindsym $mod+k exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh next --else 'focus down'
 bindsym $mod+control+k move down
-bindsym $mod+l focus up
+bindsym $mod+l exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh prev --else 'focus up'
 bindsym $mod+control+l move up
 bindsym $mod+semicolon focus right
 bindsym $mod+control+semicolon move right
@@ -204,7 +205,7 @@ for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
 # sushi file preview (space in nautilus)
 for_window [app_id="org.gnome.NautilusPreviewer"] floating enable
-# music players live in the scratchpad, $mod+minus toggles them
+# music players live in the scratchpad (scripts/scratchpad-ctl.sh)
 for_window [app_id="^(cmus|spotify)$"] move scratchpad, scratchpad show, resize set 60 ppt 60 ppt, move position center
 
 ###########  
