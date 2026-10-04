@@ -7,27 +7,27 @@
     "ipc": true,
     "id": "bar-0",
     "modules-left": [
-        "sway/workspaces",
-        "sway/mode",
-        "sway/scratchpad",
-        "sway/window"
+        "custom/power",
+        "clock",
+        "battery",
+        "power-profiles-daemon",
+        "backlight",
+        "network",
+        "bluetooth",
+        "wireplumber",
+        "custom/dnd",
+        "custom/recording",
+        "tray",
+        "custom/launcher"
     ],
     "modules-center": [
         "mpris"
     ],
     "modules-right": [
-        "custom/launcher",
-        "tray",
-        "custom/recording",
-        "custom/dnd",
-        "wireplumber",
-        "bluetooth",
-        "network",
-        "backlight",
-        "power-profiles-daemon",
-        "battery",
-        "clock",
-        "custom/power"
+        "sway/window",
+        "sway/mode",
+        "sway/workspaces",
+        "custom/scratchpad"
     ],
     "mpris": {
         "player": "cmus",
@@ -53,7 +53,10 @@
         "max-length": 60,
         "tooltip": false,
         "on-click": "/home/m/Dotfiles/scripts/float-toggle.sh",
-        "on-click-right": "swaymsg kill"
+        "on-click-middle": "swaymsg kill",
+        "on-click-right": "swaymsg move scratchpad",
+        "on-scroll-up": "swaymsg focus prev",
+        "on-scroll-down": "swaymsg focus next"
     },
     "custom/recording": {
         "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"tooltip\":\"Recording\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",
@@ -78,12 +81,12 @@
         "on-click-right": "dunstctl history-pop",
         "tooltip": true
     },
-    "sway/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}"
+    "custom/scratchpad": {
+        "exec": "/home/m/Dotfiles/scripts/scratchpad.sh",
+        "return-type": "json",
+        "on-click": "swaymsg scratchpad show",
+        "on-scroll-up": "swaymsg 'scratchpad show, scratchpad show'",
+        "on-scroll-down": "swaymsg 'scratchpad show, scratchpad show'"
     },
     "backlight": {
         "device": "intel_backlight",

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=cmus
+Comment=Music player (opens in the scratchpad)
+Exec=alacritty --class cmus -e cmus
+Icon=multimedia-player
+Terminal=false
+Categories=AudioVideo;Audio;Player;

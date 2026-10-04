@@ -34,4 +34,12 @@ done | fuzzel --dmenu --index)
 RC=$?
 (( RC == 10 )) && exec /home/m/Dotfiles/scripts/launcher.sh
 (( RC == 0 )) && [[ $IDX =~ ^[0-9]+$ ]] || exit 0
-swaymsg "[con_id=${WINDOWS[IDX]%%$'\t'*}] focus" > /dev/null
+ID=${WINDOWS[IDX]%%$'\t'*}
+# focusing a hidden scratchpad window shows it on top of any scratchpad window
+# already visible; keep one at a time by sending the others back first
+HIDE=$(swaymsg -t get_tree | jq -r --argjson id "$ID" '
+    [.. | objects | select(.scratchpad_state? and .scratchpad_state != "none")] as $sp
+    | if any($sp[]; .id == $id) then
+        $sp[] | select(.visible and .id != $id) | "[con_id=\(.id)] move scratchpad;"
+      else empty end')
+swaymsg "$HIDE [con_id=$ID] focus" > /dev/null
