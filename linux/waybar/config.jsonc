@@ -8,39 +8,37 @@
     "id": "bar-0",
     "modules-left": [
         "custom/power",
-        "clock",
         "battery",
         "power-profiles-daemon",
         "backlight",
         "network",
         "bluetooth",
         "wireplumber",
-        "custom/recording",
-        "tray",
-        "custom/launcher"
+        "mpris",
+        "custom/recording"
     ],
     "modules-center": [
+        "clock",
         "custom/notifications",
-        "mpris"
+        "tray"
     ],
     "modules-right": [
         "sway/window",
         "sway/mode",
         "sway/workspaces",
-        "custom/scratchpad"
+        "custom/scratchpad",
+        "custom/launcher"
     ],
     "mpris": {
         // playerctld follows whichever player was used last (cmus, spotify,
         // a browser tab); its D-Bus name is activatable so the first call
         // starts it
         "player": "playerctld",
-        "format": "{player_icon} {dynamic}",
-        "format-paused": "{status_icon} <i>{dynamic}</i>",
+        "format": "{dynamic}",
+        "format-paused": "<i>{dynamic}</i>",
         "format-stopped": "",
         "dynamic-order": ["artist", "title"],
         "dynamic-len": 50,
-        "player-icons": { "default": "", "cmus": "", "spotify": "" },
-        "status-icons": { "paused": "" },
         "tooltip-format": "{player}: {artist} — {title}\n{album}  {position}/{length}",
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl next",
@@ -111,7 +109,7 @@
     "tray": { },
     "clock": {
         "on-click" : "/home/m/Projects/calendar/build/deca",
-        "format": "{:%H:%M %A %d-%m-%Y}",
+        "format": "{:%Y-%m-%d %A %H:%M}",
         "locale": "it_IT.UTF-8",
         "tooltip": false
     },
@@ -138,7 +136,7 @@
         }
     },
     "network": {
-        "format-wifi": " ",
+        "format-wifi": "",
         "format-ethernet": "🖧",
         "tooltip-format": "{ifname}: {ipaddr}/{cidr} via {gwaddr}",
         "tooltip-format-wifi": "IF: {ifname}\nID: {essid}\nSS: {signalStrength}% ({signaldBm} dBm, {frequency} GHz)\nIP: {ipaddr}/{cidr}\nGW: {gwaddr}",
@@ -148,8 +146,8 @@
     },
     "wireplumber": {
         "format": "{icon} {volume}%",
-        "format-bluetooth": "{icon} {format_source} {volume}%",
-        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-bluetooth": "{icon}  {format_source} {volume}%",
+        "format-bluetooth-muted": " {icon}  {format_source}",
         "format-muted": "",
         "format-source": "{volume}% ",
         "format-source-muted": "",
@@ -160,7 +158,7 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", "", " "]
+            "default": ["", "", ""]
         },
         "on-click": "pavucontrol",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
