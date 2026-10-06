@@ -206,8 +206,10 @@ for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
 # sushi file preview (space in nautilus)
 for_window [app_id="org.gnome.NautilusPreviewer"] floating enable
-# music players and bitwarden live in the scratchpad (scripts/scratchpad-ctl.sh)
-for_window [app_id="^(cmus|spotify|Bitwarden)$"] move scratchpad, scratchpad show, resize set 88 ppt 88 ppt, move position center
+# music players and bitwarden live in the scratchpad (scripts/scratchpad-ctl.sh);
+# only while still tiling, i.e. new: after a reload sway runs for_window again
+# on the next title change, which would pop the player up at every new song
+for_window [app_id="^(cmus|spotify|Bitwarden)$" tiling] move scratchpad, scratchpad show, resize set 88 ppt 88 ppt, move position center
 
 ###########  
 ### style
