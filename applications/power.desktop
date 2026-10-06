@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Power
+Comment=Shut down, reboot, suspend, lock or log out
+Exec=/home/m/Dotfiles/scripts/power-menu.sh
+Icon=/home/m/Dotfiles/applications/icons/power.png
+Terminal=false
+Categories=Utility;
+Keywords=shutdown;poweroff;reboot;restart;suspend;sleep;lock;logout;exit;

@@ -167,15 +167,8 @@
     "custom/power": {
         "format" : "⏻",
         "tooltip": false,
-        "menu": "on-click",
-        "menu-file": "$HOME/.config/waybar/power_menu.xml",
-        "menu-actions": {
-            "logout": "sway exit",
-            "shutdown": "systemctl poweroff",
-            "reboot": "systemctl reboot",
-            "suspend": "systemctl suspend",
-            "hibernate": "systemctl hibernate"
-        }
+        "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/power-menu.sh",
+        "on-click-right": "swaylock"
     },
     "custom/pomidore": {
         "exec": "/home/m/.local/bin/pomidore waybar",
