@@ -199,7 +199,6 @@ bindsym $mod+control+0 move container to workspace $ws_main
 assign [app_id="betterbird"] workspace $ws_mess
 assign [app_id="org.telegram.desktop"] workspace $ws_mess
 assign [app_id="com.transmissionbt*"] workspace $ws_stuff
-assign [app_id="Bitwarden"] workspace $ws_stuff
 assign [app_id="beekeeper-studio"] workspace $ws_stuff
 assign [app_id="sublime_merge"] workspace $ws_stuff
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
@@ -207,8 +206,8 @@ for_window [app_id="blueman-manager"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
 # sushi file preview (space in nautilus)
 for_window [app_id="org.gnome.NautilusPreviewer"] floating enable
-# music players live in the scratchpad (scripts/scratchpad-ctl.sh)
-for_window [app_id="^(cmus|spotify)$"] move scratchpad, scratchpad show, resize set 80 ppt 80 ppt, move position center
+# music players and bitwarden live in the scratchpad (scripts/scratchpad-ctl.sh)
+for_window [app_id="^(cmus|spotify|Bitwarden)$"] move scratchpad, scratchpad show, resize set 80 ppt 80 ppt, move position center
 
 ###########  
 ### style
