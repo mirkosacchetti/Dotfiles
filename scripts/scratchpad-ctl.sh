@@ -36,7 +36,7 @@ hide() {
 }
 
 # show $1 on the focused workspace, sending any other shown one back first;
-# resized to 80% of that workspace every time, since a floating window keeps
+# resized to 88% of that workspace every time, since a floating window keeps
 # the pixel size it got on the output where it was first shown
 show() {
     local cmd= id
@@ -46,7 +46,7 @@ show() {
         cmd+="[con_id=$id] move scratchpad; "
     done
     echo "$1" > "$last_file"
-    swaymsg "$cmd[con_id=$1] focus; [con_id=$1] resize set 80 ppt 80 ppt, move position center" > /dev/null
+    swaymsg "$cmd[con_id=$1] focus; [con_id=$1] resize set 88 ppt 88 ppt, move position center" > /dev/null
     # the client may answer the resize with a different size (Spotify has a
     # minimum height) after sway already centered the requested one: center
     # again once it has settled
