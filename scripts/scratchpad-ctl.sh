@@ -1,11 +1,15 @@
 #!/bin/bash
-# Usage: scratchpad-ctl.sh toggle|show CON_ID|next|prev [--else SWAY_COMMAND]
+# Usage: scratchpad-ctl.sh toggle|show CON_ID|next|prev|close|release [--else SWAY_COMMAND]
 # Scratchpad logic on top of sway's: windows in a fixed order (creation), one
 # shown at a time, next/prev swap directly. sway's own `scratchpad show`
 # rotates a queue, so which window comes up depends on history, and showing
 # one never hides the others; toggle here brings back the last one used.
 # With --else, next/prev act only from a focused scratchpad window and run
 # SWAY_COMMAND otherwise, so they can share keys with plain focus moves.
+# close and release act on the window in front (focused, else the one shown
+# on this workspace): close asks it to quit, release tiles it back into the
+# workspace, which takes it out of the scratchpad (the inverse of
+# `move scratchpad`).
 last_file=$XDG_RUNTIME_DIR/scratchpad-last
 
 # scratchpad windows by creation: "id hidden|here|away focused"
@@ -71,5 +75,7 @@ case $1 in
     next) step 1 ;;
     prev) step -1 ;;
     show) [[ " ${ids[*]} " == *" $2 "* ]] && show "$2" ;;
-    *) echo "usage: ${0##*/} toggle|show CON_ID|next|prev [--else SWAY_COMMAND]" >&2; exit 1 ;;
+    close) [[ -n ${focused:-$here} ]] && swaymsg -q "[con_id=${focused:-$here}] kill" ;;
+    release) [[ -n ${focused:-$here} ]] && swaymsg -q "[con_id=${focused:-$here}] floating disable, border none" ;;
+    *) echo "usage: ${0##*/} toggle|show CON_ID|next|prev|close|release [--else SWAY_COMMAND]" >&2; exit 1 ;;
 esac

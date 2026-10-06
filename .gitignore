@@ -1,3 +1,6 @@
 linux/nvim/plugin
 packer_compiled.lua
 fish_variables
+# nwg-displays creates these at every start; sway's config does not include them
+linux/sway/outputs
+linux/sway/workspaces

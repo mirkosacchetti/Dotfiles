@@ -90,6 +90,7 @@ noto-fonts-emoji
 noto-fonts-extra
 npm
 nss-mdns
+nwg-displays
 obsidian
 opencode
 openvpn

@@ -1,8 +1,9 @@
 @define-color fg #d6e2ee;
 @define-color bg #16242d;
 @define-color accent #4d86b0;
-@define-color dim #6fa4c9;
 @define-color title #8bc9eb;
+/* nord11, same red as the critical notification frame in dunstrc */
+@define-color red #bf616a;
 
 * {
     /* Propo: icons take their real width, so gaps between modules stay even */
@@ -53,15 +54,11 @@ button:hover,
     color: @title;
 }
 
-#mpris.paused,
-#custom-notifications.paused,
-#custom-notifications.empty {
-    color: @dim;
-}
-
+/* icons are one colour; red is only for states that need attention */
 #custom-recording.recording,
+#custom-display.degraded,
 #battery.critical:not(.charging) {
-    color: @accent;
+    color: @red;
 }
 
 #tray > .passive {
