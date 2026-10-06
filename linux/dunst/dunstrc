@@ -1,9 +1,9 @@
 # Lumon (Omarchy 4) palette, same as fuzzel/waybar/sway
 
 [global]
-    # geometry: wider box, clear of the bar, room to breathe
-    origin = top-right
-    offset = (16, 16)
+    # geometry: top center below the bar, wider box, room to breathe
+    origin = top-center
+    offset = (0, 16)
     width = (320, 460)
     height = (0, 320)
     notification_limit = 5
@@ -59,9 +59,11 @@
     mouse_middle_click = do_action, close_current
     mouse_right_click = close_all
 
+# Same text color for every urgency, readability first. Urgency shows only
+# in the frame color, the low-urgency blue text was too dim to read.
 [urgency_low]
     background = "#16242d"
-    foreground = "#6fa4c9"
+    foreground = "#d6e2ee"
     frame_color = "#304860"
     timeout = 4
 
@@ -73,6 +75,6 @@
 
 [urgency_critical]
     background = "#16242d"
-    foreground = "#f2fcff"
-    frame_color = "#8bc9eb"
+    foreground = "#d6e2ee"
+    frame_color = "#bf616a"   # nord11 red
     timeout = 0

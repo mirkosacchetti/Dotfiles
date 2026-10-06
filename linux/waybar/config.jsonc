@@ -15,12 +15,12 @@
         "network",
         "bluetooth",
         "wireplumber",
-        "custom/dnd",
         "custom/recording",
         "tray",
         "custom/launcher"
     ],
     "modules-center": [
+        "custom/notifications",
         "mpris"
     ],
     "modules-right": [
@@ -30,20 +30,23 @@
         "custom/scratchpad"
     ],
     "mpris": {
-        "player": "cmus",
+        // playerctld follows whichever player was used last (cmus, spotify,
+        // a browser tab); its D-Bus name is activatable so the first call
+        // starts it
+        "player": "playerctld",
         "format": "{player_icon} {dynamic}",
         "format-paused": "{status_icon} <i>{dynamic}</i>",
         "format-stopped": "",
         "dynamic-order": ["artist", "title"],
         "dynamic-len": 50,
-        "player-icons": { "default": "" },
+        "player-icons": { "default": "", "cmus": "", "spotify": "" },
         "status-icons": { "paused": "" },
-        "tooltip-format": "{artist} — {title}\n{album}  {position}/{length}",
-        "on-click": "playerctl -p cmus play-pause",
-        "on-click-right": "playerctl -p cmus next",
-        "on-click-middle": "playerctl -p cmus previous",
-        "on-scroll-up": "playerctl -p cmus volume 0.05+",
-        "on-scroll-down": "playerctl -p cmus volume 0.05-"
+        "tooltip-format": "{player}: {artist} — {title}\n{album}  {position}/{length}",
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next",
+        "on-click-middle": "playerctl previous",
+        "on-scroll-up": "playerctl volume 0.05+",
+        "on-scroll-down": "playerctl volume 0.05-"
     },
     "sway/mode": {
         "format": "{}"
@@ -72,13 +75,14 @@
         "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/launcher.sh",
         "on-click-right": "pkill -x fuzzel || /home/m/Dotfiles/scripts/window-switcher.sh"
     },
-    "custom/dnd": {
-        "exec": "[ \"$(dunstctl is-paused)\" = true ] && echo '{\"text\":\"󰂛\",\"tooltip\":\"Notifications silenced\",\"class\":\"paused\"}' || echo '{\"text\":\"\"}'",
+    "custom/notifications": {
+        "exec": "/home/m/Dotfiles/scripts/notify-ctl.sh status",
         "return-type": "json",
-        "interval": "once",
+        "interval": 2,
         "signal": 2,
-        "on-click": "dunstctl set-paused toggle; pkill -RTMIN+2 waybar",
-        "on-click-right": "dunstctl history-pop",
+        "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/notify-ctl.sh pick",
+        "on-click-right": "/home/m/Dotfiles/scripts/notify-ctl.sh toggle",
+        "on-click-middle": "/home/m/Dotfiles/scripts/notify-ctl.sh clear",
         "tooltip": true
     },
     "custom/scratchpad": {
@@ -107,7 +111,7 @@
     "tray": { },
     "clock": {
         "on-click" : "/home/m/Projects/calendar/build/deca",
-        "format": "{:%H:%M %A %Y-%m-%d}",
+        "format": "{:%H:%M %A %d-%m-%Y}",
         "locale": "it_IT.UTF-8",
         "tooltip": false
     },

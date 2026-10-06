@@ -55,7 +55,8 @@ button:hover,
 }
 
 #mpris.paused,
-#custom-dnd.paused {
+#custom-notifications.paused,
+#custom-notifications.empty {
     color: @dim;
 }
 

@@ -60,6 +60,8 @@ output "LG Electronics LG HDR 4K 0x00006D62" {
 # suspends standalone; logind lid handling is off (systemd/logind-lid.conf).
 # output-watch.sh re-runs the same decision on monitor hotplug, so undocking
 # with the lid already closed suspends instead of leaving the machine awake.
+# It also re-applies the Dell's 120 Hz mode when amdgpu drops the first
+# modeset after a plug and sway falls back to 60 Hz.
 bindswitch --reload --locked lid:on exec /home/m/Dotfiles/scripts/lid-eval.sh
 bindswitch --reload --locked lid:off output $laptop_display enable
 exec /home/m/Dotfiles/scripts/output-watch.sh
@@ -206,7 +208,7 @@ for_window [app_id="org.gnome.Calculator"] floating enable
 # sushi file preview (space in nautilus)
 for_window [app_id="org.gnome.NautilusPreviewer"] floating enable
 # music players live in the scratchpad (scripts/scratchpad-ctl.sh)
-for_window [app_id="^(cmus|spotify)$"] move scratchpad, scratchpad show, resize set 60 ppt 60 ppt, move position center
+for_window [app_id="^(cmus|spotify)$"] move scratchpad, scratchpad show, resize set 80 ppt 80 ppt, move position center
 
 ###########  
 ### style
@@ -272,5 +274,5 @@ bindsym $mod+shift+comma exec dunstctl close
 bindsym $mod+shift+control+comma exec dunstctl close-all
 bindsym $mod+alt+comma exec dunstctl action
 bindsym $mod+shift+alt+comma exec dunstctl history-pop
-bindsym $mod+control+alt+comma exec 'dunstctl set-paused toggle; pkill -RTMIN+2 waybar'
+bindsym $mod+control+alt+comma exec /home/m/Dotfiles/scripts/notify-ctl.sh toggle
 

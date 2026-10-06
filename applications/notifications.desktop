@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Notifications
+Comment=Browse the notification history and show one again
+Exec=/home/m/Dotfiles/scripts/notify-ctl.sh pick
+Icon=/home/m/Dotfiles/applications/icons/notifications.png
+Terminal=false
+Categories=Utility;
