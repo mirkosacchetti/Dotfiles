@@ -102,10 +102,10 @@ render() {
         stream=
         vol=$(playerctl -p playerctld volume 2>/dev/null | awk '{ printf "%d%% (player)", $1 * 100 + 0.5 }')
     }
-    # info: album, volume, the active player, what there is
+    # info: the album, then the active player with the app's volume (one
+    # bar per popup: the volume belongs to the player)
     info=${album:+$(esc "$album")  |  }
-    [[ -n $vol ]] && info+="󰕾 $vol  |  "
-    info+=$active
+    info+="$active${vol:+ 󰕾 $vol}"
     jq -cn --arg text "$text" --arg info "$info" --arg class "${status,,}" '{text: $text, info: $info, class: $class}' || exit
 }
 

@@ -9,7 +9,7 @@ ICONS=$'󰎢󰎥󰎨󰎫󰎲󰎯󰎴󰎷󰎺󰎽󰏀'
 emit() {
     swaymsg -t get_tree | jq -c --arg icons "$ICONS" --arg mode "$1" '
         [.. | objects | select(.scratchpad_state? and .scratchpad_state != "none")] as $w
-        | ($w | map("\(.app_id // .window_properties.class // "?"): \(.name)") | join("  |  ")) as $info
+        | ($w | map("\(.app_id // .window_properties.class // "?"): \(.name)") | join(", ")) as $info
         | {
             text: (if $mode == "info" then $info else ($icons | .[([$w | length, 10] | min):][:1]) end),
             info: $info,
