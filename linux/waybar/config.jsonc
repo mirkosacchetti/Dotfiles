@@ -1,23 +1,22 @@
 // -*- mode: jsonc -*-
 {
 
-    "reload_style_on_change": true,
     "height": 28,
     "spacing": 2,
     "ipc": true,
     "id": "bar-0",
     "modules-left": [
-        "custom/launcher",
-        "custom/scratchpad",
         "sway/workspaces",
+        "custom/scratchpad",
+        "sway/mode",
+        "custom/launcher",
+        "custom/notifications",
+        "tray",
         "sway/window"
     ],
-    "modules-center": [
-        "mpris"
-    ],
+    "modules-center": [],
     "modules-right": [
-        "tray",
-        "sway/mode",
+        "custom/mpris",
         "custom/recording",
         "wireplumber",
         "pulseaudio#mic",
@@ -31,33 +30,27 @@
         "custom/power",
         "clock"
     ],
-    "mpris": {
-        // playerctld follows whichever player was used last (cmus, spotify,
-        // a browser tab); its D-Bus name is activatable so the first call
-        // starts it
-        "player": "playerctld",
-        "format": " {dynamic}",
-        "format-paused": " <i>{dynamic}</i>",
-        "format-stopped": "",
-        "dynamic-order": ["artist", "title"],
-        "dynamic-len": 50,
-        "tooltip-format": "{player}: {artist} — {title}\n{album}  {position}/{length}",
+    // playerctld follows whichever player was used last; the script adds the
+    // app's volume and the other players to the tooltip, see scripts/mpris.sh
+    "custom/mpris": {
+        "exec": "/home/m/Dotfiles/scripts/mpris.sh status",
+        "return-type": "json",
         "on-click": "playerctl play-pause",
+        "on-click-middle": "playerctld shift",
         "on-click-right": "playerctl next",
-        "on-click-middle": "playerctl previous",
-        "on-scroll-up": "playerctl volume 0.05+",
-        "on-scroll-down": "playerctl volume 0.05-"
+        "on-scroll-up": "/home/m/Dotfiles/scripts/mpris.sh volume 5%+",
+        "on-scroll-down": "/home/m/Dotfiles/scripts/mpris.sh volume 5%-"
     },
     "sway/mode": {
         "format": "{}"
     },
     "sway/window": {
-        "format": "{title}",
+        "format": "| {title}",
         "max-length": 60,
         "tooltip": false,
         "on-click": "/home/m/Dotfiles/scripts/float-toggle.sh",
-        "on-click-middle": "swaymsg kill",
-        "on-click-right": "swaymsg move scratchpad",
+        "on-click-middle": "swaymsg fullscreen toggle",
+        "on-click-right": "swaymsg kill",
         "on-scroll-up": "swaymsg focus prev",
         "on-scroll-down": "swaymsg focus next"
     },
