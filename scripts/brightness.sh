@@ -15,7 +15,8 @@
 # buses answer fast when empty, the HDMI DDC lines time out and are only
 # tried for an HDMI output; a failed scan is not retried for 5 minutes.
 #   status   waybar JSON: sun icon by level
-#   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE"
+#   info     waybar JSON for the drawer: "DP-7 DELL U2725QE  ·  45%", the
+#            label as display.sh writes it
 #   set ARG  5%+, 5%-, or an absolute percent; then signals waybar
 PICK=$XDG_RUNTIME_DIR/screen-pick
 # nerd font glyphs as bytes, so the locale does not matter: sun (U+F185),
@@ -124,14 +125,14 @@ case $1 in
     status|info)
         pct=$(get)
         if [[ -z $pct ]]; then
-            icon=$SUN; text="no DDC/CI  ·  $label"
+            icon=$SUN; text="$label  ·  no DDC/CI"
         else
             # same levels as waybar's backlight module had: half, high, full
             if (( pct >= 100 )); then icon=$FULL
             elif (( pct >= 76 )); then icon=$HIGH
             elif (( pct >= 51 )); then icon=$HALF
             else icon=$SUN; fi
-            text="$pct%  ·  $label"
+            text="$label  ·  $pct%"
         fi
         [[ $1 == status ]] && text=$icon
         jq -cn --arg text "$text" '{text: $text}'
