@@ -80,14 +80,14 @@ case $1 in
     status|info)
         pct=$(get "$name")
         if [[ -z $pct ]]; then
-            icon=$SUN; text="no DDC/CI  ·  <b>$name</b>"
+            icon=$SUN; text="no DDC/CI  ·  $name"
         else
             # same levels as waybar's backlight module had: half, high, full
             if (( pct >= 100 )); then icon=$FULL
             elif (( pct >= 76 )); then icon=$HIGH
             elif (( pct >= 51 )); then icon=$HALF
             else icon=$SUN; fi
-            text="$pct%  ·  <b>$name${model:+ $model}</b>"
+            text="$pct%  ·  $name${model:+ $model}"
         fi
         (( ${#others[@]} )) && text+=", $(IFS=,; echo "${others[*]}" | sed 's/,/, /g')"
         [[ $1 == status ]] && text=$icon

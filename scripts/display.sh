@@ -5,7 +5,7 @@
 # after a hotplug (see output-watch.sh).
 #   (none)  waybar JSON, long-running: the icon
 #   info    the same, with every active output (resolution, refresh rate,
-#           scale) as text, the picked one first and in bold
+#           scale) as text, the picked one first
 #   next    pick the next screen. The pick is a file, what brightness.sh acts
 #           on too, so the middle click on either module moves both drawers.
 # The long-running instances follow sway's output events and re-emit on
@@ -31,7 +31,7 @@ emit() {
         {
           text: (if $mode == "info"
                  then map(.line + (if .low then " (below max)" else "" end))
-                      | .[0] |= "<b>" + . + "</b>" | join("  ·  ")
+                      | join("  ·  ")
                  else $icon end),
           class: (if any(.[]; .low) then "degraded" else "" end)
         }'

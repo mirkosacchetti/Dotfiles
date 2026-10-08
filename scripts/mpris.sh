@@ -110,10 +110,10 @@ render() {
         stream=
         vol=$(playerctl -p playerctld volume 2>/dev/null | awk '{ printf "%d%% (player)", $1 * 100 + 0.5 }')
     }
-    # drawer: album, volume, players (active one in bold), what there is
+    # drawer: album, volume, players (active one first), what there is
     info=${album:+$(esc "$album")  ·  }
     [[ -n $vol ]] && info+="󰕾 $vol  ·  "
-    info+="<b>$active</b>"
+    info+=$active
     (( ${#names[@]} > 1 )) && info+=", $(IFS=,; echo "${names[*]:1}" | sed 's/,/, /g')"
     jq -cn --arg text "$info" --arg class "${status,,}" '{text: $text, class: $class}' > "$INFO"
     pkill -RTMIN+5 waybar

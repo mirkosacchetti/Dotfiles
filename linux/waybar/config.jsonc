@@ -148,6 +148,7 @@
     "custom/display-info": {
         "exec": "/home/m/Dotfiles/scripts/display.sh info",
         "return-type": "json",
+        "escape": true,
         "on-click": "nwg-displays",
         "on-click-middle": "/home/m/Dotfiles/scripts/display.sh next",
         "on-click-right": "/home/m/Dotfiles/scripts/display-restore.sh"
