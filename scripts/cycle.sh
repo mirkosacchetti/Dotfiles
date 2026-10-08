@@ -3,7 +3,10 @@
 #   sink           default audio output (wpctl set-default)
 #   source         default audio input
 #   power-profile  powerprofilesctl
-# Screens are display.sh next, players playerctld shift.
+# Screens are display.sh next, players playerctld shift. One at a time: a
+# second click while a cycle is still probing devices is dropped.
+exec 9> "${XDG_RUNTIME_DIR:-/tmp}/cycle.lock"
+flock -n 9 || exit 0
 
 # the effective default node of a kind: pipewire's "default" metadata
 current() {

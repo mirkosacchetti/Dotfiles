@@ -33,6 +33,9 @@
 (defpoll date-info :interval "60s" :initial "" "date +'%A %d %B %Y%nWeek %V, day %j'")
 
 ;; ---- one module, in the bar or in the info line ------------------------
+;; Every mouse command runs detached (setsid -f): eww kills a handler that
+;; outlives its timeout, which would cut short a device cycle or a DDC
+;; write, and would take down a program the click opened.
 ;; mode "bar": the text, with the mouse actions; hovering names the module
 ;; and opens the popup line. mode "info": the same text, transparent, to
 ;; keep the slot's width, or the card (bold title, info lines, then the
@@ -65,48 +68,48 @@
     (box :class "workspaces" :space-evenly false
       (for ws in {sway.workspaces}
         (button :class "ws ${ws.focused ? "focused" : ""} ${ws.urgent ? "urgent" : ""} ${mode == "info" ? "ghost" : ""}"
-                :onclick "swaymsg workspace '${ws.name}'" "${ws.name}")))
+                :onclick "setsid -f swaymsg workspace '${ws.name}'" "${ws.name}")))
     (mod :name "scratchpad" :hints {[["L", "show / hide"], ["M", "move in / out"], ["R", "close"], ["⇅", "previous / next"]]} :title "Scratchpad" :mode mode :screen screen :text {scratchpad.text} :info {scratchpad.info} :class {scratchpad.class}
-         :onclick "${S}/scratchpad-ctl.sh toggle" :onmiddle "${S}/scratchpad-ctl.sh move" :onright "${S}/scratchpad-ctl.sh close"
-         :onscroll "[ {} = up ] && ${S}/scratchpad-ctl.sh prev || ${S}/scratchpad-ctl.sh next")
+         :onclick "setsid -f ${S}/scratchpad-ctl.sh toggle" :onmiddle "setsid -f ${S}/scratchpad-ctl.sh move" :onright "setsid -f ${S}/scratchpad-ctl.sh close"
+         :onscroll "[ {} = up ] && setsid -f ${S}/scratchpad-ctl.sh prev || setsid -f ${S}/scratchpad-ctl.sh next")
     (label :class "mode ${mode == "info" ? "ghost" : ""}" :visible {sway.mode != "default"} :text {sway.mode})
     (mod :name "launcher" :hints {[["L", "applications"], ["M", "windows"], ["R", "close the workspace"]]} :title "Launcher" :mode mode :screen screen :text "󰕰" :info "fuzzel"
-         :onclick "pkill -x fuzzel || ${S}/launcher.sh" :onmiddle "pkill -x fuzzel || ${S}/window-switcher.sh"
-         :onright "swaymsg '[workspace=__focused__] kill'")
+         :onclick "pkill -x fuzzel || setsid -f ${S}/launcher.sh" :onmiddle "pkill -x fuzzel || setsid -f ${S}/window-switcher.sh"
+         :onright "setsid -f swaymsg '[workspace=__focused__] kill'")
     (mod :name "notifications" :hints {[["L", "history"], ["M", "clear"], ["R", "silence"]]} :title "Notifications" :mode mode :screen screen :text {notifications.text} :info {notifications.info} :class {notifications.class}
-         :onclick "pkill -x fuzzel || ${S}/notify-ctl.sh pick" :onmiddle "${S}/notify-ctl.sh clear" :onright "${S}/notify-ctl.sh toggle")
+         :onclick "pkill -x fuzzel || setsid -f ${S}/notify-ctl.sh pick" :onmiddle "setsid -f ${S}/notify-ctl.sh clear" :onright "setsid -f ${S}/notify-ctl.sh toggle")
     (box :class "tray" :visible {mode != "info"} (systray :icon-size 16 :spacing 4))
     (mod :name "title" :hints {[["L", "float"], ["M", "fullscreen"], ["R", "close"], ["⇅", "focus previous / next"]]} :title "Window" :mode mode :screen screen :text "| ${substring(sway.title, 0, 60)}" :info {sway.title} :class "title"
-         :onclick "${S}/float-toggle.sh" :onmiddle "swaymsg fullscreen toggle" :onright "swaymsg kill"
-         :onscroll "[ {} = up ] && swaymsg focus prev || swaymsg focus next")))
+         :onclick "setsid -f ${S}/float-toggle.sh" :onmiddle "setsid -f swaymsg fullscreen toggle" :onright "setsid -f swaymsg kill"
+         :onscroll "[ {} = up ] && setsid -f swaymsg focus prev || setsid -f swaymsg focus next")))
 
 (defwidget right [mode screen]
   (box :class "right" :orientation "h" :space-evenly false :spacing 2 :halign "end"
     (mod :name "mpris" :hints {[["L", "play / pause"], ["M", "next player"], ["R", "next track"], ["⇅", "volume"]]} :title "Player" :mode mode :screen screen :text {mpris.text} :info {mpris.info} :class {mpris.class} :markup true
-         :onclick "playerctl play-pause" :onmiddle "playerctld shift" :onright "playerctl next"
-         :onscroll "[ {} = up ] && ${S}/mpris.sh volume 5%+ || ${S}/mpris.sh volume 5%-")
-    (mod :name "recording" :hints {[["L", "stop"]]} :title "Recording" :mode mode :screen screen :text recording :info "wf-recorder is running" :class "recording" :onclick "${S}/record-toggle.sh")
+         :onclick "setsid -f playerctl play-pause" :onmiddle "setsid -f playerctld shift" :onright "setsid -f playerctl next"
+         :onscroll "[ {} = up ] && setsid -f ${S}/mpris.sh volume 5%+ || setsid -f ${S}/mpris.sh volume 5%-")
+    (mod :name "recording" :hints {[["L", "stop"]]} :title "Recording" :mode mode :screen screen :text recording :info "wf-recorder is running" :class "recording" :onclick "setsid -f ${S}/record-toggle.sh")
     (mod :name "volume" :hints {[["L", "mixer"], ["M", "next output"], ["R", "mute"], ["⇅", "volume"]]} :title "Audio output" :mode mode :screen screen :text {audio.sink.text} :info {audio.sink.info}
-         :onclick "pavucontrol" :onmiddle "${S}/cycle.sh sink" :onright "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-         :onscroll "[ {} = up ] && wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 2%+ || wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-")
+         :onclick "setsid -f pavucontrol" :onmiddle "setsid -f ${S}/cycle.sh sink" :onright "setsid -f wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+         :onscroll "[ {} = up ] && setsid -f wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 2%+ || setsid -f wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-")
     (mod :name "mic" :hints {[["L", "mixer"], ["M", "next input"], ["R", "mute"], ["⇅", "volume"]]} :title "Audio input" :mode mode :screen screen :text {audio.source.text} :info {audio.source.info}
-         :onclick "pavucontrol -t 4" :onmiddle "${S}/cycle.sh source" :onright "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-         :onscroll "[ {} = up ] && wpctl set-volume -l 1 @DEFAULT_AUDIO_SOURCE@ 2%+ || wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-")
+         :onclick "setsid -f pavucontrol -t 4" :onmiddle "setsid -f ${S}/cycle.sh source" :onright "setsid -f wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+         :onscroll "[ {} = up ] && setsid -f wpctl set-volume -l 1 @DEFAULT_AUDIO_SOURCE@ 2%+ || setsid -f wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-")
     (mod :name "display" :hints {[["L", "settings"], ["M", "next screen"], ["R", "restore modes"]]} :title "Display" :mode mode :screen screen :text {display.text} :info {display.info} :class {display.class}
-         :onclick "nwg-displays" :onmiddle "${S}/display.sh next" :onright "${S}/display-restore.sh")
+         :onclick "setsid -f nwg-displays" :onmiddle "setsid -f ${S}/display.sh next" :onright "setsid -f ${S}/display-restore.sh")
     (mod :name "brightness" :hints {[["M", "next screen"], ["⇅", "level"]]} :title "Brightness" :mode mode :screen screen :text {brightness.text} :info {brightness.info}
-         :onmiddle "${S}/display.sh next"
-         :onscroll "[ {} = up ] && ${S}/brightness.sh set 5%+ || ${S}/brightness.sh set 5%-")
-    (mod :name "nightlight" :hints {[["L", "toggle"]]} :title "Night light" :mode mode :screen screen :text {nightlight.text} :info {nightlight.info} :onclick "${S}/nightlight.sh toggle")
+         :onmiddle "setsid -f ${S}/display.sh next"
+         :onscroll "[ {} = up ] && setsid -f ${S}/brightness.sh set 5%+ || setsid -f ${S}/brightness.sh set 5%-")
+    (mod :name "nightlight" :hints {[["L", "toggle"]]} :title "Night light" :mode mode :screen screen :text {nightlight.text} :info {nightlight.info} :onclick "setsid -f ${S}/nightlight.sh toggle")
     (mod :name "bluetooth" :hints {[["L", "manager"], ["M", "next device"]]} :title "Bluetooth" :mode mode :screen screen :text {bluetooth.text} :info {bluetooth.info}
-         :onclick "blueman-manager" :onmiddle "${S}/bluetooth.sh next")
-    (mod :name "network" :hints {[["L", "impala"]]} :title "Network" :mode mode :screen screen :text {network.text} :info {network.info} :onclick "alacritty --class impala -e impala")
+         :onclick "setsid -f blueman-manager" :onmiddle "setsid -f ${S}/bluetooth.sh next")
+    (mod :name "network" :hints {[["L", "impala"]]} :title "Network" :mode mode :screen screen :text {network.text} :info {network.info} :onclick "setsid -f alacritty --class impala -e impala")
     (mod :name "battery" :hints {[]} :title "Battery" :mode mode :screen screen :text {battery.text} :info {battery.info} :class {battery.class})
-    (mod :name "profile" :hints {[["M", "next profile"]]} :title "Power profile" :mode mode :screen screen :text {profile.text} :info {profile.info} :onmiddle "${S}/cycle.sh power-profile")
+    (mod :name "profile" :hints {[["M", "next profile"]]} :title "Power profile" :mode mode :screen screen :text {profile.text} :info {profile.info} :onmiddle "setsid -f ${S}/cycle.sh power-profile")
     (mod :name "power" :hints {[["L", "menu"], ["R", "lock"]]} :title "Power" :mode mode :screen screen :text "⏻" :info power-info
-         :onclick "pkill -x fuzzel || ${S}/power-menu.sh" :onright "swaylock")
+         :onclick "pkill -x fuzzel || setsid -f ${S}/power-menu.sh" :onright "setsid -f swaylock")
     (mod :name "clock" :hints {[["L", "calendar"]]} :title "Date" :mode mode :screen screen :text {formattime(EWW_TIME, "%Y-%m-%d %H:%M")}
-         :info date-info :onclick "/home/m/Projects/calendar/build/deca")))
+         :info date-info :onclick "setsid -f /home/m/Projects/calendar/build/deca")))
 
 (defwidget line [mode screen]
   (centerbox :class "line ${mode}" :orientation "h"
