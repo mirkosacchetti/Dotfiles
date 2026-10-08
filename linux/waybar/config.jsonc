@@ -9,7 +9,9 @@
     // more to say leads a group with a drawer instead: what used to be its
     // tooltip is a second module (the "-info" ones, or a second instance of
     // the same builtin) that slides out to its right on hover, at once. The
-    // #group suffix is the CSS class the groups share (style.css).
+    // #group suffix is the CSS class the groups share (style.css). Opening
+    // shifts the leader left under the pointer, which often lands on the
+    // info module: so that one answers to the same clicks and scrolls.
     "modules-left": [
         "sway/workspaces",
         "group/scratchpad#group",
@@ -65,7 +67,12 @@
         "exec": "/home/m/Dotfiles/scripts/mpris.sh info",
         "return-type": "json",
         "interval": "once",
-        "signal": 5
+        "signal": 5,
+        "on-click": "playerctl play-pause",
+        "on-click-middle": "playerctld shift",
+        "on-click-right": "playerctl next",
+        "on-scroll-up": "/home/m/Dotfiles/scripts/mpris.sh volume 5%+",
+        "on-scroll-down": "/home/m/Dotfiles/scripts/mpris.sh volume 5%-"
     },
     "sway/mode": {
         "format": "{}"
@@ -107,7 +114,10 @@
         "return-type": "json",
         "interval": 2,
         "signal": 2,
-        "escape": true
+        "escape": true,
+        "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/notify-ctl.sh pick",
+        "on-click-right": "/home/m/Dotfiles/scripts/notify-ctl.sh toggle",
+        "on-click-middle": "/home/m/Dotfiles/scripts/notify-ctl.sh clear"
     },
     "custom/scratchpad": {
         "exec": "/home/m/Dotfiles/scripts/scratchpad.sh",
@@ -121,7 +131,12 @@
     "custom/scratchpad-info": {
         "exec": "/home/m/Dotfiles/scripts/scratchpad.sh info",
         "return-type": "json",
-        "escape": true
+        "escape": true,
+        "on-click": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh toggle",
+        "on-click-middle": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh move",
+        "on-click-right": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh close",
+        "on-scroll-up": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh prev",
+        "on-scroll-down": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh next"
     },
     "custom/display": {
         "exec": "/home/m/Dotfiles/scripts/display.sh",
@@ -132,7 +147,9 @@
     "custom/display-info": {
         "exec": "/home/m/Dotfiles/scripts/display.sh info",
         "return-type": "json",
-        "escape": true
+        "escape": true,
+        "on-click": "nwg-displays",
+        "on-click-right": "/home/m/Dotfiles/scripts/display-restore.sh"
     },
     "custom/nightlight": {
         "exec": "/home/m/Dotfiles/scripts/nightlight.sh status",
@@ -145,7 +162,8 @@
         "exec": "/home/m/Dotfiles/scripts/nightlight.sh info",
         "return-type": "json",
         "interval": 60,
-        "signal": 4
+        "signal": 4,
+        "on-click": "/home/m/Dotfiles/scripts/nightlight.sh toggle"
     },
     "backlight": {
         "device": "intel_backlight",
@@ -176,7 +194,8 @@
         "format-disabled": "off",
         "format-connected": "{device_alias}",
         "format-connected-battery": "{device_alias} {device_battery_percentage}%",
-        "tooltip": false
+        "tooltip": false,
+        "on-click": "blueman-manager"
     },
     "tray": { },
     "clock": {
@@ -237,7 +256,8 @@
         "format-ethernet": "{ifname}  ·  {ipaddr}/{cidr} via {gwaddr}",
         "format-linked": "{ifname} (no IP)",
         "format-disconnected": "disconnected",
-        "tooltip": false
+        "tooltip": false,
+        "on-click": "alacritty --class impala -e impala"
     },
     "wireplumber": {
         "format": "{icon} {volume}%",
@@ -260,7 +280,9 @@
         "format": "{node_name}",
         "format-muted": "muted  ·  {node_name}",
         "tooltip": false,
-        "scroll-step": 2
+        "scroll-step": 2,
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
     },
     "pulseaudio#mic": {
         "format": "{format_source}",
@@ -276,7 +298,11 @@
         "format": "{format_source}  ·  {source_desc}",
         "format-source": "{volume}%",
         "format-source-muted": "muted",
-        "tooltip": false
+        "tooltip": false,
+        "on-click": "pavucontrol -t 4",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-scroll-up": "wpctl set-volume -l 1 @DEFAULT_AUDIO_SOURCE@ 2%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-"
     },
     "custom/power": {
         "format": "⏻",
@@ -285,6 +311,8 @@
     },
     "custom/power-info": {
         "exec": "uptime -p",
-        "interval": 60
+        "interval": 60,
+        "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/power-menu.sh",
+        "on-click-right": "swaylock"
     }
 }
