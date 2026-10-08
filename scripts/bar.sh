@@ -1,23 +1,39 @@
 #!/bin/bash
 # The eww bar on every active output: opened where missing, closed where the
 # output is gone. One-shot from sway's exec_always; `watch` keeps doing it on
-# output events (hotplug), single instance. The first eww command starts the
-# daemon, with sway's environment.
+# output events (hotplug), single instance. The daemon is the eww user
+# service (linux/systemd/user/eww.service), started here if needed.
+daemon() {
+    local i
+    systemctl --user start eww.service
+    for i in 1 2 3 4 5 6 7 8 9 10; do eww ping > /dev/null 2>&1 && return 0; sleep 0.5; done
+    return 1
+}
+
+# true when every active output has its bar
 open_all() {
-    local active o id
+    local active open o id ok=0
     active=$(swaymsg -t get_outputs | jq -r '.[] | select(.active) | .name')
-    for id in $(eww active-windows 2>/dev/null | sed -n 's/^\(bar-[^:]*\):.*/\1/p'); do
+    open=$(eww active-windows 2>/dev/null)
+    for id in $(sed -n 's/^\(bar-[^:]*\):.*/\1/p' <<< "$open"); do
         grep -qx "${id#bar-}" <<< "$active" || eww close "$id"
     done
     for o in $active; do
-        eww active-windows 2>/dev/null | grep -q "^bar-$o:" ||
-            eww open bar --id "bar-$o" --screen "$o" --arg "screen=$o"
+        grep -q "^bar-$o:" <<< "$open" && continue
+        # a monitor just plugged may not have its name in GTK yet: the
+        # caller retries
+        eww open bar --id "bar-$o" --screen "$o" --arg "screen=$o" > /dev/null 2>&1 || ok=1
     done
+    return $ok
 }
+
+daemon || exit 1
 if [[ $1 == watch ]]; then
     exec 9> "${XDG_RUNTIME_DIR:-/tmp}/bar-watch.lock"
     flock -n 9 || exit 0
-    swaymsg -rm -t subscribe '["output"]' | while read -r _; do sleep 1; open_all; done
+    swaymsg -rm -t subscribe '["output"]' | while read -r _; do
+        for _ in 1 2 3 4 5; do sleep 1; open_all && break; done
+    done
 else
     open_all
 fi

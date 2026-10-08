@@ -1,15 +1,18 @@
 ; eww bar: the waybar one rebuilt, with popups below instead of drawers:
-; hovering a module opens a second line under the bar, laid out like the bar
-; itself (same modules, same widths, text transparent) so the information
-; sits right under its module, growing right on the left side and left on
-; the right side. Nothing in the bar moves. The scripts are the ones waybar used,
-; they print JSON with text, info and class; see scripts/.
+; hovering a module opens a popup under it. The popup window is a second,
+; transparent line laid out like the bar itself (same modules, same widths,
+; text invisible) with the hovered module's slot showing a card with its
+; information, so the card sits right under its module, growing right on
+; the left side and left on the right side. Nothing in the bar moves. The
+; scripts are the ones waybar used; they print JSON with text, info and
+; class; see scripts/.
 ;
 ;   scripts/bar.sh      opens the bar on every output (sway exec_always)
 ;   info                opened and closed by the modules (scripts/eww-hover.sh)
 
 (defvar S "/home/m/Dotfiles/scripts")
 (defvar hovered "")
+(defvar hoverseq "")
 
 ;; ---- data ------------------------------------------------------------
 (deflisten sway :initial '{"workspaces": [], "mode": "default", "title": ""}' "/home/m/Dotfiles/scripts/sway-state.sh")
@@ -40,7 +43,7 @@
             :onclick {onclick ?: ""} :onmiddleclick {onmiddle ?: ""} :onrightclick {onright ?: ""} :onscroll {onscroll ?: ""}
     (box :class "slot" :space-evenly false
       (label :class "ghost" :visible {(mode == "info") && (hovered != name)} :text text)
-      (label :class "info" :visible {(mode == "info") && (hovered == name)} :text info)
+      (box :class "card" :visible {(mode == "info") && (hovered == name)} (label :text info))
       (label :visible {(mode != "info") && !(markup ?: false)} :text text)
       (label :visible {(mode != "info") && (markup ?: false)} :markup text))))
 
@@ -106,9 +109,9 @@
   :stacking "fg" :exclusive true :focusable false :namespace "eww-bar"
   (line :mode "bar" :screen screen))
 
-;; not exclusive: under the bar, over the windows
+;; not exclusive: under the bar, over the windows; tall enough for the card
 (defwindow info [screen]
   :monitor screen
-  :geometry (geometry :x "0" :y "0" :width "100%" :height "28px" :anchor "top center")
+  :geometry (geometry :x "0" :y "0" :width "100%" :height "44px" :anchor "top center")
   :stacking "overlay" :exclusive false :focusable false :namespace "eww-info"
   (line :mode "info" :screen screen))

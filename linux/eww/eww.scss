@@ -4,7 +4,6 @@ $bg: #16242d;
 $accent: #4d86b0;
 $title: #8bc9eb;
 $red: #bf616a;      // nord11, the alerts
-$info: #8bc9eb;     // the open module and its information
 
 * {
   all: unset;
@@ -14,16 +13,16 @@ $info: #8bc9eb;     // the open module and its information
   color: $fg;
 }
 
-.line { background-color: $bg; min-height: 28px; }
+.line.bar { background-color: $bg; min-height: 28px; }
+.line.info { background-color: transparent; }
 
 // an eventbox takes no padding, its box does
 .slot, .ws { padding: 0 0.5rem; }
 .workspaces { padding: 0; }
 .tray { padding: 0 0.5rem; }
 
-// hover line, and the module stays marked while its info line is open
+// hover line, and the module stays marked while its popup is open
 .module:hover, .module.open, .ws:hover, .ws.focused, .scratchpad.focused { box-shadow: inset 0 1px $fg; }
-.module.open label { color: $info; }
 
 .mode { font-style: italic; color: $accent; }
 .title label { color: $title; }
@@ -31,7 +30,17 @@ $info: #8bc9eb;     // the open module and its information
 // red only for states that need attention
 .recording label, .degraded label, .critical label { color: $red; }
 
-// the info line: a transparent copy of the bar keeps the slots aligned,
-// the hovered one shows its information instead
-.ghost, .ghost * { color: transparent; }
-.info label.info { color: $info; }
+// the popup line: a transparent copy of the bar keeps the slots aligned,
+// the hovered one shows a card with its information instead. The copy
+// carries no hover line, and its text stays invisible whatever colour the
+// bar gives it (hence the specificity).
+.line.info .module { box-shadow: none; }
+.line.info .ghost, .line.info .ghost * { color: transparent; }
+.card {
+  background-color: $bg;
+  border: 1px solid $fg;
+  border-radius: 8px;
+  padding: 4px 12px;
+  margin-top: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}

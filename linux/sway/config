@@ -252,7 +252,8 @@ set $purple               #8bc9eb
 ###########  
 ### bar
 ###########  
-# eww (linux/eww): one bar per output, re-done on reload and on hotplug
+# eww (linux/eww, daemon as the eww user service): one bar per output,
+# re-done on reload and on hotplug
 exec_always /home/m/Dotfiles/scripts/bar.sh
 exec /home/m/Dotfiles/scripts/bar.sh watch
 
