@@ -43,12 +43,13 @@ screen() {
 }
 
 # ddcutil display number of an output, from the DRM connector in `detect`
+# ("DRM_connector" in 3.0, "DRM connector" before)
 ddc_display() {
     local cache=$XDG_RUNTIME_DIR/brightness-ddc-$1 n
     if n=$(cat "$cache" 2>/dev/null) && [[ -n $n ]]; then echo "$n"; return; fi
     n=$(ddcutil detect 2>/dev/null | awk -v out="$1" '
         /^Display [0-9]+/ { d = $2 }
-        /DRM connector:/ && $NF ~ ("-" out "$") { print d; exit }')
+        /DRM.connector:/ && $NF ~ ("-" out "$") { print d; exit }')
     [[ -n $n ]] && echo "$n" | tee "$cache"
 }
 
