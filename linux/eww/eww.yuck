@@ -15,13 +15,15 @@
 (defvar hoverseq "")
 
 ;; ---- data ------------------------------------------------------------
-(deflisten sway :initial '{"workspaces": [], "mode": "default", "title": ""}' "/home/m/Dotfiles/scripts/sway-state.sh")
-(deflisten scratchpad :initial '{"text": "", "info": "", "class": ""}' "/home/m/Dotfiles/scripts/scratchpad.sh")
+;; deflisten scripts exec over the shell eww starts them in, so a reload
+;; kills them instead of leaving them behind
+(deflisten sway :initial '{"workspaces": [], "mode": "default", "title": ""}' "exec /home/m/Dotfiles/scripts/sway-state.sh")
+(deflisten scratchpad :initial '{"text": "", "info": "", "class": ""}' "exec /home/m/Dotfiles/scripts/scratchpad.sh")
 (defpoll notifications :interval "2s" :initial '{"text": "", "info": "", "class": ""}' "/home/m/Dotfiles/scripts/notify-ctl.sh status")
-(deflisten mpris :initial '{"text": "", "info": "", "class": ""}' "/home/m/Dotfiles/scripts/mpris.sh status")
+(deflisten mpris :initial '{"text": "", "info": "", "class": ""}' "exec /home/m/Dotfiles/scripts/mpris.sh status")
 (defpoll recording :interval "2s" :initial "" "pgrep -x wf-recorder > /dev/null && echo ⏺ || true")
-(deflisten audio :initial '{"sink": {"text": "", "info": ""}, "source": {"text": "", "info": ""}}' "/home/m/Dotfiles/scripts/audio.sh")
-(deflisten display :initial '{"text": "", "info": "", "class": ""}' "/home/m/Dotfiles/scripts/display.sh")
+(deflisten audio :initial '{"sink": {"text": "", "info": ""}, "source": {"text": "", "info": ""}}' "exec /home/m/Dotfiles/scripts/audio.sh")
+(deflisten display :initial '{"text": "", "info": "", "class": ""}' "exec /home/m/Dotfiles/scripts/display.sh")
 (defpoll brightness :interval "300s" :initial '{"text": "", "info": ""}' "/home/m/Dotfiles/scripts/brightness.sh status")
 (defpoll nightlight :interval "60s" :initial '{"text": "", "info": "", "class": ""}' "/home/m/Dotfiles/scripts/nightlight.sh status")
 (defpoll bluetooth :interval "30s" :initial '{"text": "", "info": ""}' "/home/m/Dotfiles/scripts/bluetooth.sh status")

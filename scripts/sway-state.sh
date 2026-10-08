@@ -12,10 +12,20 @@ emit() {
           mode: $mode.name,
           title: ([$tree | .. | objects | select(.focused? == true and .type != "workspace") | .name] | first // "") }'
 }
-emit || exit
+# only what changed goes out: window events come for focus, titles and
+# more, most of them leave the line as it was
+last=
+emit_changed() {
+    local line
+    line=$(emit) || return 1
+    [[ $line == "$last" ]] && return 0
+    last=$line
+    echo "$line"
+}
+emit_changed || exit
 # exit once the bar is gone (write fails) instead of lingering
 swaymsg -rm -t subscribe '["workspace", "window", "mode"]' | while read -r _; do
     # a burst of events is one emit
     while read -r -t 0.05 _; do :; done
-    emit || exit
+    emit_changed || exit
 done

@@ -1,0 +1,13 @@
+# The bar windows: scripts/bar.sh opens one per output and keeps them in step
+# with hotplugs. Bound to the daemon, and wanted by it, so a daemon restart
+# brings the windows back; sway's exec_always runs bar.sh once more on reload.
+[Unit]
+Description=eww bar windows
+BindsTo=eww.service
+After=eww.service
+
+[Service]
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin
+ExecStart=/home/m/Dotfiles/scripts/bar.sh watch
+Restart=on-failure
+RestartSec=1

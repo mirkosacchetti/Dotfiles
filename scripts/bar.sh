@@ -1,8 +1,9 @@
 #!/bin/bash
 # The eww bar on every active output: opened where missing, closed where the
-# output is gone. One-shot from sway's exec_always; `watch` keeps doing it on
-# output events (hotplug), single instance. The daemon is the eww user
-# service (linux/systemd/user/eww.service), started here if needed.
+# output is gone. `watch` (the eww-bar user service) does it at start and on
+# every output event (hotplug), single instance; without arguments (sway's
+# exec_always) once. The daemon is the eww user service
+# (linux/systemd/user/eww.service), started here if needed.
 daemon() {
     local i
     systemctl --user start eww.service
@@ -31,6 +32,7 @@ daemon || exit 1
 if [[ $1 == watch ]]; then
     exec 9> "${XDG_RUNTIME_DIR:-/tmp}/bar-watch.lock"
     flock -n 9 || exit 0
+    for _ in 1 2 3 4 5; do open_all && break; sleep 1; done
     swaymsg -rm -t subscribe '["output"]' | while read -r _; do
         for _ in 1 2 3 4 5; do sleep 1; open_all && break; done
     done

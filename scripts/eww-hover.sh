@@ -12,7 +12,7 @@ case $1 in
     enter)
         eww update "hovered=$2" "hoverseq=$(date +%s%N)"
         eww active-windows | grep -q "^info-$3:" ||
-            eww open info --id "info-$3" --screen "$3" --arg "screen=$3"
+            timeout 3 eww open info --id "info-$3" --screen "$3" --arg "screen=$3"
         ;;
     leave)
         setsid -f "$0" close-later "$2" "$(eww get hoverseq)"

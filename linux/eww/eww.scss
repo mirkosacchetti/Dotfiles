@@ -47,7 +47,7 @@ $red: #bf616a;      // nord11, the alerts
 .card-title { font-weight: bold; margin-bottom: 6px; }
 // the mouse actions: small, in the title blue, the button as a badge, two
 // per row: each cell takes half of the card's width
-.hints { margin-top: 4px; }
+.hints { margin-top: 12px; }
 .hints label { font-size: 11px; color: $title; }
 .hint { min-width: 180px; }
 .hints .key {

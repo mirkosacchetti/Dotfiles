@@ -7,6 +7,7 @@
 # is installed) and the usual tools.
 [Unit]
 Description=eww bar daemon
+Wants=eww-bar.service
 
 [Service]
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin
