@@ -1,25 +1,47 @@
 #!/bin/bash
 # Brightness of the screen in use, for waybar (custom/brightness, signal 6)
-# and the XF86MonBrightness keys. The screen is the focused output: the
-# laptop panel goes through its backlight (brightnessctl, via logind), an
-# external monitor through DDC/CI (ddcutil, which needs the i2c group and
-# takes a few hundred ms per call, hence the cache: ddcutil is only asked
-# every minute, or when a set changes the value).
+# and the XF86MonBrightness keys. The screen is the one picked with `next`
+# (middle click), else the focused output. The laptop panel goes through
+# its backlight (brightnessctl, via logind), an external monitor through
+# DDC/CI (ddcutil, which needs the i2c group and takes a few hundred ms per
+# call, hence the cache: ddcutil is only asked every minute, or when a set
+# changes the value).
 #   status   waybar JSON: sun icon by level
-#   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE"
+#   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE", plus
+#            the other screens when there are any
 #   set ARG  5%+, 5%-, or an absolute percent; then signals waybar
+#   next     pick the next active screen
 CACHE_MAX_AGE=60
+PICK=$XDG_RUNTIME_DIR/brightness-screen
 # nerd font glyphs as bytes, so the locale does not matter: sun (U+F185),
 # brightness-5 and -6 (U+F00DF, U+F00E0), circle (U+F111)
 printf -v SUN '\xef\x86\x85'; printf -v HALF '\xf3\xb0\x83\x9f'
 printf -v HIGH '\xf3\xb0\x83\xa0'; printf -v FULL '\xef\x84\x91'
 
-# focused output, else any active one: "name model" (the panel's model is
-# a bare code, so only the name for that one)
-screen() {
+# active outputs, one per line, "name model" (the panel's model is a bare
+# code, so only the name for that one), the focused one first
+screens() {
     swaymsg -t get_outputs | jq -r '
-        [.[] | select(.active)] | (first(.[] | select(.focused)) // first)
+        [.[] | select(.active)] | sort_by(.focused | not)[]
         | if .name | startswith("eDP") then .name else "\(.name) \(.model)" end'
+}
+
+# the picked screen if still there, else the focused one; sets name, model
+# and others (the rest, for the drawer)
+screen() {
+    local pick line
+    pick=$(cat "$PICK" 2>/dev/null)
+    mapfile -t all < <(screens)
+    name=; others=()
+    for line in "${all[@]}"; do
+        if [[ -z $name && ( ${line%% *} == "$pick" || -z $pick ) ]]; then
+            read -r name model <<< "$line"
+        else
+            others+=("$line")
+        fi
+    done
+    # the pick is gone: fall back to the focused one
+    [[ -n $name ]] || { : > "$PICK"; screen; }
 }
 
 # ddcutil display number of an output, from the DRM connector in `detect`
@@ -54,22 +76,28 @@ get() {
     [[ -n $v ]] && echo "$v" | tee "$cache"
 }
 
-read -r name model < <(screen)
+screen
 case $1 in
     status|info)
         pct=$(get "$name")
         if [[ -z $pct ]]; then
-            icon=$SUN; text="no DDC/CI  ·  $name"
+            icon=$SUN; text="no DDC/CI  ·  <b>$name</b>"
         else
             # same levels as waybar's backlight module had: half, high, full
             if (( pct >= 100 )); then icon=$FULL
             elif (( pct >= 76 )); then icon=$HIGH
             elif (( pct >= 51 )); then icon=$HALF
             else icon=$SUN; fi
-            text="$pct%  ·  $name${model:+ $model}"
+            text="$pct%  ·  <b>$name${model:+ $model}</b>"
         fi
+        (( ${#others[@]} )) && text+=", $(IFS=,; echo "${others[*]}" | sed 's/,/, /g')"
         [[ $1 == status ]] && text=$icon
         jq -cn --arg text "$text" '{text: $text}'
+        ;;
+    next)
+        # the one after the current, wrapping: others are the rest in order
+        [[ -n ${others[0]} ]] && echo "${others[0]%% *}" > "$PICK"
+        pkill -RTMIN+6 waybar
         ;;
     set)
         if [[ $name == eDP-* ]]; then
@@ -89,5 +117,5 @@ case $1 in
         fi
         pkill -RTMIN+6 waybar
         ;;
-    *) echo "usage: ${0##*/} status|info|set ARG" >&2; exit 1 ;;
+    *) echo "usage: ${0##*/} status|info|set ARG|next" >&2; exit 1 ;;
 esac
