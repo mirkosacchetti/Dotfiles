@@ -45,6 +45,14 @@ $red: #bf616a;      // nord11, the alerts
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .card-title { font-weight: bold; margin-bottom: 2px; }
-// the mouse actions: small, in the title blue
+// the mouse actions: small, in the title blue, the button as a badge
 .hints { margin-top: 4px; }
 .hints label { font-size: 11px; color: $title; }
+.hints .key {
+  font-size: 9px;
+  min-width: 12px;
+  padding: 0 3px;
+  margin: 1px 6px 1px 0;
+  border: 1px solid $title;
+  border-radius: 3px;
+}
