@@ -3,63 +3,108 @@
 # and the XF86MonBrightness keys. The screen is the one picked with the
 # middle click (display.sh next), else the focused output. The laptop
 # panel goes through its backlight (brightnessctl, via logind), an external
-# monitor through DDC/CI (ddcutil, which needs the i2c group and takes a
-# few hundred ms per call, hence the cache: ddcutil is only asked every
-# minute, or when a set changes the value).
+# monitor through DDC/CI, spoken directly on its I2C bus with i2ctransfer
+# (i2c-tools): the monitor answers at address 0x37 to MCCS packets, VCP
+# code 0x10 is brightness. ddcutil would do the same but its detection
+# fails when the kernel does not link the connector to its I2C bus, as
+# happens here with the Dell behind DisplayPort MST. The bus is found by
+# reading the EDID (address 0x50) of each display bus and matching model
+# and serial with sway's, then cached.
 #   status   waybar JSON: sun icon by level
 #   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE", plus
 #            the other screens when there are any
 #   set ARG  5%+, 5%-, or an absolute percent; then signals waybar
-CACHE_MAX_AGE=60
 PICK=$XDG_RUNTIME_DIR/screen-pick
 # nerd font glyphs as bytes, so the locale does not matter: sun (U+F185),
 # brightness-5 and -6 (U+F00DF, U+F00E0), circle (U+F111)
 printf -v SUN '\xef\x86\x85'; printf -v HALF '\xf3\xb0\x83\x9f'
 printf -v HIGH '\xf3\xb0\x83\xa0'; printf -v FULL '\xef\x84\x91'
 
-# active outputs, one per line, "name model" (the panel's model is a bare
-# code, so only the name for that one), the focused one first
+# active outputs, one per line, "name|model|serial", the focused one first
 screens() {
     swaymsg -t get_outputs | jq -r '
         [.[] | select(.active)] | sort_by(.focused | not)[]
-        | if .name | startswith("eDP") then .name else "\(.name) \(.model)" end'
+        | "\(.name)|\(.model)|\(.serial)"'
 }
 
-# the picked screen if still there, else the focused one; sets name, model
-# and others: the rest, starting after the current one and wrapping, the
-# order the drawer lists them in
+# the picked screen if still there, else the focused one; sets name, model,
+# serial, label (name, plus the model unless it is the panel's bare code)
+# and others: the labels of the rest, starting after the current one and
+# wrapping, the order the drawer lists them in
 screen() {
-    local pick i n
+    local pick i n line
     pick=$(cat "$PICK" 2>/dev/null)
     mapfile -t all < <(screens)
     n=${#all[@]}
     for (( i = 0; i < n; i++ )); do
-        [[ ${all[i]%% *} == "$pick" ]] && break
+        [[ ${all[i]%%|*} == "$pick" ]] && break
     done
-    # no pick, or gone: the focused one, first in the list
     (( i == n )) && i=0
-    read -r name model <<< "${all[i]}"
-    others=("${all[@]:i+1}" "${all[@]:0:i}")
+    IFS='|' read -r name model serial <<< "${all[i]}"
+    label=$(label "${all[i]}")
+    others=()
+    for line in "${all[@]:i+1}" "${all[@]:0:i}"; do others+=("$(label "$line")"); done
+}
+label() { local n=${1%%|*} m=${1#*|}; m=${m%|*}; [[ $n == eDP-* ]] && echo "$n" || echo "$n $m"; }
+
+# DDC/CI packet checksum: XOR of the bytes with the destination address
+# (0x6e = 0x37 << 1 for what we send, 0x50 for what the monitor answers)
+chk() { local c=$1 b; shift; for b in "$@"; do c=$(( c ^ b )); done; printf '0x%02x' "$c"; }
+
+# the I2C bus of an external output, by EDID: the 128-byte base block at
+# 0x50, descriptors at 54, 72, 90, 108 tagged 0xfc (name) and 0xff (serial)
+ddc_bus() {
+    local cache=$XDG_RUNTIME_DIR/brightness-bus-$1 bus b e off tag s mname mserial
+    if bus=$(cat "$cache" 2>/dev/null) && [[ -n $bus ]]; then echo "$bus"; return; fi
+    for b in /sys/bus/i2c/devices/i2c-*; do
+        # display buses only (amdgpu's aux and ddc lines, MST): the SMBus
+        # has EEPROMs at 0x50 too
+        grep -qiE 'DPMST|aux|AMDGPU DM|DDC' "$b/name" || continue
+        bus=${b##*i2c-}
+        e=($(i2ctransfer -y "$bus" w1@0x50 0x00 r128@0x50 2>/dev/null)) || continue
+        (( ${#e[@]} == 128 )) || continue
+        mname= mserial=
+        for off in 54 72 90 108; do
+            (( e[off] == 0 && e[off+1] == 0 && e[off+2] == 0 )) || continue
+            s=$(printf "$(printf '\\x%02x' "${e[@]:off+5:13}")" | tr -d '\n' | sed 's/ *$//')
+            case ${e[off+3]} in 0xfc) mname=$s ;; 0xff) mserial=$s ;; esac
+        done
+        [[ $mname == "$2" && $mserial == "$3" ]] || continue
+        # and it must speak DDC/CI: a valid reply to "get VCP 0x10"
+        ddc_get "$bus" > /dev/null || continue
+        echo "$bus" | tee "$cache"
+        return
+    done
+    return 1
 }
 
-# ddcutil display number of an output, from the DRM connector in `detect`
-# ("DRM_connector" in 3.0, "DRM connector" before)
-ddc_display() {
-    local cache=$XDG_RUNTIME_DIR/brightness-ddc-$1 n
-    if n=$(cat "$cache" 2>/dev/null) && [[ -n $n ]]; then echo "$n"; return; fi
-    n=$(ddcutil detect 2>/dev/null | awk -v out="$1" '
-        /^Display [0-9]+/ { d = $2 }
-        /DRM.connector:/ && $NF ~ ("-" out "$") { print d; exit }')
-    [[ -n $n ]] && echo "$n" | tee "$cache"
+# brightness percent over DDC/CI: ask for VCP 0x10, the reply carries max
+# and current (bytes 6-7, 8-9), checked by length, opcode and checksum
+ddc_get() {
+    local bus=$1 r
+    i2ctransfer -y "$bus" w5@0x37 0x51 0x82 0x01 0x10 "$(chk 0x6e 0x51 0x82 0x01 0x10)" 2>/dev/null || return 1
+    sleep 0.05
+    r=($(i2ctransfer -y "$bus" r11@0x37 2>/dev/null)) || return 1
+    [[ ${#r[@]} == 11 && ${r[1]} == 0x88 && ${r[2]} == 0x02 && ${r[4]} == 0x10 ]] || return 1
+    [[ $(chk 0x50 "${r[@]:0:10}") == "${r[10]}" ]] || return 1
+    local max=$(( r[6] << 8 | r[7] )) cur=$(( r[8] << 8 | r[9] ))
+    (( max > 0 )) && echo $(( (cur * 100 + max / 2) / max ))
 }
 
-fresh() { [[ -f $1 && $(( $(date +%s) - $(stat -c %Y "$1") )) -lt $CACHE_MAX_AGE ]]; }
+# set VCP 0x10 to a percent (the Dell's max is 100, the value is sent as is)
+ddc_set() {
+    local bus=$1 hi=$(( $2 >> 8 )) lo=$(( $2 & 0xff ))
+    i2ctransfer -y "$bus" w7@0x37 0x51 0x84 0x03 0x10 "$hi" "$lo" "$(chk 0x6e 0x51 0x84 0x03 0x10 "$hi" "$lo")" 2>/dev/null
+    sleep 0.05
+}
 
-# current percent of a screen, from the cache when fresh enough; the lock
-# keeps the two waybar modules from asking ddcutil at the same time, the
-# second one finds the cache filled
+# one DDC conversation at a time on a bus: waybar runs status and info
+# together, and the keys may come in the middle
+lock() { exec {lockfd}> "$XDG_RUNTIME_DIR/brightness-lock"; flock "$lockfd"; }
+
+# current percent of the screen
 get() {
-    local name=$1 cache=$XDG_RUNTIME_DIR/brightness-$1 v max d bl lock
+    local bl bus v max
     if [[ $name == eDP-* ]]; then
         bl=(/sys/class/backlight/*)
         read -r v < "${bl[0]}/brightness"
@@ -67,27 +112,24 @@ get() {
         echo $(( (v * 100 + max / 2) / max ))
         return
     fi
-    exec {lock}> "$cache.lock"; flock "$lock"
-    if fresh "$cache"; then cat "$cache"; return; fi
-    d=$(ddc_display "$name") || return 1
-    # "VCP 10 C 45 100"
-    v=$(ddcutil getvcp 10 --brief --display "$d" 2>/dev/null | awk '{ print $4 }')
-    [[ -n $v ]] && echo "$v" | tee "$cache"
+    lock
+    bus=$(ddc_bus "$name" "$model" "$serial") || return 1
+    ddc_get "$bus" || { rm -f "$XDG_RUNTIME_DIR/brightness-bus-$name"; return 1; }
 }
 
 screen
 case $1 in
     status|info)
-        pct=$(get "$name")
+        pct=$(get)
         if [[ -z $pct ]]; then
-            icon=$SUN; text="no DDC/CI  ·  $name"
+            icon=$SUN; text="no DDC/CI  ·  $label"
         else
             # same levels as waybar's backlight module had: half, high, full
             if (( pct >= 100 )); then icon=$FULL
             elif (( pct >= 76 )); then icon=$HIGH
             elif (( pct >= 51 )); then icon=$HALF
             else icon=$SUN; fi
-            text="$pct%  ·  $name${model:+ $model}"
+            text="$pct%  ·  $label"
         fi
         (( ${#others[@]} )) && text+=", $(IFS=,; echo "${others[*]}" | sed 's/,/, /g')"
         [[ $1 == status ]] && text=$icon
@@ -97,8 +139,7 @@ case $1 in
         if [[ $name == eDP-* ]]; then
             brightnessctl -q set "$2"
         else
-            d=$(ddc_display "$name") || exit 1
-            cur=$(get "$name") || exit 1
+            cur=$(get) || exit 1
             case $2 in
                 *%+) new=$(( cur + ${2%\%+} )) ;;
                 *%-) new=$(( cur - ${2%\%-} )) ;;
@@ -106,8 +147,7 @@ case $1 in
             esac
             (( new > 100 )) && new=100
             (( new < 0 )) && new=0
-            ddcutil setvcp 10 "$new" --display "$d" 2>/dev/null &&
-                echo "$new" > "$XDG_RUNTIME_DIR/brightness-$name"
+            ddc_set "$(ddc_bus "$name" "$model" "$serial")" "$new"
         fi
         pkill -RTMIN+6 waybar
         ;;
