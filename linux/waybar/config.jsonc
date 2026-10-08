@@ -170,12 +170,13 @@
         "on-click": "/home/m/Dotfiles/scripts/nightlight.sh toggle"
     },
     // brightness of the focused screen, or the one picked with the middle
-    // click: the panel's backlight, or an external monitor over DDC/CI
-    // (ddcutil), see scripts/brightness.sh
+    // click: the panel's backlight, or an external monitor over DDC/CI, see
+    // scripts/brightness.sh. Polled rarely: each DDC exchange goes through
+    // the GPU driver and can stall the compositor; a set refreshes anyway
     "custom/brightness": {
         "exec": "/home/m/Dotfiles/scripts/brightness.sh status",
         "return-type": "json",
-        "interval": 60,
+        "interval": 300,
         "signal": 6,
         "on-click-middle": "/home/m/Dotfiles/scripts/display.sh next",
         "on-scroll-up": "/home/m/Dotfiles/scripts/brightness.sh set 5%+",
@@ -184,7 +185,7 @@
     "custom/brightness-info": {
         "exec": "/home/m/Dotfiles/scripts/brightness.sh info",
         "return-type": "json",
-        "interval": 60,
+        "interval": 300,
         "signal": 6,
         "on-click-middle": "/home/m/Dotfiles/scripts/display.sh next",
         "on-scroll-up": "/home/m/Dotfiles/scripts/brightness.sh set 5%+",

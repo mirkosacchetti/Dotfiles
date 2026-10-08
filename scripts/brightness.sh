@@ -9,7 +9,11 @@
 # fails when the kernel does not link the connector to its I2C bus, as
 # happens here with the Dell behind DisplayPort MST. The bus is found by
 # reading the EDID (address 0x50) of each display bus and matching model
-# and serial with sway's, then cached.
+# and serial with sway's, then cached. Every transaction on a display bus
+# goes through the GPU driver's AUX/DDC path and can stall the compositor
+# (visible as input lag), so the scan is kept rare and short: aux and MST
+# buses answer fast when empty, the HDMI DDC lines time out and are only
+# tried for an HDMI output; a failed scan is not retried for 5 minutes.
 #   status   waybar JSON: sun icon by level
 #   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE", plus
 #            the other screens when there are any
@@ -54,12 +58,13 @@ chk() { local c=$1 b; shift; for b in "$@"; do c=$(( c ^ b )); done; printf '0x%
 # the I2C bus of an external output, by EDID: the 128-byte base block at
 # 0x50, descriptors at 54, 72, 90, 108 tagged 0xfc (name) and 0xff (serial)
 ddc_bus() {
-    local cache=$XDG_RUNTIME_DIR/brightness-bus-$1 bus b e off tag s mname mserial
+    local cache=$XDG_RUNTIME_DIR/brightness-bus-$1 bus b e off tag s mname mserial pat
     if bus=$(cat "$cache" 2>/dev/null) && [[ -n $bus ]]; then echo "$bus"; return; fi
+    [[ -f $cache.failed && $(( $(date +%s) - $(stat -c %Y "$cache.failed") )) -lt 300 ]] && return 1
+    pat='DPMST|aux'; [[ $1 == HDMI* ]] && pat='AMDGPU DM i2c|DDC'
     for b in /sys/bus/i2c/devices/i2c-*; do
-        # display buses only (amdgpu's aux and ddc lines, MST): the SMBus
-        # has EEPROMs at 0x50 too
-        grep -qiE 'DPMST|aux|AMDGPU DM|DDC' "$b/name" || continue
+        # display buses only: the SMBus has EEPROMs at 0x50 too
+        grep -qiE "$pat" "$b/name" || continue
         bus=${b##*i2c-}
         e=($(i2ctransfer -y "$bus" w1@0x50 0x00 r128@0x50 2>/dev/null)) || continue
         (( ${#e[@]} == 128 )) || continue
@@ -73,8 +78,10 @@ ddc_bus() {
         # and it must speak DDC/CI: a valid reply to "get VCP 0x10"
         ddc_get "$bus" > /dev/null || continue
         echo "$bus" | tee "$cache"
+        rm -f "$cache.failed"
         return
     done
+    touch "$cache.failed"
     return 1
 }
 
