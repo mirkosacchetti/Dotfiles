@@ -48,9 +48,9 @@ status|info)
         icon='󰂜'; class=empty
     fi
     info=$(history | head -1 | awk -F'\t' '{ printf "%s  %s: %s", $2, $4, $5 }')
-    [ "$count" -gt 1 ] && info="$info  ·  $((count - 1)) more"
+    [ "$count" -gt 1 ] && info="$info  |  $((count - 1)) more"
     [ -z "$info" ] && info="No notifications"
-    [ "$paused" = true ] && info="Silenced  ·  $info"
+    [ "$paused" = true ] && info="Silenced  |  $info"
     text=$icon; [ "$1" = info ] && text=$info
     jq -cn --arg text "$text" --arg info "$info" --arg class "$class" '{text: $text, info: $info, class: $class}'
     ;;

@@ -3,7 +3,7 @@
 # long-running, refreshed on pipewire's sink/source/server events (pactl
 # subscribe; client events are ignored, our own wpctl calls make those).
 #   {"sink": {"text": "ICON 78%", "info": "FiiO K5 Pro Pro", "muted": false},
-#    "source": {"text": "ICON", "info": "45%  ·  Ryzen ... Microphone", "muted": false}}
+#    "source": {"text": "ICON", "info": "45%  |  Ryzen ... Microphone", "muted": false}}
 printf -v VOL0 '\xef\x80\xa6'; printf -v VOL1 '\xef\x80\xa7'; printf -v VOL2 '\xef\x80\xa8'
 printf -v HEADPHONE '\xef\x80\xa5'; printf -v MUTED '\xef\x9a\xa9'
 printf -v MIC '\xef\x84\xb0'; printf -v MICMUTED '\xef\x84\xb1'
@@ -32,7 +32,7 @@ emit() {
     read -r v m < <(volume @DEFAULT_AUDIO_SOURCE@)
     IFS='|' read -r ff desc < <(describe @DEFAULT_AUDIO_SOURCE@)
     [[ $m == muted ]] && icon=$MICMUTED || icon=$MIC
-    source=$(jq -cn --arg text "$icon" --arg info "${m:-$v%}  ·  $desc" --argjson muted "$(bool "$m")" \
+    source=$(jq -cn --arg text "$icon" --arg info "${m:-$v%}  |  $desc" --argjson muted "$(bool "$m")" \
         '{text: $text, info: $info, muted: $muted}')
     jq -cn --argjson sink "$sink" --argjson source "$source" '{sink: $sink, source: $source}'
 }

@@ -58,7 +58,7 @@
          :onclick "${S}/scratchpad-ctl.sh toggle" :onmiddle "${S}/scratchpad-ctl.sh move" :onright "${S}/scratchpad-ctl.sh close"
          :onscroll "[ {} = up ] && ${S}/scratchpad-ctl.sh prev || ${S}/scratchpad-ctl.sh next")
     (label :class "mode ${mode == "info" ? "ghost" : ""}" :visible {sway.mode != "default"} :text {sway.mode})
-    (mod :name "launcher" :mode mode :screen screen :text "󰕰" :info "launcher  ·  middle: windows, right: close the workspace"
+    (mod :name "launcher" :mode mode :screen screen :text "󰕰" :info "launcher  |  middle: windows, right: close the workspace"
          :onclick "pkill -x fuzzel || ${S}/launcher.sh" :onmiddle "pkill -x fuzzel || ${S}/window-switcher.sh"
          :onright "swaymsg '[workspace=__focused__] kill'")
     (mod :name "notifications" :mode mode :screen screen :text {notifications.text} :info {notifications.info} :class {notifications.class}

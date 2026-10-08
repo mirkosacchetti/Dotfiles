@@ -24,7 +24,7 @@ outputs() {
               | (if .name | startswith("eDP") then .name else "\(.name) \(.model)" end) as $label
               | { name,
                   low: ($m.refresh < $best - 1000),
-                  line: "\($label)  ·  \($m.width)x\($m.height)@\($m.refresh / 1000 | round)Hz, scale \(.scale)" }
+                  line: "\($label)  |  \($m.width)x\($m.height)@\($m.refresh / 1000 | round)Hz, scale \(.scale)" }
               | .line += (if .low then " (below max)" else "" end))
         | (map(.name) | index($pick)) as $i
         | if $i == null then . else .[$i:] + .[:$i] end'
