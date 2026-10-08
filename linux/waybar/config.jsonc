@@ -165,8 +165,9 @@
         "signal": 4,
         "on-click": "/home/m/Dotfiles/scripts/nightlight.sh toggle"
     },
+    // the only backlight here is the laptop panel's (amdgpu_bl1, eDP-1), so
+    // no device is named: waybar picks it, and the drawer says which screen
     "backlight": {
-        "device": "intel_backlight",
         "format": "",
         "format-half": "󰃟",
         "format-high": "󰃠",
@@ -177,8 +178,7 @@
         "scroll-step": 5
     },
     "backlight#info": {
-        "device": "intel_backlight",
-        "format": "{percent}%",
+        "format": "{percent}%  ·  eDP-1",
         "tooltip": false,
         "scroll-step": 5
     },
