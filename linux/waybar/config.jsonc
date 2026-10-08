@@ -5,33 +5,53 @@
     "spacing": 2,
     "ipc": true,
     "id": "bar-0",
+    // No tooltips: GTK 3 shows them after a fixed half second. A module with
+    // more to say leads a group with a drawer instead: what used to be its
+    // tooltip is a second module (the "-info" ones, or a second instance of
+    // the same builtin) that slides out to its right on hover, at once. The
+    // #group suffix is the CSS class the groups share (style.css).
     "modules-left": [
         "sway/workspaces",
-        "custom/scratchpad",
+        "group/scratchpad#group",
         "sway/mode",
         "custom/launcher",
-        "custom/notifications",
+        "group/notifications#group",
         "tray",
         "sway/window"
     ],
     "modules-center": [],
     "modules-right": [
-        "custom/mpris",
-        "custom/recording",
-        "wireplumber",
-        "pulseaudio#mic",
-        "custom/display",
-        "backlight",
-        "custom/nightlight",
-        "bluetooth",
-        "network",
-        "battery",
-        "power-profiles-daemon",
-        "custom/power",
-        "clock"
+        "group/mpris#group",
+        "group/volume#group",
+        "group/mic#group",
+        "group/display#group",
+        "group/backlight#group",
+        "group/nightlight#group",
+        "group/bluetooth#group",
+        "group/network#group",
+        "group/battery#group",
+        "group/power-profile#group",
+        "group/power#group",
+        "group/clock#group"
     ],
-    // playerctld follows whichever player was used last; the script adds the
-    // app's volume and the other players to the tooltip, see scripts/mpris.sh
+
+    "group/scratchpad#group":     { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/scratchpad", "custom/scratchpad-info"] },
+    "group/notifications#group":  { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/notifications", "custom/notifications-info"] },
+    "group/mpris#group":          { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/mpris", "custom/mpris-info"] },
+    "group/volume#group":         { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["wireplumber", "wireplumber#info"] },
+    "group/mic#group":            { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["pulseaudio#mic", "pulseaudio#mic-info"] },
+    "group/display#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/display", "custom/display-info"] },
+    "group/backlight#group":      { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["backlight", "backlight#info"] },
+    "group/nightlight#group":     { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/nightlight", "custom/nightlight-info"] },
+    "group/bluetooth#group":      { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["bluetooth", "bluetooth#info"] },
+    "group/network#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["network", "network#info"] },
+    "group/battery#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["battery", "battery#info"] },
+    "group/power-profile#group":  { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["power-profiles-daemon", "power-profiles-daemon#info"] },
+    "group/power#group":          { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/power", "custom/power-info"] },
+    "group/clock#group":          { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["clock", "clock#info"] },
+
+    // playerctld follows whichever player was used last; the drawer has the
+    // album, the app's volume and the other players, see scripts/mpris.sh
     "custom/mpris": {
         "exec": "/home/m/Dotfiles/scripts/mpris.sh status",
         "return-type": "json",
@@ -40,6 +60,12 @@
         "on-click-right": "playerctl next",
         "on-scroll-up": "/home/m/Dotfiles/scripts/mpris.sh volume 5%+",
         "on-scroll-down": "/home/m/Dotfiles/scripts/mpris.sh volume 5%-"
+    },
+    "custom/mpris-info": {
+        "exec": "/home/m/Dotfiles/scripts/mpris.sh info",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 5
     },
     "sway/mode": {
         "format": "{}"
@@ -55,16 +81,14 @@
         "on-scroll-down": "swaymsg focus next"
     },
     "custom/recording": {
-        "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"tooltip\":\"Recording\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",
+        "exec": "pgrep -x wf-recorder >/dev/null && echo '{\"text\":\"⏺\",\"class\":\"recording\"}' || echo '{\"text\":\"\"}'",
         "return-type": "json",
         "interval": "once",
         "signal": 3,
-        "on-click": "/home/m/Dotfiles/scripts/record-toggle.sh",
-        "tooltip": true
+        "on-click": "/home/m/Dotfiles/scripts/record-toggle.sh"
     },
     "custom/launcher": {
         "format": "󰕰",
-        "tooltip": false,
         "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/launcher.sh",
         "on-click-middle": "pkill -x fuzzel || /home/m/Dotfiles/scripts/window-switcher.sh",
         "on-click-right": "swaymsg '[workspace=__focused__] kill'"
@@ -76,8 +100,14 @@
         "signal": 2,
         "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/notify-ctl.sh pick",
         "on-click-right": "/home/m/Dotfiles/scripts/notify-ctl.sh toggle",
-        "on-click-middle": "/home/m/Dotfiles/scripts/notify-ctl.sh clear",
-        "tooltip": true
+        "on-click-middle": "/home/m/Dotfiles/scripts/notify-ctl.sh clear"
+    },
+    "custom/notifications-info": {
+        "exec": "/home/m/Dotfiles/scripts/notify-ctl.sh info",
+        "return-type": "json",
+        "interval": 2,
+        "signal": 2,
+        "escape": true
     },
     "custom/scratchpad": {
         "exec": "/home/m/Dotfiles/scripts/scratchpad.sh",
@@ -88,11 +118,21 @@
         "on-scroll-up": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh prev",
         "on-scroll-down": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh next"
     },
+    "custom/scratchpad-info": {
+        "exec": "/home/m/Dotfiles/scripts/scratchpad.sh info",
+        "return-type": "json",
+        "escape": true
+    },
     "custom/display": {
         "exec": "/home/m/Dotfiles/scripts/display.sh",
         "return-type": "json",
         "on-click": "nwg-displays",
         "on-click-right": "/home/m/Dotfiles/scripts/display-restore.sh"
+    },
+    "custom/display-info": {
+        "exec": "/home/m/Dotfiles/scripts/display.sh info",
+        "return-type": "json",
+        "escape": true
     },
     "custom/nightlight": {
         "exec": "/home/m/Dotfiles/scripts/nightlight.sh status",
@@ -100,6 +140,12 @@
         "interval": 60,
         "signal": 4,
         "on-click": "/home/m/Dotfiles/scripts/nightlight.sh toggle"
+    },
+    "custom/nightlight-info": {
+        "exec": "/home/m/Dotfiles/scripts/nightlight.sh info",
+        "return-type": "json",
+        "interval": 60,
+        "signal": 4
     },
     "backlight": {
         "device": "intel_backlight",
@@ -109,23 +155,39 @@
         "format-full": "",
         // a state applies from its value up; the highest matching one wins
         "states": { "half": 51, "high": 76, "full": 100 },
-        "tooltip-format": "Brightness: {percent}%",
+        "tooltip": false,
+        "scroll-step": 5
+    },
+    "backlight#info": {
+        "device": "intel_backlight",
+        "format": "{percent}%",
+        "tooltip": false,
         "scroll-step": 5
     },
     "bluetooth": {
         "format": "",
         "format-disabled": "󰂲",
         "format-connected": "󰂰",
-        "tooltip-format": "{controller_alias}\t{controller_address}",
-        "tooltip-format-connected": "{device_alias} (battery {device_battery_percentage}%)",
-        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "tooltip": false,
         "on-click": "blueman-manager"
+    },
+    "bluetooth#info": {
+        "format": "{controller_alias}",
+        "format-disabled": "off",
+        "format-connected": "{device_alias}",
+        "format-connected-battery": "{device_alias} {device_battery_percentage}%",
+        "tooltip": false
     },
     "tray": { },
     "clock": {
         "on-click" : "/home/m/Projects/calendar/build/deca",
         "format": "{:%Y-%m-%d %H:%M}",
-        "tooltip-format": "{:%A %d %B %Y, week %V, day %j}"
+        "tooltip": false
+    },
+    "clock#info": {
+        "on-click" : "/home/m/Projects/calendar/build/deca",
+        "format": "{:%A %d %B, week %V, day %j}",
+        "tooltip": false
     },
     "battery": {
         "states": {
@@ -136,12 +198,21 @@
         "format": "{capacity}% {icon}",
         "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": false
+    },
+    "battery#info": {
+        "interval": 1,
+        "format": "{time} left",
+        "format-charging": "{time} to full",
+        "format-plugged": "plugged in",
+        "format-full": "full",
+        "format-time": "{H}h {M}min",
+        "tooltip": false
     },
     "power-profiles-daemon": {
         "format": "{icon}",
-        "tooltip-format": "Power profile: {profile}",
-        "tooltip": true,
+        "tooltip": false,
         "format-icons": {
             "default": "",
             "performance": "",
@@ -149,22 +220,28 @@
             "power-saver": ""
         }
     },
+    "power-profiles-daemon#info": {
+        "format": "{profile}",
+        "tooltip": false
+    },
     "network": {
         "format-wifi": "",
         "format-ethernet": "🖧",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr} via {gwaddr}",
-        "tooltip-format-wifi": "IF: {ifname}\nID: {essid}\nSS: {signalStrength}% ({signaldBm} dBm, {frequency} GHz)\nIP: {ipaddr}/{cidr}\nGW: {gwaddr}",
-        "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "Disconnected",
+        "format-linked": "",
+        "format-disconnected": "󰤭",
+        "tooltip": false,
         "on-click": "alacritty --class impala -e impala"
+    },
+    "network#info": {
+        "format-wifi": "{essid} {signalStrength}% ({signaldBm} dBm, {frequency} GHz)  ·  {ipaddr}/{cidr} via {gwaddr}",
+        "format-ethernet": "{ifname}  ·  {ipaddr}/{cidr} via {gwaddr}",
+        "format-linked": "{ifname} (no IP)",
+        "format-disconnected": "disconnected",
+        "tooltip": false
     },
     "wireplumber": {
         "format": "{icon} {volume}%",
-        "format-bluetooth": "{icon}  {format_source} {volume}%",
-        "format-bluetooth-muted": " {icon}  {format_source}",
         "format-muted": "",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -174,33 +251,40 @@
             "car": "",
             "default": ["", "", ""]
         },
+        "tooltip": false,
         "on-click": "pavucontrol",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 2
+    },
+    "wireplumber#info": {
+        "format": "{node_name}",
+        "format-muted": "muted  ·  {node_name}",
+        "tooltip": false,
         "scroll-step": 2
     },
     "pulseaudio#mic": {
         "format": "{format_source}",
         "format-source": "",
         "format-source-muted": "",
-        "tooltip-format": "{source_desc}: {source_volume}%",
+        "tooltip": false,
         "on-click": "pavucontrol -t 4",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
         "on-scroll-up": "wpctl set-volume -l 1 @DEFAULT_AUDIO_SOURCE@ 2%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-"
     },
+    "pulseaudio#mic-info": {
+        "format": "{format_source}  ·  {source_desc}",
+        "format-source": "{volume}%",
+        "format-source-muted": "muted",
+        "tooltip": false
+    },
     "custom/power": {
-        "exec": "echo ⏻; uptime -p",
-        "interval": 60,
+        "format": "⏻",
         "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/power-menu.sh",
         "on-click-right": "swaylock"
     },
-    "custom/pomidore": {
-        "exec": "/home/m/.local/bin/pomidore waybar",
-        "interval": 1,
-        "format": "{}",
-        "return-type": "json",
-        "on-click": "/home/m/.local/bin/pomidore pause",
-        "on-click-right": "/home/m/.local/bin/pomidore stop",
-        "tooltip": true
+    "custom/power-info": {
+        "exec": "uptime -p",
+        "interval": 60
     }
 }

@@ -1,14 +1,18 @@
 #!/bin/bash
 # Media player module for waybar (custom/mpris), built on playerctld: the
 # active player is whichever was used last, `playerctld shift` cycles them.
-#   status      waybar JSON, long-running: text is the active player's track,
-#               the tooltip adds album, the app's own audio level
-#               (its PipeWire stream, what pavucontrol shows) and the other
-#               players; refreshed on player, volume and player-list events
+#   status      waybar JSON, long-running: the active player's track. The
+#               rest (album, the app's own audio level, i.e. its PipeWire
+#               stream as pavucontrol shows it, and the other players) goes
+#               to a file for the drawer module next to it, custom/mpris-info,
+#               which is signalled (RTMIN+5) and prints it with `info`.
+#               Refreshed on player, volume and player-list events
+#   info        the drawer text, from that file
 #   volume ARG  wpctl set-volume on the active player's stream (5%+, 5%-,
 #               0.5...), the player's MPRIS volume if it has no stream
 # Waybar's own mpris module has no volume placeholder and nothing to switch
 # player with, hence this.
+INFO=$XDG_RUNTIME_DIR/mpris-info.json
 esc() { local s=$1; s=${s//&/\&amp;}; s=${s//</\&lt;}; s=${s//>/\&gt;}; printf %s "$s"; }
 
 # players in playerctld order, the active one first, without the
@@ -54,7 +58,8 @@ case $1 in
             exec playerctl volume "$2"
         fi ;;
     status) ;;
-    *) echo "usage: $0 status | volume ARG" >&2; exit 1 ;;
+    info) cat "$INFO" 2>/dev/null || echo '{"text": ""}'; exit 0 ;;
+    *) echo "usage: $0 status | info | volume ARG" >&2; exit 1 ;;
 esac
 
 # Event sources, all line-oriented, merged on one fd and told apart by their
@@ -82,19 +87,20 @@ trap '' PIPE
 
 meta= stream= stream_of=
 render() {
-    local status artist title album dyn text tip vol
+    local status artist title album dyn text info vol
     IFS=$'\x1f' read -r _ status artist title album <<< "$meta"
     mapfile -t names < <(players)
     local active=${names[0]}
     if [[ -z $active || ( $status != Playing && $status != Paused ) ]]; then
+        echo '{"text": ""}' > "$INFO"; pkill -RTMIN+5 waybar
         echo '{"text": ""}' || exit
         return
     fi
     dyn=$artist${artist:+${title:+ - }}$title
     (( ${#dyn} > 60 )) && dyn=${dyn:0:59}…
     case $status in
-        Playing) text=" $(esc "$dyn")" ;;
-        Paused) text=" <i>$(esc "$dyn")</i>" ;;
+        Playing) text=" $(esc "$dyn")" ;;
+        Paused) text=" <i>$(esc "$dyn")</i>" ;;
     esac
     # new active player or a stream event: look its stream up again
     if [[ $stream_of != "$active" || -z $stream ]]; then
@@ -104,11 +110,14 @@ render() {
         stream=
         vol=$(playerctl -p playerctld volume 2>/dev/null | awk '{ printf "%d%% (player)", $1 * 100 + 0.5 }')
     }
-    tip="$active: $(esc "$artist")${artist:+${title:+ — }}$(esc "$title")"${album:+$'\n'$(esc "$album")}
-    [[ -n $vol ]] && tip+=$'\n'"Volume: $vol"
-    (( ${#names[@]} > 1 )) && tip+=$'\n'"Players: <b>$active</b>, $(IFS=,; echo "${names[*]:1}" | sed 's/,/, /g')"
-    jq -cn --arg text "$text" --arg tip "$tip" --arg class "${status,,}" \
-        '{text: $text, tooltip: $tip, class: $class}' || exit
+    # drawer: album, volume, players (active one in bold), what there is
+    info=${album:+$(esc "$album")  ·  }
+    [[ -n $vol ]] && info+="󰕾 $vol  ·  "
+    info+="<b>$active</b>"
+    (( ${#names[@]} > 1 )) && info+=", $(IFS=,; echo "${names[*]:1}" | sed 's/,/, /g')"
+    jq -cn --arg text "$info" --arg class "${status,,}" '{text: $text, class: $class}' > "$INFO"
+    pkill -RTMIN+5 waybar
+    jq -cn --arg text "$text" --arg class "${status,,}" '{text: $text, class: $class}' || exit
 }
 
 while :; do

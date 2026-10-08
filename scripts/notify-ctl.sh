@@ -2,7 +2,9 @@
 # Notification controls around dunst, for the waybar module and sway keys.
 #
 #   status   waybar JSON: bell (filled with history, crossed when paused,
-#            outline when empty), last entries and count as tooltip
+#            outline when empty)
+#   info     waybar JSON for the drawer next to the bell: the last entry and
+#            how many more, or silenced
 #   pick     notification center: the history in fuzzel, newest first; Enter shows the
 #            chosen notification again (dunstctl history-pop ID)
 #   pop      show the latest history entry again
@@ -35,7 +37,7 @@ history() {
 }
 
 case $1 in
-status)
+status|info)
     count=$(dunstctl count history)
     paused=$(dunstctl is-paused)
     if [ "$paused" = true ]; then
@@ -46,12 +48,13 @@ status)
         icon='󰂜'; class=empty
     fi
     text=$icon
-    tooltip=$(history | head -5 | awk -F'\t' '{ printf "%s  %s: %s\n", $2, $4, $5 }')
-    [ "$count" -gt 5 ] && tooltip="$tooltip"$'\n'"… $((count - 5)) more"
-    [ "$paused" = true ] && tooltip="Notifications silenced"$'\n'"$tooltip"
-    [ -z "$tooltip" ] && tooltip="No notifications"
-    jq -cn --arg text "$text" --arg class "$class" --arg tooltip "${tooltip%$'\n'}" \
-        '{text: $text, class: $class, tooltip: $tooltip}'
+    if [ "$1" = info ]; then
+        text=$(history | head -1 | awk -F'\t' '{ printf "%s  %s: %s", $2, $4, $5 }')
+        [ "$count" -gt 1 ] && text="$text  ·  $((count - 1)) more"
+        [ -z "$text" ] && text="No notifications"
+        [ "$paused" = true ] && text="Silenced  ·  $text"
+    fi
+    jq -cn --arg text "$text" --arg class "$class" '{text: $text, class: $class}'
     ;;
 pick)
     mapfile -t LINES < <(history)
@@ -66,5 +69,5 @@ pick)
 pop)    dunstctl history-pop; $SIGNAL ;;
 clear)  dunstctl history-clear; $SIGNAL ;;
 toggle) dunstctl set-paused toggle; $SIGNAL ;;
-*)      echo "usage: ${0##*/} status|pick|pop|clear|toggle" >&2; exit 2 ;;
+*)      echo "usage: ${0##*/} status|info|pick|pop|clear|toggle" >&2; exit 2 ;;
 esac

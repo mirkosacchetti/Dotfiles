@@ -4,6 +4,9 @@
 @define-color title #8bc9eb;
 /* nord11, same red as the critical notification frame in dunstrc */
 @define-color red #bf616a;
+/* an open group, icon and drawer text alike: the title blue (red for a
+   louder one: @red) */
+@define-color drawer #8bc9eb;
 
 * {
     /* Propo: icons take their real width, so gaps between modules stay even */
@@ -33,8 +36,11 @@ button {
     padding: 0;
 }
 
+/* a group with a drawer (config.jsonc) counts as hovered for as long as the
+   drawer is open: the line spans the icon and the drawer text together */
 .module:hover,
 button:hover,
+.group:hover,
 #workspaces button.focused,
 #custom-scratchpad.focused {
     background: inherit;
@@ -52,6 +58,11 @@ button:hover,
 
 #window {
     color: @title;
+}
+
+/* ...and the whole of it, the leader and the drawer text, takes the colour */
+.group:hover .module {
+    color: @drawer;
 }
 
 /* icons are one colour; red is only for states that need attention */
