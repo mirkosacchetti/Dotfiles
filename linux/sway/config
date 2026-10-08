@@ -94,8 +94,9 @@ bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
+# the focused screen, external ones over DDC/CI (scripts/brightness.sh)
+bindsym XF86MonBrightnessDown exec /home/m/Dotfiles/scripts/brightness.sh set 5%-
+bindsym XF86MonBrightnessUp exec /home/m/Dotfiles/scripts/brightness.sh set 5%+
 bindsym XF86Display exec swaymsg output "eDP-1" toggle
 # capture: region to clipboard, focused screen to ~/Pictures/screenshots + clipboard
 bindsym Print exec /home/m/Dotfiles/scripts/screenshot-region.sh

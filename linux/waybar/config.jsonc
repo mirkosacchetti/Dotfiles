@@ -27,7 +27,7 @@
         "group/volume#group",
         "group/mic#group",
         "group/display#group",
-        "group/backlight#group",
+        "group/brightness#group",
         "group/nightlight#group",
         "group/bluetooth#group",
         "group/network#group",
@@ -43,7 +43,7 @@
     "group/volume#group":         { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["wireplumber", "wireplumber#info"] },
     "group/mic#group":            { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["pulseaudio#mic", "pulseaudio#mic-info"] },
     "group/display#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/display", "custom/display-info"] },
-    "group/backlight#group":      { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["backlight", "backlight#info"] },
+    "group/brightness#group":     { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/brightness", "custom/brightness-info"] },
     "group/nightlight#group":     { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/nightlight", "custom/nightlight-info"] },
     "group/bluetooth#group":      { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["bluetooth", "bluetooth#info"] },
     "group/network#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["network", "network#info"] },
@@ -165,22 +165,23 @@
         "signal": 4,
         "on-click": "/home/m/Dotfiles/scripts/nightlight.sh toggle"
     },
-    // the only backlight here is the laptop panel's (amdgpu_bl1, eDP-1), so
-    // no device is named: waybar picks it, and the drawer says which screen
-    "backlight": {
-        "format": "",
-        "format-half": "󰃟",
-        "format-high": "󰃠",
-        "format-full": "",
-        // a state applies from its value up; the highest matching one wins
-        "states": { "half": 51, "high": 76, "full": 100 },
-        "tooltip": false,
-        "scroll-step": 5
+    // brightness of the focused screen: the panel's backlight, or an external
+    // monitor over DDC/CI (ddcutil), see scripts/brightness.sh
+    "custom/brightness": {
+        "exec": "/home/m/Dotfiles/scripts/brightness.sh status",
+        "return-type": "json",
+        "interval": 60,
+        "signal": 6,
+        "on-scroll-up": "/home/m/Dotfiles/scripts/brightness.sh set 5%+",
+        "on-scroll-down": "/home/m/Dotfiles/scripts/brightness.sh set 5%-"
     },
-    "backlight#info": {
-        "format": "{percent}%  ·  eDP-1",
-        "tooltip": false,
-        "scroll-step": 5
+    "custom/brightness-info": {
+        "exec": "/home/m/Dotfiles/scripts/brightness.sh info",
+        "return-type": "json",
+        "interval": 60,
+        "signal": 6,
+        "on-scroll-up": "/home/m/Dotfiles/scripts/brightness.sh set 5%+",
+        "on-scroll-down": "/home/m/Dotfiles/scripts/brightness.sh set 5%-"
     },
     "bluetooth": {
         "format": "",
