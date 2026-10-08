@@ -8,7 +8,7 @@
 ; class; see scripts/.
 ;
 ;   scripts/bar.sh      opens the bar on every output (sway exec_always)
-;   info                opened and closed by the modules (scripts/eww-hover.sh)
+;   info                one per output too, filled by hovering (scripts/eww-hover.sh)
 
 (defvar S "/home/m/Dotfiles/scripts")
 (defvar hovered "")
@@ -56,8 +56,8 @@
   (eventbox :class "module ${class ?: ""} ${hovered == name ? "open" : ""}"
             :visible {text != ""}
             :timeout "2s"
-            :onhover {mode == "info" ? "" : "${S}/eww-hover.sh enter ${name} ${screen}"}
-            :onhoverlost {mode == "info" ? "" : "${S}/eww-hover.sh leave ${screen}"}
+            :onhover {mode == "info" ? "" : "${S}/eww-hover.sh enter ${name}"}
+            :onhoverlost {mode == "info" ? "" : "${S}/eww-hover.sh leave"}
             :onclick {onclick ?: ""} :onmiddleclick {onmiddle ?: ""} :onrightclick {onright ?: ""} :onscroll {onscroll ?: ""}
     (box :class "slot" :space-evenly false
       (label :class "ghost" :visible {(mode == "info") && (hovered != name)} :text text)
@@ -133,9 +133,12 @@
   :stacking "fg" :exclusive true :focusable false :namespace "eww-bar"
   (line :mode "bar" :screen screen))
 
-;; not exclusive: under the bar, over the windows; as tall as its card
+;; not exclusive: under the bar, over the windows, as tall as its card. Kept
+;; open all the time (bar.sh), empty when nothing is hovered: showing the
+;; card is then a variable update, with no window to map, which was slow and
+;; made the compositor send the bar a leave and an enter.
 (defwindow info [screen]
   :monitor screen
   :geometry (geometry :x "0" :y "0" :width "100%" :anchor "top center")
   :stacking "overlay" :exclusive false :focusable false :namespace "eww-info"
-  (line :mode "info" :screen screen))
+  (box :visible {hovered != ""} (line :mode "info" :screen screen)))

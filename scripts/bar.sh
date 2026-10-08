@@ -11,19 +11,21 @@ daemon() {
     return 1
 }
 
-# true when every active output has its bar
+# true when every active output has its bar and its popup window
 open_all() {
-    local active open o id ok=0
+    local active open o id w ok=0
     active=$(swaymsg -t get_outputs | jq -r '.[] | select(.active) | .name')
     open=$(eww active-windows 2>/dev/null)
-    for id in $(sed -n 's/^\(bar-[^:]*\):.*/\1/p' <<< "$open"); do
-        grep -qx "${id#bar-}" <<< "$active" || eww close "$id"
+    for id in $(sed -n 's/^\(\(bar\|info\)-[^:]*\):.*/\1/p' <<< "$open"); do
+        grep -qx "${id#*-}" <<< "$active" || eww close "$id"
     done
     for o in $active; do
-        grep -q "^bar-$o:" <<< "$open" && continue
-        # a monitor just plugged may not have its name in GTK yet: the
-        # caller retries
-        eww open bar --id "bar-$o" --screen "$o" --arg "screen=$o" > /dev/null 2>&1 || ok=1
+        for w in bar info; do
+            grep -q "^$w-$o:" <<< "$open" && continue
+            # a monitor just plugged may not have its name in GTK yet: the
+            # caller retries
+            eww open "$w" --id "$w-$o" --screen "$o" --arg "screen=$o" > /dev/null 2>&1 || ok=1
+        done
     done
     return $ok
 }
