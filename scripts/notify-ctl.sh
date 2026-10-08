@@ -1,10 +1,10 @@
 #!/bin/bash
-# Notification controls around dunst, for the waybar module and sway keys.
+# Notification controls around dunst, for the eww bar and sway keys.
 #
-#   status   waybar JSON: bell (filled with history, crossed when paused,
+#   status   JSON: bell (filled with history, crossed when paused,
 #            outline when empty)
-#   info     waybar JSON for the drawer next to the bell: the last entry and
-#            how many more, or silenced
+#   info     JSON with the info text: the last entry and how many more, or
+#            silenced (status carries it too, as info)
 #   pick     notification center: the history in fuzzel, newest first; Enter shows the
 #            chosen notification again (dunstctl history-pop ID)
 #   pop      show the latest history entry again
@@ -14,10 +14,10 @@
 # dunst keeps `history_length` closed notifications (dunstrc) and exposes
 # them with `dunstctl history` as JSON; the timestamp there is monotonic
 # microseconds, hence the boot-time arithmetic below. Anything that changes
-# the state signals waybar (RTMIN+2, see custom/notifications) so the bar
-# updates right away instead of on its next poll.
+# the state refreshes the bar's variable so it updates right away instead
+# of on its next poll.
 
-SIGNAL='pkill -RTMIN+2 waybar'
+SIGNAL='eww poll notifications'
 
 # Flat history: "id<TAB>HH:MM<TAB>icon<TAB>summary<TAB>body", newest first,
 # one line each, pango markup stripped. dunst stamps entries with a clock
@@ -47,14 +47,12 @@ status|info)
     else
         icon='󰂜'; class=empty
     fi
-    text=$icon
-    if [ "$1" = info ]; then
-        text=$(history | head -1 | awk -F'\t' '{ printf "%s  %s: %s", $2, $4, $5 }')
-        [ "$count" -gt 1 ] && text="$text  ·  $((count - 1)) more"
-        [ -z "$text" ] && text="No notifications"
-        [ "$paused" = true ] && text="Silenced  ·  $text"
-    fi
-    jq -cn --arg text "$text" --arg class "$class" '{text: $text, class: $class}'
+    info=$(history | head -1 | awk -F'\t' '{ printf "%s  %s: %s", $2, $4, $5 }')
+    [ "$count" -gt 1 ] && info="$info  ·  $((count - 1)) more"
+    [ -z "$info" ] && info="No notifications"
+    [ "$paused" = true ] && info="Silenced  ·  $info"
+    text=$icon; [ "$1" = info ] && text=$info
+    jq -cn --arg text "$text" --arg info "$info" --arg class "$class" '{text: $text, info: $info, class: $class}'
     ;;
 pick)
     mapfile -t LINES < <(history)

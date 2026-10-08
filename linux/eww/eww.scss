@@ -1,0 +1,37 @@
+// palette and font of the old waybar style, kept as they were
+$fg: #d6e2ee;
+$bg: #16242d;
+$accent: #4d86b0;
+$title: #8bc9eb;
+$red: #bf616a;      // nord11, the alerts
+$info: #8bc9eb;     // the open module and its information
+
+* {
+  all: unset;
+  // Propo: icons take their real width, so gaps between modules stay even
+  font-family: "JetBrainsMono Nerd Font Propo";
+  font-size: 14px;
+  color: $fg;
+}
+
+.line { background-color: $bg; min-height: 28px; }
+
+// an eventbox takes no padding, its box does
+.slot, .ws { padding: 0 0.5rem; }
+.workspaces { padding: 0; }
+.tray { padding: 0 0.5rem; }
+
+// hover line, and the module stays marked while its info line is open
+.module:hover, .module.open, .ws:hover, .ws.focused, .scratchpad.focused { box-shadow: inset 0 1px $fg; }
+.module.open label { color: $info; }
+
+.mode { font-style: italic; color: $accent; }
+.title label { color: $title; }
+
+// red only for states that need attention
+.recording label, .degraded label, .critical label { color: $red; }
+
+// the info line: a transparent copy of the bar keeps the slots aligned,
+// the hovered one shows its information instead
+.ghost, .ghost * { color: transparent; }
+.info label.info { color: $info; }

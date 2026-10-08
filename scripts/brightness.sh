@@ -1,5 +1,5 @@
 #!/bin/bash
-# Brightness of the screen in use, for waybar (custom/brightness, signal 6)
+# Brightness of the screen in use, for the eww bar (status, info keys)
 # and the XF86MonBrightness keys. The screen is the one picked with the
 # middle click (display.sh next), else the focused output. The laptop
 # panel goes through its backlight (brightnessctl, via logind), an external
@@ -14,10 +14,10 @@
 # (visible as input lag), so the scan is kept rare and short: aux and MST
 # buses answer fast when empty, the HDMI DDC lines time out and are only
 # tried for an HDMI output; a failed scan is not retried for 5 minutes.
-#   status   waybar JSON: sun icon by level
-#   info     waybar JSON for the drawer: "DP-7 DELL U2725QE  ·  45%", the
+#   status   JSON: sun icon by level, the info text as a second key
+#   info     JSON with the text: "DP-7 DELL U2725QE  ·  45%", the
 #            label as display.sh writes it
-#   set ARG  5%+, 5%-, or an absolute percent; then signals waybar
+#   set ARG  5%+, 5%-, or an absolute percent; then refreshes the bar
 PICK=$XDG_RUNTIME_DIR/screen-pick
 # nerd font glyphs as bytes, so the locale does not matter: sun (U+F185),
 # brightness-5 and -6 (U+F00DF, U+F00E0), circle (U+F111)
@@ -101,8 +101,8 @@ ddc_set() {
     sleep 0.05
 }
 
-# one DDC conversation at a time on a bus: waybar runs status and info
-# together, and the keys may come in the middle
+# one DDC conversation at a time on a bus: the bar and the keys may ask
+# at the same time
 lock() { exec {lockfd}> "$XDG_RUNTIME_DIR/brightness-lock"; flock "$lockfd"; }
 
 # current percent of the screen
@@ -127,15 +127,15 @@ case $1 in
         if [[ -z $pct ]]; then
             icon=$SUN; text="$label  ·  no DDC/CI"
         else
-            # same levels as waybar's backlight module had: half, high, full
+            # levels: half, high, full
             if (( pct >= 100 )); then icon=$FULL
             elif (( pct >= 76 )); then icon=$HIGH
             elif (( pct >= 51 )); then icon=$HALF
             else icon=$SUN; fi
             text="$label  ·  $pct%"
         fi
-        [[ $1 == status ]] && text=$icon
-        jq -cn --arg text "$text" '{text: $text}'
+        info=$text; [[ $1 == status ]] && text=$icon
+        jq -cn --arg text "$text" --arg info "$info" '{text: $text, info: $info}'
         ;;
     set)
         if [[ $name == eDP-* ]]; then
@@ -151,7 +151,7 @@ case $1 in
             (( new < 0 )) && new=0
             ddc_set "$(ddc_bus "$name" "$model" "$serial")" "$new"
         fi
-        pkill -RTMIN+6 waybar
+        eww poll brightness
         ;;
     *) echo "usage: ${0##*/} status|info|set ARG" >&2; exit 1 ;;
 esac

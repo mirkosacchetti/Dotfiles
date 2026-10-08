@@ -1,18 +1,12 @@
 #!/bin/bash
-# Media player module for waybar (custom/mpris), built on playerctld: the
-# active player is whichever was used last, `playerctld shift` cycles them.
-#   status      waybar JSON, long-running: the active player's track. The
-#               rest (album, the app's own audio level, i.e. its PipeWire
-#               stream as pavucontrol shows it, and the other players) goes
-#               to a file for the drawer module next to it, custom/mpris-info,
-#               which is signalled (RTMIN+5) and prints it with `info`.
+# Media player module for the eww bar, built on playerctld: the active
+# player is whichever was used last, `playerctld shift` cycles them.
+#   status      JSON, long-running: the active player's track as text, and
+#               as info the album, the app's own audio level (its PipeWire
+#               stream, as pavucontrol shows it) and the other players.
 #               Refreshed on player, volume and player-list events
-#   info        the drawer text, from that file
 #   volume ARG  wpctl set-volume on the active player's stream (5%+, 5%-,
 #               0.5...), the player's MPRIS volume if it has no stream
-# Waybar's own mpris module has no volume placeholder and nothing to switch
-# player with, hence this.
-INFO=$XDG_RUNTIME_DIR/mpris-info.json
 esc() { local s=$1; s=${s//&/\&amp;}; s=${s//</\&lt;}; s=${s//>/\&gt;}; printf %s "$s"; }
 
 # players in playerctld order, the active one first, without the
@@ -58,8 +52,7 @@ case $1 in
             exec playerctl volume "$2"
         fi ;;
     status) ;;
-    info) cat "$INFO" 2>/dev/null || echo '{"text": ""}'; exit 0 ;;
-    *) echo "usage: $0 status | info | volume ARG" >&2; exit 1 ;;
+    *) echo "usage: $0 status | volume ARG" >&2; exit 1 ;;
 esac
 
 # Event sources, all line-oriented, merged on one fd and told apart by their
@@ -82,7 +75,7 @@ exec {events}< <(
 )
 sources=$!
 trap 'kill $sources 2>/dev/null' EXIT
-# waybar does not kill us on reload: a failed write means it is gone
+# the bar does not kill us: a failed write means it is gone
 trap '' PIPE
 
 meta= stream= stream_of=
@@ -92,8 +85,7 @@ render() {
     mapfile -t names < <(players)
     local active=${names[0]}
     if [[ -z $active || ( $status != Playing && $status != Paused ) ]]; then
-        echo '{"text": ""}' > "$INFO"; pkill -RTMIN+5 waybar
-        echo '{"text": ""}' || exit
+        echo '{"text": "", "info": ""}' || exit
         return
     fi
     dyn=$artist${artist:+${title:+ - }}$title
@@ -115,15 +107,13 @@ render() {
     [[ -n $vol ]] && info+="󰕾 $vol  ·  "
     info+=$active
     (( ${#names[@]} > 1 )) && info+=", $(IFS=,; echo "${names[*]:1}" | sed 's/,/, /g')"
-    jq -cn --arg text "$info" --arg class "${status,,}" '{text: $text, class: $class}' > "$INFO"
-    pkill -RTMIN+5 waybar
-    jq -cn --arg text "$text" --arg class "${status,,}" '{text: $text, class: $class}' || exit
+    jq -cn --arg text "$text" --arg info "$info" --arg class "${status,,}" '{text: $text, info: $info, class: $class}' || exit
 }
 
 while :; do
     read -r -t 60 -u "$events" line; rc=$?
     if (( rc > 128 )); then
-        # nothing for a minute: render anyway, so a waybar that went away
+        # nothing for a minute: render anyway, so a bar that went away
         # without killing us is noticed (failed write) within that time
         render; continue
     fi

@@ -2,7 +2,7 @@
 # Re-apply the modes set in sway's config to every output: undoes whatever was
 # changed at runtime (nwg-displays) and retries a mode the monitor fell out
 # of, e.g. the Dell staying at 60 Hz after a hotplug (see output-watch.sh).
-# Right click on the waybar display indicator (custom/display).
+# Right click on the bar's display indicator.
 
 CONFIG=/home/m/Dotfiles/linux/sway/config
 

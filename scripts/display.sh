@@ -1,9 +1,9 @@
 #!/bin/bash
-# Waybar display indicator (custom/display) and the screen the other modules
+# Display indicator for the eww bar, and the screen the other modules
 # act on. The icon turns red when an output runs below the best refresh
 # rate it offers at its current resolution, e.g. the Dell stuck at 60 Hz
 # after a hotplug (see output-watch.sh).
-#   (none)  waybar JSON, long-running: the icon
+#   (none)  JSON, long-running: the icon, the info text as a second key
 #   info    the same, with the picked output as text: "DP-7 DELL U2725QE  ·
 #           3840x2160@60Hz, scale 1.5", the same label brightness.sh uses
 #   next    pick the next screen. The pick is a file, what brightness.sh acts
@@ -23,8 +23,9 @@ outputs() {
               | ([.modes[] | select(.width == $m.width and .height == $m.height).refresh] | max) as $best
               | (if .name | startswith("eDP") then .name else "\(.name) \(.model)" end) as $label
               | { name,
-                  line: "\($label)  ·  \($m.width)x\($m.height)@\($m.refresh / 1000 | round)Hz, scale \(.scale)",
-                  low: ($m.refresh < $best - 1000) })
+                  low: ($m.refresh < $best - 1000),
+                  line: "\($label)  ·  \($m.width)x\($m.height)@\($m.refresh / 1000 | round)Hz, scale \(.scale)" }
+              | .line += (if .low then " (below max)" else "" end))
         | (map(.name) | index($pick)) as $i
         | if $i == null then . else .[$i:] + .[:$i] end'
 }
@@ -32,9 +33,8 @@ outputs() {
 emit() {
     outputs | jq -c --arg icon $'󰍹' --arg mode "$1" '
         {
-          text: (if $mode == "info"
-                 then .[0] | .line + (if .low then " (below max)" else "" end)
-                 else $icon end),
+          text: (if $mode == "info" then .[0].line else $icon end),
+          info: .[0].line,
           class: (if any(.[]; .low) then "degraded" else "" end)
         }'
 }
@@ -45,7 +45,7 @@ case $1 in
         # (read before writing: the redirection would empty the file first)
         pick=$(outputs | jq -r '.[1].name // empty')
         echo "$pick" > "$PICK"
-        pkill -RTMIN+6 waybar
+        eww poll brightness
         swaymsg -t send_tick screen-pick > /dev/null
         exit
         ;;
@@ -53,6 +53,6 @@ case $1 in
     *) echo "usage: ${0##*/} [info|next]" >&2; exit 1 ;;
 esac
 
-# exit once waybar is gone (write fails) instead of lingering after a reload
+# exit once the bar is gone (write fails) instead of lingering
 emit "$mode" || exit
 swaymsg -rm -t subscribe '["output", "tick"]' | while read -r _; do emit "$mode" || exit; done

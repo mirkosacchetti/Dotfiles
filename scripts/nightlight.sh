@@ -1,11 +1,10 @@
 #!/bin/bash
-# Night light: gammastep's user service, switched from waybar
-# (custom/nightlight, signal 4). gammastep follows the sun at the location in
+# Night light: gammastep's user service, switched from the eww bar. gammastep follows the sun at the location in
 # ~/.config/gammastep/config.ini, so while on it only tints the screen at night.
 #
-#   status   waybar JSON: filled lamp when running, outline when not
-#   info     waybar JSON for the drawer next to it: on with period and colour
-#            temperature, or off
+#   status   JSON: filled lamp when running, outline when not, and as info
+#            on with period and colour temperature, or off
+#   info     JSON with that info as text
 #   toggle   start/stop the service
 
 UNIT=gammastep.service
@@ -22,7 +21,7 @@ status|info)
         info=off
     fi
     [[ $1 == info ]] && icon=$info
-    jq -cn --arg text "$icon" --arg class "$class" '{text: $text, class: $class}'
+    jq -cn --arg text "$icon" --arg info "$info" --arg class "$class" '{text: $text, info: $info, class: $class}'
     ;;
 toggle)
     if systemctl --user -q is-active $UNIT; then
@@ -30,7 +29,7 @@ toggle)
     else
         systemctl --user start $UNIT
     fi
-    pkill -RTMIN+4 waybar
+    eww poll nightlight
     ;;
 *) echo "usage: ${0##*/} status|info|toggle" >&2; exit 1 ;;
 esac

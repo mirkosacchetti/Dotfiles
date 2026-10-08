@@ -1,5 +1,5 @@
 #!/bin/bash
-# Middle click in waybar steps to the next of something, wrapping around:
+# Middle click in the bar steps to the next of something, wrapping around:
 #   sink           default audio output (wpctl set-default)
 #   source         default audio input
 #   power-profile  powerprofilesctl

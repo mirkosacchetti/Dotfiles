@@ -1,5 +1,5 @@
 #!/bin/bash
-# Power menu in fuzzel, for the waybar power button and the launcher entry.
+# Power menu in fuzzel, for the bar's power button and the launcher entry.
 
 ICONS=/home/m/Dotfiles/applications/icons
 

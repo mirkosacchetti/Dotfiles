@@ -27,7 +27,7 @@ input * {
 input  $laptop_keyboard {
     xkb_options compose:ralt,shift:both_capslock,caps:ctrl_modifier,altwin:swap_alt_win
 }
-# same cursor in sway and GTK apps (waybar): sway defaults to 24, GTK read 32 from gsettings
+# same cursor in sway and GTK apps (the bar): sway defaults to 24, GTK read 32 from gsettings
 seat * xcursor_theme Adwaita 24
 exec gsettings set org.gnome.desktop.interface cursor-theme Adwaita
 exec gsettings set org.gnome.desktop.interface cursor-size 24
@@ -252,12 +252,9 @@ set $purple               #8bc9eb
 ###########  
 ### bar
 ###########  
-bar {
-    swaybar_command /home/m/Dotfiles/scripts/bar-loop.sh
-    mode dock
-    hidden_state hide
-    modifier none
-}
+# eww (linux/eww): one bar per output, re-done on reload and on hotplug
+exec_always /home/m/Dotfiles/scripts/bar.sh
+exec /home/m/Dotfiles/scripts/bar.sh watch
 
 ###########  
 ### apps
