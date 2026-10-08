@@ -40,7 +40,8 @@
 ;; and opens the popup line. mode "info": the same text, transparent, to
 ;; keep the slot's width, or the card (bold title, info lines, then the
 ;; mouse actions, small, each with a badge for the button: L, M, R or the
-;; wheel) when this is the hovered module.
+;; wheel) when this is the hovered module. The card has a fixed width
+;; (style), long lines are cut with an ellipsis.
 (defwidget mod [name title text info hints screen ?class ?markup ?onclick ?onmiddle ?onright ?onscroll ?mode]
   (eventbox :class "module ${class ?: ""} ${hovered == name ? "open" : ""}"
             :visible {text != ""}
@@ -52,8 +53,8 @@
       (label :class "ghost" :visible {(mode == "info") && (hovered != name)} :text text)
       (box :class "card" :orientation "v" :space-evenly false :visible {(mode == "info") && (hovered == name)}
         (label :class "card-title" :halign "start" :text title)
-        (label :halign "start" :xalign 0 :visible {!(markup ?: false)} :text info)
-        (label :halign "start" :xalign 0 :visible {markup ?: false} :markup info)
+        (label :halign "start" :xalign 0 :limit-width 40 :truncate true :visible {!(markup ?: false)} :text info)
+        (label :halign "start" :xalign 0 :limit-width 40 :truncate true :visible {markup ?: false} :markup info)
         (box :class "hints" :orientation "v" :space-evenly false :visible {arraylength(hints) > 0}
           (for h in hints
             (box :space-evenly false :halign "start"

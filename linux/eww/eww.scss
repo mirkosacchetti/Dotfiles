@@ -37,6 +37,7 @@ $red: #bf616a;      // nord11, the alerts
 .line.info .module { box-shadow: none; }
 .line.info .ghost, .line.info .ghost * { color: transparent; }
 .card {
+  min-width: 360px;   // 40 characters of this font, the labels' limit
   background-color: $bg;
   border: 1px solid $fg;
   border-radius: 8px;
