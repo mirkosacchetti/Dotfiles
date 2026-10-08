@@ -53,6 +53,7 @@ $red: #bf616a;      // nord11, the alerts
   min-width: 12px;
   padding: 0 3px;
   margin: 1px 6px 1px 0;
-  border: 1px solid $title;
+  color: $bg;
+  background-color: $title;
   border-radius: 3px;
 }
