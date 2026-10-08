@@ -78,10 +78,10 @@ bindsym $mod+Return exec $term
 bindsym $mod+g exec $browser
 bindsym $mod+space exec $menu
 # modifier-only chord, either press order; --release so $mod+control+<key> combos keep working
-bindsym --release $mod+Control_L exec /home/m/Dotfiles/scripts/window-switcher.sh
-bindsym --release control+Super_L exec /home/m/Dotfiles/scripts/window-switcher.sh
+# bindsym --release $mod+Control_L exec /home/m/Dotfiles/scripts/window-switcher.sh
+# bindsym --release control+Super_L exec /home/m/Dotfiles/scripts/window-switcher.sh
 # laptop CapsLock is caps:ctrl_modifier: Control modifier but Caps_Lock keysym
-bindsym --release $mod+Caps_Lock exec /home/m/Dotfiles/scripts/window-switcher.sh
+#bindsym --release $mod+Caps_Lock exec /home/m/Dotfiles/scripts/window-switcher.sh
 # omarchy-style app launches
 bindsym $mod+shift+f exec nautilus
 bindsym $mod+shift+n exec $term -e nvim
@@ -197,21 +197,21 @@ bindsym $mod+control+0 move container to workspace $ws_main
 # assign window to a workspace with window criteria
 # use swaymsg -t get_tree 
 assign [app_id="betterbird"] workspace $ws_mess
-assign [app_id="org.telegram.desktop"] workspace $ws_mess
 assign [app_id="com.transmissionbt*"] workspace $ws_stuff
 assign [app_id="beekeeper-studio"] workspace $ws_stuff
 assign [app_id="sublime_merge"] workspace $ws_stuff
 # only while still tiling, like the scratchpad rule below: a reload must not
 # resize them again
-for_window [app_id="^(org.pulseaudio.pavucontrol|nwg-displays)$" tiling] floating enable, resize set 88 ppt 88 ppt, move position center
-for_window [app_id="blueman-manager"] floating enable
-for_window [app_id="org.gnome.Calculator"] floating enable
-# sushi file preview (space in nautilus)
-for_window [app_id="org.gnome.NautilusPreviewer"] floating enable
-# music players and bitwarden live in the scratchpad (scripts/scratchpad-ctl.sh);
+# default_floating_border only covers windows that map floating: one made
+# floating later keeps the border it was born with (default_border none), so
+# every "floating enable" and "move scratchpad" below sets it, like
+# float-toggle.sh. NautilusPreviewer is sushi, the file preview in nautilus.
+for_window [app_id="^(org.pulseaudio.pavucontrol|nwg-displays)$" tiling] floating enable, border normal, resize set 88 ppt 88 ppt, move position center
+for_window [app_id="^(blueman-manager|org.gnome.Calculator|org.gnome.NautilusPreviewer)$"] floating enable, border normal
+# music players, bitwarden and telegram live in the scratchpad (scripts/scratchpad-ctl.sh);
 # only while still tiling, i.e. new: after a reload sway runs for_window again
 # on the next title change, which would pop the player up at every new song
-for_window [app_id="^(cmus|spotify|Bitwarden)$" tiling] move scratchpad, scratchpad show, resize set 88 ppt 88 ppt, move position center
+for_window [app_id="^(cmus|spotify|Bitwarden|org\.telegram\.desktop)$" tiling] move scratchpad, scratchpad show, border normal, resize set 88 ppt 88 ppt, move position center
 
 ###########  
 ### style

@@ -73,8 +73,8 @@
         "format": "󰕰",
         "tooltip": false,
         "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/launcher.sh",
-        "on-click-middle": "swaymsg '[workspace=__focused__] kill'",
-        "on-click-right": "pkill -x fuzzel || /home/m/Dotfiles/scripts/window-switcher.sh"
+        "on-click-middle": "pkill -x fuzzel || /home/m/Dotfiles/scripts/window-switcher.sh",
+        "on-click-right": "swaymsg '[workspace=__focused__] kill'"
     },
     "custom/notifications": {
         "exec": "/home/m/Dotfiles/scripts/notify-ctl.sh status",
@@ -90,8 +90,8 @@
         "exec": "/home/m/Dotfiles/scripts/scratchpad.sh",
         "return-type": "json",
         "on-click": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh toggle",
-        "on-click-middle": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh close",
-        "on-click-right": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh release",
+        "on-click-middle": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh move",
+        "on-click-right": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh close",
         "on-scroll-up": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh prev",
         "on-scroll-down": "/home/m/Dotfiles/scripts/scratchpad-ctl.sh next"
     },
@@ -110,10 +110,14 @@
     },
     "backlight": {
         "device": "intel_backlight",
-        "format": "{icon}",
+        "format": "",
+        "format-half": "󰃟",
+        "format-high": "󰃠",
+        "format-full": "",
+        // a state applies from its value up; the highest matching one wins
+        "states": { "half": 51, "high": 76, "full": 100 },
         "tooltip-format": "Brightness: {percent}%",
-        "format-icons": ["", ""],
-        "scroll-step": 2
+        "scroll-step": 5
     },
     "bluetooth": {
         "format": "",
@@ -181,8 +185,6 @@
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "scroll-step": 2
     },
-    // pulseaudio rather than wireplumber: only this one knows the source's
-    // full description
     "pulseaudio#mic": {
         "format": "{format_source}",
         "format-source": "",
@@ -194,7 +196,6 @@
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-"
     },
     "custom/power": {
-        // plain output: first line is the text, second the tooltip
         "exec": "echo ⏻; uptime -p",
         "interval": 60,
         "on-click": "pkill -x fuzzel || /home/m/Dotfiles/scripts/power-menu.sh",
