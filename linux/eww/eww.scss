@@ -45,3 +45,6 @@ $red: #bf616a;      // nord11, the alerts
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .card-title { font-weight: bold; margin-bottom: 2px; }
+// the mouse actions: small, in the title blue
+.hints { margin-top: 4px; }
+.hints label { font-size: 11px; color: $title; }
