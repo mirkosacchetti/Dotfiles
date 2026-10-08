@@ -1,18 +1,17 @@
 #!/bin/bash
 # Brightness of the screen in use, for waybar (custom/brightness, signal 6)
-# and the XF86MonBrightness keys. The screen is the one picked with `next`
-# (middle click), else the focused output. The laptop panel goes through
-# its backlight (brightnessctl, via logind), an external monitor through
-# DDC/CI (ddcutil, which needs the i2c group and takes a few hundred ms per
-# call, hence the cache: ddcutil is only asked every minute, or when a set
-# changes the value).
+# and the XF86MonBrightness keys. The screen is the one picked with the
+# middle click (display.sh next), else the focused output. The laptop
+# panel goes through its backlight (brightnessctl, via logind), an external
+# monitor through DDC/CI (ddcutil, which needs the i2c group and takes a
+# few hundred ms per call, hence the cache: ddcutil is only asked every
+# minute, or when a set changes the value).
 #   status   waybar JSON: sun icon by level
 #   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE", plus
 #            the other screens when there are any
 #   set ARG  5%+, 5%-, or an absolute percent; then signals waybar
-#   next     pick the next active screen
 CACHE_MAX_AGE=60
-PICK=$XDG_RUNTIME_DIR/brightness-screen
+PICK=$XDG_RUNTIME_DIR/screen-pick
 # nerd font glyphs as bytes, so the locale does not matter: sun (U+F185),
 # brightness-5 and -6 (U+F00DF, U+F00E0), circle (U+F111)
 printf -v SUN '\xef\x86\x85'; printf -v HALF '\xf3\xb0\x83\x9f'
@@ -27,8 +26,8 @@ screens() {
 }
 
 # the picked screen if still there, else the focused one; sets name, model
-# and others: the rest, starting after the current one and wrapping, so
-# `next` takes others[0] and the drawer lists them in that order
+# and others: the rest, starting after the current one and wrapping, the
+# order the drawer lists them in
 screen() {
     local pick i n
     pick=$(cat "$PICK" 2>/dev/null)
@@ -38,7 +37,7 @@ screen() {
         [[ ${all[i]%% *} == "$pick" ]] && break
     done
     # no pick, or gone: the focused one, first in the list
-    (( i == n )) && { i=0; : > "$PICK"; }
+    (( i == n )) && i=0
     read -r name model <<< "${all[i]}"
     others=("${all[@]:i+1}" "${all[@]:0:i}")
 }
@@ -93,11 +92,6 @@ case $1 in
         [[ $1 == status ]] && text=$icon
         jq -cn --arg text "$text" '{text: $text}'
         ;;
-    next)
-        # the one after the current, wrapping: others are the rest in order
-        [[ -n ${others[0]} ]] && echo "${others[0]%% *}" > "$PICK"
-        pkill -RTMIN+6 waybar
-        ;;
     set)
         if [[ $name == eDP-* ]]; then
             brightnessctl -q set "$2"
@@ -116,5 +110,5 @@ case $1 in
         fi
         pkill -RTMIN+6 waybar
         ;;
-    *) echo "usage: ${0##*/} status|info|set ARG|next" >&2; exit 1 ;;
+    *) echo "usage: ${0##*/} status|info|set ARG" >&2; exit 1 ;;
 esac

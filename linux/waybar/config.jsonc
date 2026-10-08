@@ -142,6 +142,7 @@
         "exec": "/home/m/Dotfiles/scripts/display.sh",
         "return-type": "json",
         "on-click": "nwg-displays",
+        "on-click-middle": "/home/m/Dotfiles/scripts/display.sh next",
         "on-click-right": "/home/m/Dotfiles/scripts/display-restore.sh"
     },
     "custom/display-info": {
@@ -149,6 +150,7 @@
         "return-type": "json",
         "escape": true,
         "on-click": "nwg-displays",
+        "on-click-middle": "/home/m/Dotfiles/scripts/display.sh next",
         "on-click-right": "/home/m/Dotfiles/scripts/display-restore.sh"
     },
     "custom/nightlight": {
@@ -173,7 +175,7 @@
         "return-type": "json",
         "interval": 60,
         "signal": 6,
-        "on-click-middle": "/home/m/Dotfiles/scripts/brightness.sh next",
+        "on-click-middle": "/home/m/Dotfiles/scripts/display.sh next",
         "on-scroll-up": "/home/m/Dotfiles/scripts/brightness.sh set 5%+",
         "on-scroll-down": "/home/m/Dotfiles/scripts/brightness.sh set 5%-"
     },
@@ -182,7 +184,7 @@
         "return-type": "json",
         "interval": 60,
         "signal": 6,
-        "on-click-middle": "/home/m/Dotfiles/scripts/brightness.sh next",
+        "on-click-middle": "/home/m/Dotfiles/scripts/display.sh next",
         "on-scroll-up": "/home/m/Dotfiles/scripts/brightness.sh set 5%+",
         "on-scroll-down": "/home/m/Dotfiles/scripts/brightness.sh set 5%-"
     },
