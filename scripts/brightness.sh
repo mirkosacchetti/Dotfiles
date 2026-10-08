@@ -27,21 +27,20 @@ screens() {
 }
 
 # the picked screen if still there, else the focused one; sets name, model
-# and others (the rest, for the drawer)
+# and others: the rest, starting after the current one and wrapping, so
+# `next` takes others[0] and the drawer lists them in that order
 screen() {
-    local pick line
+    local pick i n
     pick=$(cat "$PICK" 2>/dev/null)
     mapfile -t all < <(screens)
-    name=; others=()
-    for line in "${all[@]}"; do
-        if [[ -z $name && ( ${line%% *} == "$pick" || -z $pick ) ]]; then
-            read -r name model <<< "$line"
-        else
-            others+=("$line")
-        fi
+    n=${#all[@]}
+    for (( i = 0; i < n; i++ )); do
+        [[ ${all[i]%% *} == "$pick" ]] && break
     done
-    # the pick is gone: fall back to the focused one
-    [[ -n $name ]] || { : > "$PICK"; screen; }
+    # no pick, or gone: the focused one, first in the list
+    (( i == n )) && { i=0; : > "$PICK"; }
+    read -r name model <<< "${all[i]}"
+    others=("${all[@]:i+1}" "${all[@]:0:i}")
 }
 
 # ddcutil display number of an output, from the DRM connector in `detect`
