@@ -1,9 +1,9 @@
 #!/bin/bash
 # Bluetooth drawer for waybar (custom/bluetooth-info, signal 7), next to the
-# builtin bluetooth icon: the connected devices with their battery, the
-# picked one first; the middle click (`next`) picks the next one.
-#   info   waybar JSON: "HHKB-Hybrid_1 85%, Mouse 60%", the controller's
-#          name when nothing is connected, off when powered down
+# builtin bluetooth icon: the picked connected device with its battery; the
+# middle click (`next`) picks the next one.
+#   info   waybar JSON: "HHKB-Hybrid_1 85%", the controller's name when
+#          nothing is connected, off when powered down
 #   next   pick the next connected device, wrapping; then signals waybar
 PICK=$XDG_RUNTIME_DIR/bt-pick
 
@@ -21,13 +21,14 @@ case $1 in
         if ! bluetoothctl show 2>/dev/null | grep -q 'Powered: yes'; then
             text=off
         else
-            text=
-            while read -r mac name; do
+            read -r mac name < <(devices)
+            if [[ -n $mac ]]; then
                 # "Battery Percentage: 0x55 (85)"
                 pct=$(bluetoothctl info "$mac" 2>/dev/null | awk -F'[()]' '/Battery Percentage/ { print $2 "%" }')
-                text+="${text:+, }$name${pct:+ $pct}"
-            done < <(devices)
-            [[ -n $text ]] || text=$(bluetoothctl show 2>/dev/null | awk '/Alias:/ { print $2 }')
+                text="$name${pct:+ $pct}"
+            else
+                text=$(bluetoothctl show 2>/dev/null | awk '/Alias:/ { print $2 }')
+            fi
         fi
         jq -cn --arg text "$text" '{text: $text}'
         ;;

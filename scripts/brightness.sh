@@ -15,8 +15,7 @@
 # buses answer fast when empty, the HDMI DDC lines time out and are only
 # tried for an HDMI output; a failed scan is not retried for 5 minutes.
 #   status   waybar JSON: sun icon by level
-#   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE", plus
-#            the other screens when there are any
+#   info     waybar JSON for the drawer: "45%  ·  DP-7 DELL U2725QE"
 #   set ARG  5%+, 5%-, or an absolute percent; then signals waybar
 PICK=$XDG_RUNTIME_DIR/screen-pick
 # nerd font glyphs as bytes, so the locale does not matter: sun (U+F185),
@@ -32,11 +31,9 @@ screens() {
 }
 
 # the picked screen if still there, else the focused one; sets name, model,
-# serial, label (name, plus the model unless it is the panel's bare code)
-# and others: the labels of the rest, starting after the current one and
-# wrapping, the order the drawer lists them in
+# serial and label (name, plus the model unless it is the panel's bare code)
 screen() {
-    local pick i n line
+    local pick i n
     pick=$(cat "$PICK" 2>/dev/null)
     mapfile -t all < <(screens)
     n=${#all[@]}
@@ -46,8 +43,6 @@ screen() {
     (( i == n )) && i=0
     IFS='|' read -r name model serial <<< "${all[i]}"
     label=$(label "${all[i]}")
-    others=()
-    for line in "${all[@]:i+1}" "${all[@]:0:i}"; do others+=("$(label "$line")"); done
 }
 label() { local n=${1%%|*} m=${1#*|}; m=${m%|*}; [[ $n == eDP-* ]] && echo "$n" || echo "$n $m"; }
 
@@ -138,7 +133,6 @@ case $1 in
             else icon=$SUN; fi
             text="$pct%  ·  $label"
         fi
-        (( ${#others[@]} )) && text+=", $(IFS=,; echo "${others[*]}" | sed 's/,/, /g')"
         [[ $1 == status ]] && text=$icon
         jq -cn --arg text "$text" '{text: $text}'
         ;;

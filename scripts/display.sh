@@ -4,8 +4,8 @@
 # rate it offers at its current resolution, e.g. the Dell stuck at 60 Hz
 # after a hotplug (see output-watch.sh).
 #   (none)  waybar JSON, long-running: the icon
-#   info    the same, with every active output (resolution, refresh rate,
-#           scale) as text, the picked one first
+#   info    the same, with the picked output (resolution, refresh rate,
+#           scale) as text
 #   next    pick the next screen. The pick is a file, what brightness.sh acts
 #           on too, so the middle click on either module moves both drawers.
 # The long-running instances follow sway's output events and re-emit on
@@ -13,7 +13,8 @@
 PICK=$XDG_RUNTIME_DIR/screen-pick
 
 # active outputs as a JSON array of {name, line, low}, the focused one
-# first, then rotated so the picked one (if still there) leads
+# first, then rotated so the picked one (if still there) leads: the drawer
+# shows it, next takes the one after
 outputs() {
     swaymsg -t get_outputs | jq -c --arg pick "$(cat "$PICK" 2>/dev/null)" '
         [.[] | select(.active)] | sort_by(.focused | not)
@@ -30,8 +31,7 @@ emit() {
     outputs | jq -c --arg icon $'󰍹' --arg mode "$1" '
         {
           text: (if $mode == "info"
-                 then map(.line + (if .low then " (below max)" else "" end))
-                      | join("  ·  ")
+                 then .[0] | .line + (if .low then " (below max)" else "" end)
                  else $icon end),
           class: (if any(.[]; .low) then "degraded" else "" end)
         }'
