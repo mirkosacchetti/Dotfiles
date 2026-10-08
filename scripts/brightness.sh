@@ -15,8 +15,7 @@
 # buses answer fast when empty, the HDMI DDC lines time out and are only
 # tried for an HDMI output; a failed scan is not retried for 5 minutes.
 #   status   JSON: sun icon by level, the info text as a second key
-#   info     JSON with the text: "DP-7 DELL U2725QE  |  45%", the
-#            label as display.sh writes it
+#   info     JSON with the text: "DP-7 DELL U2725QE", then "Level: 45%"
 #   set ARG  5%+, 5%-, or an absolute percent; then refreshes the bar
 PICK=$XDG_RUNTIME_DIR/screen-pick
 # nerd font glyphs as bytes, so the locale does not matter: sun (U+F185),
@@ -125,14 +124,14 @@ case $1 in
     status|info)
         pct=$(get)
         if [[ -z $pct ]]; then
-            icon=$SUN; text="$label  |  no DDC/CI"
+            icon=$SUN; text="$label"$'\n'"No DDC/CI"
         else
             # levels: half, high, full
             if (( pct >= 100 )); then icon=$FULL
             elif (( pct >= 76 )); then icon=$HIGH
             elif (( pct >= 51 )); then icon=$HALF
             else icon=$SUN; fi
-            text="$label  |  $pct%"
+            text="$label"$'\n'"Level: $pct%"
         fi
         info=$text; [[ $1 == status ]] && text=$icon
         jq -cn --arg text "$text" --arg info "$info" '{text: $text, info: $info}'

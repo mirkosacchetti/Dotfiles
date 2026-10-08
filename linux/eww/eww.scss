@@ -40,7 +40,8 @@ $red: #bf616a;      // nord11, the alerts
   background-color: $bg;
   border: 1px solid $fg;
   border-radius: 8px;
-  padding: 4px 12px;
+  padding: 6px 12px;
   margin-top: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
+.card-title { font-weight: bold; margin-bottom: 2px; }

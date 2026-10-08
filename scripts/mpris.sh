@@ -2,8 +2,9 @@
 # Media player module for the eww bar, built on playerctld: the active
 # player is whichever was used last, `playerctld shift` cycles them.
 #   status      JSON, long-running: the active player's track as text, and
-#               as info the album, the app's own audio level (its PipeWire
-#               stream, as pavucontrol shows it) and the player.
+#               as info, one per line, the track again, the album, the
+#               player and the app's own audio level (its PipeWire stream,
+#               as pavucontrol shows it).
 #               Refreshed on player, volume and player-list events
 #   volume ARG  wpctl set-volume on the active player's stream (5%+, 5%-,
 #               0.5...), the player's MPRIS volume if it has no stream
@@ -102,10 +103,11 @@ render() {
         stream=
         vol=$(playerctl -p playerctld volume 2>/dev/null | awk '{ printf "%d%% (player)", $1 * 100 + 0.5 }')
     }
-    # info: the album, then the active player with the app's volume (one
-    # bar per popup: the volume belongs to the player)
-    info=${album:+$(esc "$album")  |  }
-    info+="$active${vol:+ 󰕾 $vol}"
+    # info, one item per line: the track as on the bar, album, player, volume
+    info=$text
+    [[ -n $album ]] && info+=$'\n'"Album: $(esc "$album")"
+    info+=$'\n'"Player: $active"
+    [[ -n $vol ]] && info+=$'\n'"Volume: $vol"
     jq -cn --arg text "$text" --arg info "$info" --arg class "${status,,}" '{text: $text, info: $info, class: $class}' || exit
 }
 

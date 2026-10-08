@@ -14,11 +14,11 @@ status|info)
     if systemctl --user -q is-active $UNIT; then
         icon=$'󰚵'; class=on
         # "Notice: Period: Night", "Notice: Colour temperature: 4500K"
-        info="on, "$(gammastep -p 2>&1 |
+        info="On: "$(gammastep -p 2>&1 |
             awk -F': ' '/Period|temperature/ { printf "%s%s", sep, $NF; sep = ", " }')
     else
         icon=$'󱟐'; class=off
-        info=off
+        info=Off
     fi
     [[ $1 == info ]] && icon=$info
     jq -cn --arg text "$icon" --arg info "$info" --arg class "$class" '{text: $text, info: $info, class: $class}'

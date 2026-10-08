@@ -1,8 +1,7 @@
 #!/bin/bash
 # Bluetooth for the eww bar: the picked connected device with its battery;
 # the middle click (`next`) picks the next one.
-#   info   JSON: "HHKB-Hybrid_1 85%", the controller's name when
-#          nothing is connected, off when powered down
+#   info   JSON: "HHKB-Hybrid_1", then "Battery: 85%"; or no device, or off
 #   status the icon (off, on, connected) with that text as info key
 #   next   pick the next connected device, wrapping; then refreshes the bar
 PICK=$XDG_RUNTIME_DIR/bt-pick
@@ -20,16 +19,16 @@ devices() {
 case $1 in
     info|status)
         if ! bluetoothctl show 2>/dev/null | grep -q 'Powered: yes'; then
-            text=off; icon=$BTOFF
+            text=Off; icon=$BTOFF
         else
             icon=$BT
             read -r mac name < <(devices)
             if [[ -n $mac ]]; then
                 # "Battery Percentage: 0x55 (85)"
                 pct=$(bluetoothctl info "$mac" 2>/dev/null | awk -F'[()]' '/Battery Percentage/ { print $2 "%" }')
-                text="$name${pct:+ $pct}"; icon=$BTCONN
+                text="$name${pct:+$'\n'Battery: $pct}"; icon=$BTCONN
             else
-                text=$(bluetoothctl show 2>/dev/null | awk '/Alias:/ { print $2 }')
+                text="No device connected"
             fi
         fi
         [[ $1 == status ]] && jq -cn --arg text "$icon" --arg info "$text" '{text: $text, info: $info}' \

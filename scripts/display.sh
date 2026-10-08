@@ -4,8 +4,8 @@
 # rate it offers at its current resolution, e.g. the Dell stuck at 60 Hz
 # after a hotplug (see output-watch.sh).
 #   (none)  JSON, long-running: the icon, the info text as a second key
-#   info    the same, with the picked output as text: "DP-7 DELL U2725QE  ·
-#           3840x2160@60Hz, scale 1.5", the same label brightness.sh uses
+#   info    the same, with the picked output as text: "DP-7 DELL U2725QE",
+#           then "3840x2160 @ 60 Hz, scale 1.5" on a second line
 #   next    pick the next screen. The pick is a file, what brightness.sh acts
 #           on too, so the middle click on either module moves both drawers.
 # The long-running instances follow sway's output events, plus the tick
@@ -24,7 +24,7 @@ outputs() {
               | (if .name | startswith("eDP") then .name else "\(.name) \(.model)" end) as $label
               | { name,
                   low: ($m.refresh < $best - 1000),
-                  line: "\($label)  |  \($m.width)x\($m.height)@\($m.refresh / 1000 | round)Hz, scale \(.scale)" }
+                  line: "\($label)\n\($m.width)x\($m.height) @ \($m.refresh / 1000 | round) Hz, scale \(.scale)" }
               | .line += (if .low then " (below max)" else "" end))
         | (map(.name) | index($pick)) as $i
         | if $i == null then . else .[$i:] + .[:$i] end'

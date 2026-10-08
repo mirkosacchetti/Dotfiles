@@ -3,13 +3,13 @@
 # hidden windows (the ones in __i3_scratch); count shown ones too
 # (scratchpad_state) and flag when one of them has focus.
 # The count is drawn inside the icon: numeric-N-box-multiple-outline for
-# 0-9, then the 9+ glyph; the windows, one line, as info (and as the text
-# with `info`).
+# 0-9, then the 9+ glyph; the windows, one per line, as info (and as the
+# text with `info`).
 ICONS=$'󰎢󰎥󰎨󰎫󰎲󰎯󰎴󰎷󰎺󰎽󰏀'
 emit() {
     swaymsg -t get_tree | jq -c --arg icons "$ICONS" --arg mode "$1" '
         [.. | objects | select(.scratchpad_state? and .scratchpad_state != "none")] as $w
-        | ($w | map("\(.app_id // .window_properties.class // "?"): \(.name)") | join(", ")) as $info
+        | ($w | map("\(.app_id // .window_properties.class // "?"): \(.name)") | join("\n")) as $info
         | {
             text: (if $mode == "info" then $info else ($icons | .[([$w | length, 10] | min):][:1]) end),
             info: $info,
