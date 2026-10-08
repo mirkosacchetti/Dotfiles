@@ -13,7 +13,8 @@
     // shifts the leader left under the pointer, which often lands on the
     // info module: so that one answers to the same clicks and scrolls.
     // Middle click steps through what a module has more than one of:
-    // players, screens, audio outputs and inputs, power profiles.
+    // players, screens, audio outputs and inputs, bluetooth devices, power
+    // profiles.
     "modules-left": [
         "sway/workspaces",
         "group/scratchpad#group",
@@ -47,7 +48,7 @@
     "group/display#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/display", "custom/display-info"] },
     "group/brightness#group":     { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/brightness", "custom/brightness-info"] },
     "group/nightlight#group":     { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["custom/nightlight", "custom/nightlight-info"] },
-    "group/bluetooth#group":      { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["bluetooth", "bluetooth#info"] },
+    "group/bluetooth#group":      { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["bluetooth", "custom/bluetooth-info"] },
     "group/network#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["network", "network#info"] },
     "group/battery#group":        { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["battery", "battery#info"] },
     "group/power-profile#group":  { "orientation": "inherit", "drawer": { "transition-duration": 150 }, "modules": ["power-profiles-daemon", "power-profiles-daemon#info"] },
@@ -196,15 +197,18 @@
         "format-disabled": "󰂲",
         "format-connected": "󰂰",
         "tooltip": false,
-        "on-click": "blueman-manager"
+        "on-click": "blueman-manager",
+        "on-click-middle": "/home/m/Dotfiles/scripts/bluetooth.sh next"
     },
-    "bluetooth#info": {
-        "format": "{controller_alias}",
-        "format-disabled": "off",
-        "format-connected": "{device_alias}",
-        "format-connected-battery": "{device_alias} {device_battery_percentage}%",
-        "tooltip": false,
-        "on-click": "blueman-manager"
+    // the connected devices with battery, see scripts/bluetooth.sh
+    "custom/bluetooth-info": {
+        "exec": "/home/m/Dotfiles/scripts/bluetooth.sh info",
+        "return-type": "json",
+        "interval": 30,
+        "signal": 7,
+        "escape": true,
+        "on-click": "blueman-manager",
+        "on-click-middle": "/home/m/Dotfiles/scripts/bluetooth.sh next"
     },
     "tray": { },
     "clock": {
