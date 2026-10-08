@@ -12,6 +12,8 @@
     // #group suffix is the CSS class the groups share (style.css). Opening
     // shifts the leader left under the pointer, which often lands on the
     // info module: so that one answers to the same clicks and scrolls.
+    // Middle click steps through what a module has more than one of:
+    // players, screens, audio outputs and inputs, power profiles.
     "modules-left": [
         "sway/workspaces",
         "group/scratchpad#group",
@@ -238,6 +240,7 @@
     "power-profiles-daemon": {
         "format": "{icon}",
         "tooltip": false,
+        "on-click-middle": "/home/m/Dotfiles/scripts/cycle.sh power-profile",
         "format-icons": {
             "default": "",
             "performance": "",
@@ -247,7 +250,8 @@
     },
     "power-profiles-daemon#info": {
         "format": "{profile}",
-        "tooltip": false
+        "tooltip": false,
+        "on-click-middle": "/home/m/Dotfiles/scripts/cycle.sh power-profile"
     },
     "network": {
         "format-wifi": "",
@@ -279,6 +283,7 @@
         },
         "tooltip": false,
         "on-click": "pavucontrol",
+        "on-click-middle": "/home/m/Dotfiles/scripts/cycle.sh sink",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "scroll-step": 2
     },
@@ -296,6 +301,7 @@
         "format-source-muted": "",
         "tooltip": false,
         "on-click": "pavucontrol -t 4",
+        "on-click-middle": "/home/m/Dotfiles/scripts/cycle.sh source",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
         "on-scroll-up": "wpctl set-volume -l 1 @DEFAULT_AUDIO_SOURCE@ 2%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-"
@@ -306,6 +312,7 @@
         "format-source-muted": "muted",
         "tooltip": false,
         "on-click": "pavucontrol -t 4",
+        "on-click-middle": "/home/m/Dotfiles/scripts/cycle.sh source",
         "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
         "on-scroll-up": "wpctl set-volume -l 1 @DEFAULT_AUDIO_SOURCE@ 2%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 2%-"
