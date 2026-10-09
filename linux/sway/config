@@ -216,10 +216,11 @@ assign [app_id="sublime_merge"] workspace $ws_stuff
 for_window [app_id="^(org.pulseaudio.pavucontrol|nwg-displays)$" tiling] floating enable, border normal, resize set 88 ppt 88 ppt, move position center
 for_window [app_id="^(blueman-manager|org.gnome.Calculator|org.gnome.NautilusPreviewer)$"] floating enable, border normal
 # music players, bitwarden, telegram and jarvis (scripts/jarvis.sh) live in
-# the scratchpad (scripts/scratchpad-ctl.sh); only while still tiling, i.e.
-# new: after a reload sway runs for_window again on the next title change,
-# which would pop the player up at every new song
-for_window [app_id="^(cmus|spotify|Bitwarden|org\.telegram\.desktop|jarvis)$" tiling] move scratchpad, scratchpad show, border normal, resize set 88 ppt 88 ppt, move position center
+# the scratchpad (scripts/scratchpad-ctl.sh), with a border but no title
+# bar (the bar shows the title, with the scratchpad's icon); only while
+# still tiling, i.e. new: after a reload sway runs for_window again on the
+# next title change, which would pop the player up at every new song
+for_window [app_id="^(cmus|spotify|Bitwarden|org\.telegram\.desktop|jarvis)$" tiling] move scratchpad, scratchpad show, border pixel 1, resize set 88 ppt 88 ppt, move position center
 
 ###########  
 ### style
@@ -262,13 +263,16 @@ set $purple               #8bc9eb
 # lintel (~/Projects/lintel, config in linux/lintel, the lintel user
 # service): one bar per output, it follows hotplugs by itself. The exec
 # below only runs when sway starts: it imports the compositor's sockets
-# into the manager's environment first, synchronously — so the bar never
+# and the session type into the manager's and D-Bus's environment first,
+# synchronously — so whatever they start gets them (without
+# XDG_SESSION_TYPE=wayland, a Chromium started by the portal for a link
+# picks X11, and there is no Xwayland), and the bar never
 # inherits a previous session's dead SWAYSOCK at a relogin, nor crashes
 # GTK on a missing WAYLAND_DISPLAY — then clears any start limit the
 # pre-session attempts may have left (tolerated: a fresh session has
 # nothing to clear) and starts the service. exec_always just makes sure
 # it runs after a reload too, where starting an active service is a no-op.
-exec sh -c 'systemctl --user import-environment SWAYSOCK WAYLAND_DISPLAY && { systemctl --user reset-failed lintel.service || true; } && systemctl --user start lintel.service'
+exec sh -c 'dbus-update-activation-environment --systemd SWAYSOCK WAYLAND_DISPLAY XDG_SESSION_TYPE && { systemctl --user reset-failed lintel.service || true; } && systemctl --user start lintel.service'
 exec_always systemctl --user start lintel.service
 
 ###########  
