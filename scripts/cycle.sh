@@ -2,7 +2,6 @@
 # Middle click in the bar steps to the next of something, wrapping around:
 #   sink           default audio output (wpctl set-default)
 #   source         default audio input
-#   power-profile  powerprofilesctl
 # Screens are display.sh next, players playerctld shift. One at a time: a
 # second click while a cycle is still probing devices is dropped.
 exec 9> "${XDG_RUNTIME_DIR:-/tmp}/cycle.lock"
@@ -48,10 +47,5 @@ cycle_node() {
 case $1 in
     sink)   cycle_node Audio/Sink default.audio.sink ;;
     source) cycle_node Audio/Source default.audio.source ;;
-    power-profile)
-        # "* balanced:" marks the current one in the list
-        powerprofilesctl set "$(powerprofilesctl list | awk '
-            /^[ *]+[a-z-]+:$/ { sub(":", "", $NF); p[n++] = $NF; if ($1 == "*") cur = n - 1 }
-            END { print p[(cur + 1) % n] }')" ;;
-    *) echo "usage: ${0##*/} sink|source|power-profile" >&2; exit 1 ;;
+    *) echo "usage: ${0##*/} sink|source" >&2; exit 1 ;;
 esac

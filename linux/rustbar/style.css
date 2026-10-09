@@ -77,6 +77,46 @@ label { padding: 0; margin: 0; }
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 .card-title { font-weight: bold; margin-bottom: 6px; }
+/* the card's switches (the toggles module): the name, a line under it,
+   and a pill on the right, the accent when on */
+.card .toggles { margin-top: 16px; }
+.card .toggle { padding: 4px 0; }
+.card .toggle .detail { color: #8bc9eb; font-size: 12px; }
+.card switch {
+  min-width: 40px;
+  min-height: 22px;
+  padding: 2px;
+  border: none;
+  border-radius: 13px;
+  background-color: #304860;
+  background-image: none;
+  box-shadow: none;
+  outline: none;
+}
+.card switch:checked { background-color: #4d86b0; }
+.card switch slider {
+  min-width: 22px;
+  min-height: 22px;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #d6e2ee;
+  background-image: none;
+  box-shadow: none;
+}
+/* GTK's I and O marks inside the pill */
+.card switch image { color: transparent; }
+/* the card's rows of buttons (the controls module), over the switches:
+   a caption, then the buttons side by side; the one a choice is on in the accent */
+.card .button-row { margin-top: 16px; }
+.card .button-row button {
+  padding: 5px 6px;
+  border-radius: 6px;
+  background-color: #243d56;
+}
+.card .button-row button:hover { background-color: #304860; }
+.card .button-row button.active { background-color: #4d86b0; }
+.card .button-row button label { font-size: 12px; }
 /* the card's input row: a field and a button */
 .card .input { margin-top: 8px; }
 .card entry {

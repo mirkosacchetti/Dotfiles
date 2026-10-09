@@ -1,5 +1,6 @@
 #!/bin/bash
-# Power menu in the bar's picker, for the power button and the launcher entry.
+# Power menu in the bar's picker, for the launcher entry (the bar's
+# controls card has the same actions as buttons).
 
 ICONS=/home/m/Dotfiles/applications/icons
 

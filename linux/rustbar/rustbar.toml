@@ -83,8 +83,17 @@ triggers = ["udev:backlight", "sway:tick,output", "refresh", "hover"]
 [[source]]
 name = "nightlight"
 kind = "nightlight"
-initial = '{"text": "", "info": "", "class": ""}'
+initial = '{"on": false, "info": ""}'
 triggers = ["dbus:session:org.freedesktop.systemd1:/org/freedesktop/systemd1/unit/gammastep_2eservice", "refresh", "hover"]
+
+# Tailscale's state and Syncthing's user unit; the unit signals its
+# changes, Tailscale is read again when the card opens
+[[source]]
+name = "sync"
+kind = "command"
+command = "$S/sync.sh status"
+initial = '{"tailscale": {"on": false, "info": ""}, "syncthing": {"on": false, "info": ""}}'
+triggers = ["dbus:session:org.freedesktop.systemd1:/org/freedesktop/systemd1/unit/syncthing_2eservice", "refresh", "hover"]
 
 # bluez: Powered, Connected, Battery1.Percentage all come as PropertiesChanged
 [[source]]
@@ -114,7 +123,7 @@ triggers = ["udev:power_supply", "dbus:system:org.freedesktop.UPower:/org/freede
 [[source]]
 name = "profile"
 kind = "powerprofile"
-initial = '{"text": "", "info": ""}'
+initial = '{"profile": ""}'
 triggers = ["dbus:system:org.freedesktop.UPower.PowerProfiles:/org/freedesktop/UPower/PowerProfiles"]
 
 # the uptime only matters when you look at it
@@ -302,15 +311,6 @@ scroll_down = "$S/brightness.sh set 5%-"
 hints = [["M 2", "next screen"], ["R 3", "reset 40%"], ["⇅ 4/5", "level"]]
 
 [[module]]
-name = "nightlight"
-side = "right"
-title = "Night light"
-text = "{nightlight.text}"
-info = "{nightlight.info}"
-click = "$S/nightlight.sh toggle"
-hints = [["L 1", "toggle"]]
-
-[[module]]
 name = "bluetooth"
 side = "right"
 title = "Bluetooth"
@@ -337,24 +337,55 @@ text = "{battery.text}"
 info = "{battery.info}"
 class = "{battery.class}"
 
+# the system's controls in one card: the uptime, the power actions, the
+# CPU's power profile (the one in use is marked), and switches for
+# Tailscale, Syncthing and the night light
 [[module]]
-name = "profile"
+name = "controls"
 side = "right"
-title = "Power profile"
-text = "{profile.text}"
-info = "{profile.info}"
-middle = "$S/cycle.sh power-profile"
-hints = [["M 2", "next profile"]]
-
-[[module]]
-name = "power"
-side = "right"
-title = "Power"
-text = "⏻"
+title = "Control System"
+text = ""
 info = "{power-info}"
-click = "$S/power-menu.sh"
-right = "swaylock"
-hints = [["L 1", "menu"], ["R 3", "lock"]]
+
+[[module.buttons]]
+label = "Power"
+items = [
+  { text = "󰌾 Lock", command = "swaylock" },
+  { text = "󰤄 Suspend", command = "systemctl suspend" },
+  { text = "󰍃 Logout", command = "swaymsg exit" },
+  { text = "󰜉 Reboot", command = "systemctl reboot" },
+  { text = "󰐥 Off", command = "systemctl poweroff" },
+]
+
+[[module.buttons]]
+label = "Power profile"
+state = "{profile.profile}"
+items = [
+  { text = " Saver", value = "power-saver", command = "powerprofilesctl set power-saver" },
+  { text = " Balanced", value = "balanced", command = "powerprofilesctl set balanced" },
+  { text = " Performance", value = "performance", command = "powerprofilesctl set performance" },
+]
+
+[[module.toggles]]
+label = "Tailscale"
+detail = "{sync.tailscale.info}"
+state = "{sync.tailscale.on}"
+on = "$S/sync.sh tailscale on"
+off = "$S/sync.sh tailscale off"
+
+[[module.toggles]]
+label = "Syncthing"
+detail = "{sync.syncthing.info}"
+state = "{sync.syncthing.on}"
+on = "$S/sync.sh syncthing on"
+off = "$S/sync.sh syncthing off"
+
+[[module.toggles]]
+label = "Night light"
+detail = "{nightlight.info}"
+state = "{nightlight.on}"
+on = "systemctl --user start gammastep.service"
+off = "systemctl --user stop gammastep.service"
 
 # the date and time; the card carries the month's calendar (the old deca
 # window, rebuilt inside): ‹ and › or a scroll change the month, the month
