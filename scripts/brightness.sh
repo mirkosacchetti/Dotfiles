@@ -1,5 +1,5 @@
 #!/bin/bash
-# Brightness of the screen in use, for the bar (rustbar) (status, info keys)
+# Brightness of the screen in use, for the bar (lintel) (status, info keys)
 # and the XF86MonBrightness keys. The screen is the one picked with the
 # middle click (display.sh next), else the focused output. The laptop
 # panel goes through its backlight (brightnessctl, via logind), an external
@@ -150,7 +150,7 @@ case $1 in
             (( new < 0 )) && new=0
             ddc_set "$(ddc_bus "$name" "$model" "$serial")" "$new"
         fi
-        rustbar refresh brightness
+        lintel refresh brightness
         ;;
     *) echo "usage: ${0##*/} status|info|set ARG" >&2; exit 1 ;;
 esac

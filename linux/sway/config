@@ -11,7 +11,7 @@ set $alt Mod1
 floating_modifier $mod normal
 tiling_drag disabled
 focus_follows_mouse no
-set $menu /home/m/.local/bin/rustbar launch
+set $menu /home/m/.local/bin/lintel launch
 set $term alacritty
 set $browser chromium
 
@@ -79,10 +79,10 @@ bindsym $mod+Return exec $term
 bindsym $mod+g exec $browser
 bindsym $mod+space exec $menu
 # modifier-only chord, either press order; --release so $mod+control+<key> combos keep working
-# bindsym --release $mod+Control_L exec /home/m/.local/bin/rustbar windows
-# bindsym --release control+Super_L exec /home/m/.local/bin/rustbar windows
+# bindsym --release $mod+Control_L exec /home/m/.local/bin/lintel windows
+# bindsym --release control+Super_L exec /home/m/.local/bin/lintel windows
 # laptop CapsLock is caps:ctrl_modifier: Control modifier but Caps_Lock keysym
-#bindsym --release $mod+Caps_Lock exec /home/m/.local/bin/rustbar windows
+#bindsym --release $mod+Caps_Lock exec /home/m/.local/bin/lintel windows
 # omarchy-style app launches
 bindsym $mod+shift+f exec nautilus
 bindsym $mod+shift+n exec $term -e nvim
@@ -259,7 +259,7 @@ set $purple               #8bc9eb
 ###########  
 ### bar
 ###########  
-# rustbar (~/Projects/rustbar, config in linux/rustbar, the rustbar user
+# lintel (~/Projects/lintel, config in linux/lintel, the lintel user
 # service): one bar per output, it follows hotplugs by itself. The exec
 # below only runs when sway starts: it imports the compositor's sockets
 # into the manager's environment first, synchronously — so the bar never
@@ -268,8 +268,8 @@ set $purple               #8bc9eb
 # pre-session attempts may have left (tolerated: a fresh session has
 # nothing to clear) and starts the service. exec_always just makes sure
 # it runs after a reload too, where starting an active service is a no-op.
-exec sh -c 'systemctl --user import-environment SWAYSOCK WAYLAND_DISPLAY && { systemctl --user reset-failed rustbar.service || true; } && systemctl --user start rustbar.service'
-exec_always systemctl --user start rustbar.service
+exec sh -c 'systemctl --user import-environment SWAYSOCK WAYLAND_DISPLAY && { systemctl --user reset-failed lintel.service || true; } && systemctl --user start lintel.service'
+exec_always systemctl --user start lintel.service
 
 ###########  
 ### apps
@@ -285,9 +285,9 @@ exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 bindsym $mod+control+v exec /home/m/Dotfiles/scripts/clipboard-picker.sh
 # omarchy-style notification controls: dismiss / dismiss all / invoke / history replay / DND
-bindsym $mod+shift+comma exec /home/m/.local/bin/rustbar notifications close
-bindsym $mod+shift+control+comma exec /home/m/.local/bin/rustbar notifications close-all
-bindsym $mod+alt+comma exec /home/m/.local/bin/rustbar notifications action
-bindsym $mod+shift+alt+comma exec /home/m/.local/bin/rustbar notifications pop
-bindsym $mod+control+alt+comma exec /home/m/.local/bin/rustbar notifications toggle
+bindsym $mod+shift+comma exec /home/m/.local/bin/lintel notifications close
+bindsym $mod+shift+control+comma exec /home/m/.local/bin/lintel notifications close-all
+bindsym $mod+alt+comma exec /home/m/.local/bin/lintel notifications action
+bindsym $mod+shift+alt+comma exec /home/m/.local/bin/lintel notifications pop
+bindsym $mod+control+alt+comma exec /home/m/.local/bin/lintel notifications toggle
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Media player module for the bar (rustbar), built on playerctld: the active
+# Media player module for the bar (lintel), built on playerctld: the active
 # player is whichever was used last, `playerctld shift` cycles them.
 #   status      JSON, long-running: the active player's track as text, and
 #               as info, one per line, the track again, the album, the

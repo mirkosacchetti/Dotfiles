@@ -1,9 +1,9 @@
-# rustbar: the bar, the tray, the launcher and the notifications, event
-# driven. Copy to ~/.config/rustbar/rustbar.toml (style.css next to it).
+# lintel: the bar, the tray, the launcher and the notifications, event
+# driven. Copy to ~/.config/lintel/lintel.toml (style.css next to it).
 #
 # Sources give values, modules show them. No source here polls: the
 # native readers run only when a trigger fires (a kernel uevent, a D-Bus
-# signal, a netlink message, a sway event, a `rustbar refresh`, or the
+# signal, a netlink message, a sway event, a `lintel refresh`, or the
 # module's card opening); sway, the sound server and the player are
 # followed on their own events; the clock and the timers wake up exactly
 # when their text changes. See README.md for the module-by-module account.
@@ -17,7 +17,7 @@ leave_delay_ms = 150
 coalesce_ms = 100
 
 [picker]
-width = 560                           # the launcher, the window switcher, `rustbar pick`
+width = 560                           # the launcher, the window switcher, `lintel pick`
 rows = 8
 icon_size = 24
 terminal = "alacritty -e"             # for the entries that want one
@@ -60,7 +60,7 @@ initial = '{"text": "", "info": ""}'
 
 # ---- sources: native readers, run on events --------------------------
 
-# record-toggle.sh starts and stops wf-recorder: it says so (`rustbar
+# record-toggle.sh starts and stops wf-recorder: it says so (`lintel
 # refresh recording`); the card re-checks in case it crashed
 [[source]]
 name = "recording"
@@ -183,8 +183,8 @@ name = "launcher"
 title = "Launcher"
 text = "󰕰"
 info = "the bar's picker"
-click = "rustbar launch"
-middle = "rustbar windows"
+click = "lintel launch"
+middle = "lintel windows"
 right = "swaymsg '[workspace=__focused__] kill'"
 hints = [["L 1", "applications"], ["M 2", "windows"], ["R 3", "close the workspace"]]
 
@@ -194,13 +194,13 @@ title = "Pomodoro"
 text = "{pomodoro.text}"
 info = "{pomodoro.info}"
 class = "{pomodoro.class}"
-click = "rustbar pomodoro toggle"
-middle = "rustbar pomodoro skip"
-right = "rustbar pomodoro stop"
+click = "lintel pomodoro toggle"
+middle = "lintel pomodoro skip"
+right = "lintel pomodoro stop"
 hints = [["L 1", "start / pause"], ["M 2", "skip the phase"], ["R 3", "stop the session"]]
 # in the card: a countdown, independent of the session; the label is its
 # key (the same label again restarts it) and its notification's title
-input = { prompt = "Minutes", default = "7", label = "Label", label_default = "Countdown", button = "Start", command = "rustbar timer {value}m {label}" }
+input = { prompt = "Minutes", default = "7", label = "Label", label_default = "Countdown", button = "Start", command = "lintel timer {value}m {label}" }
 
 # the countdowns, one next to the other, each with its seconds and its
 # label; a right click stops that one. They start from the pomodoro card
@@ -209,7 +209,7 @@ name = "timer"
 kind = "list"
 items = "timer.items"
 item_text = "󰔟 {text} {label}"
-item_right = "rustbar timer stop {label}"
+item_right = "lintel timer stop {label}"
 
 # the StatusNotifier icons (Telegram, blueman ...): left click activates
 # (or opens the menu when the item is only a menu), right click the menu,

@@ -6,7 +6,7 @@
 # prompt), CLAUDE.md with how it works, its notes under note/ (the
 # memory, in place of Claude Code's automatic one, which
 # .claude/settings.json there turns off). It starts there, so --continue
-# picks up Jarvis's own last conversation and no other Claude session's. rustbar's MCP server gives it eyes and hands: the
+# picks up Jarvis's own last conversation and no other Claude session's. lintel's MCP server gives it eyes and hands: the
 # bar's widgets, sway's windows, workspaces and outputs, screenshots,
 # sway commands, the journal. Launched again while running, it brings the
 # window up instead.
@@ -17,7 +17,7 @@ if [ -n "$id" ]; then
     exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh show "$id"
 fi
 
-# sway's own PATH may lack ~/.local/bin, where claude and rustbar are
+# sway's own PATH may lack ~/.local/bin, where claude and lintel are
 export PATH="$HOME/.local/bin:$PATH"
 cd "$HOME_DIR" || { notify-send -i dialog-error Jarvis "no $HOME_DIR"; exit 1; }
 
@@ -32,5 +32,5 @@ exec alacritty --class jarvis --title Jarvis -e claude "${args[@]}" \
     --dangerously-skip-permissions \
     --name jarvis \
     --append-system-prompt "$(cat "$HOME_DIR/character")" \
-    --mcp-config '{"mcpServers": {"rustbar": {"command": "'"$HOME"'/.local/bin/rustbar", "args": ["mcp"]}}}' \
-    --add-dir "$HOME/Dotfiles" "$HOME/Projects/rustbar"
+    --mcp-config '{"mcpServers": {"lintel": {"command": "'"$HOME"'/.local/bin/lintel", "args": ["mcp"]}}}' \
+    --add-dir "$HOME/Dotfiles" "$HOME/Projects/lintel"

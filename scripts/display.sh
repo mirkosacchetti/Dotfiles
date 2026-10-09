@@ -1,9 +1,9 @@
 #!/bin/bash
 # The screen the other modules act on: the bar's display and brightness
-# modules (rustbar) show the picked output, brightness.sh sets its level.
+# modules (lintel) show the picked output, brightness.sh sets its level.
 #   next    pick the next screen. The pick is a file, what brightness.sh acts
 #           on too, so the middle click on either module moves both cards.
-# rustbar reads the outputs itself; the tick sent through sway tells it the
+# lintel reads the outputs itself; the tick sent through sway tells it the
 # pick changed.
 PICK=$XDG_RUNTIME_DIR/screen-pick
 
@@ -22,5 +22,5 @@ pick=$(swaymsg -t get_outputs | jq -r --arg pick "$(cat "$PICK" 2>/dev/null)" '
     | (if $i == null then . else .[$i:] + .[:$i] end)
     | .[1] // empty')
 echo "$pick" > "$PICK"
-rustbar refresh brightness
+lintel refresh brightness
 swaymsg -t send_tick screen-pick > /dev/null

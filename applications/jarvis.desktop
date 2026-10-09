@@ -8,5 +8,5 @@ Icon=/home/m/Dotfiles/applications/icons/jarvis.png
 Terminal=false
 StartupWMClass=jarvis
 SingleMainWindow=true
-Keywords=claude;claudio;agent;ai;assistant;debug;sway;rustbar;
+Keywords=claude;claudio;agent;ai;assistant;debug;sway;lintel;
 Categories=Development;

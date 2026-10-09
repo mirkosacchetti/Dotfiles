@@ -1,4 +1,4 @@
-/* rustbar style, GTK 4 CSS: the palette and font of the eww/waybar bar.
+/* lintel style, GTK 4 CSS: the palette and font of the eww/waybar bar.
    GTK's own theme is undone where it would show: buttons, entries,
    popovers; everything else is drawn plain. */
 
@@ -10,7 +10,7 @@
 }
 
 window { background-color: transparent; }
-window.rustbar-bar { background-color: #16242d; }
+window.lintel-bar { background-color: #16242d; }
 
 /* GTK's theme out of the way. The layout properties are reset on the
    bare element only: a pseudo-class rule (button:hover) outranks a class
@@ -183,7 +183,7 @@ popover.tray-menu modelbutton:hover { background-color: #4d86b0; }
 popover.tray-menu modelbutton:disabled label { color: #7f93a3; }
 popover.tray-menu separator { background-color: #4d86b0; min-height: 1px; margin: 4px 0; }
 
-/* the picker: the launcher, the window switcher, `rustbar pick` */
+/* the picker: the launcher, the window switcher, `lintel pick` */
 .picker {
   background-color: #16242d;
   border: 1px solid #d6e2ee;

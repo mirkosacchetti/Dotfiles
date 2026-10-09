@@ -1,15 +1,15 @@
-# The bar (~/Projects/rustbar, config in linux/rustbar): one window per
+# The bar (~/Projects/lintel, config in linux/lintel): one window per
 # output, follows hotplugs by itself. sway starts the service from its
 # config, after importing its own sockets into the manager's environment,
 # so the bar never races the session's startup; the service brings it
 # back if it dies, and SIGTERM makes it close its listener scripts.
-# PATH: the mouse commands need rustbar itself (~/.local/bin) and the
+# PATH: the mouse commands need lintel itself (~/.local/bin) and the
 # usual tools.
 [Unit]
-Description=rustbar
+Description=lintel
 
 [Service]
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin
-ExecStart=%h/.local/bin/rustbar
+ExecStart=%h/.local/bin/lintel
 Restart=on-failure
 RestartSec=1
