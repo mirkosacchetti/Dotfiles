@@ -21,6 +21,7 @@ width = 560                           # the launcher, the window switcher, `lint
 rows = 8
 icon_size = 24
 terminal = "alacritty -e"             # for the entries that want one
+scratchpad = "$S/scratchpad-ctl.sh show {id}"   # a scratchpad window, placed the script's way
 
 [pomodoro]
 work_minutes = 25
@@ -75,6 +76,7 @@ triggers = ["refresh", "hover"]
 [[source]]
 name = "brightness"
 kind = "brightness"
+command = "$S/brightness.sh status"   # the external monitors, over DDC/CI
 initial = '{"text": "", "info": ""}'
 triggers = ["udev:backlight", "sway:tick,output", "refresh", "hover"]
 

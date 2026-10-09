@@ -1,4 +1,4 @@
-/* lintel style, GTK 4 CSS: the palette and font of the eww/waybar bar.
+/* lintel style, GTK 4 CSS: a dark blue palette, JetBrains Mono Nerd Font.
    GTK's own theme is undone where it would show: buttons, entries,
    popovers; everything else is drawn plain. */
 
@@ -146,9 +146,9 @@ label { padding: 0; margin: 0; }
   border-radius: 3px;
 }
 
-/* the calendar in the clock's card: the deca palette (Nord0 #16242d is
-   the card itself, NORD2 the grid lines, NORD3 the days of the other
-   months, NORD11 the weekend) */
+/* the calendar in the clock's card: the card's colour behind, the grid
+   lines and today a shade lighter, the other months' days dimmed, the
+   weekend in the light blue */
 .calendar { margin-top: 12px; }
 /* the header: the month name between the navigation buttons; the three
    are buttons of their own, with a hover like the day's highlight */
@@ -157,7 +157,7 @@ label { padding: 0; margin: 0; }
 .calendar .nav:hover, .calendar .title:hover { background-color: #243d56; }
 .calendar .title { border-radius: 3px; }
 .calendar .title label { font-weight: bold; padding: 2px 0; }
-/* the week row and the cells: deca's grid lines, on cells a touch wider
+/* the week row and the cells: grid lines, on cells a touch wider
    than tall, to fill the card's width */
 .calendar .weekday { font-size: 11px; padding-bottom: 6px; }
 .calendar .weekday.weekend { color: #8bc9eb; }
