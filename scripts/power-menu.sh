@@ -1,5 +1,5 @@
 #!/bin/bash
-# Power menu in fuzzel, for the bar's power button and the launcher entry.
+# Power menu in the bar's picker, for the power button and the launcher entry.
 
 ICONS=/home/m/Dotfiles/applications/icons
 
@@ -15,6 +15,6 @@ ACTIONS=(
 IDX=$(for a in "${ACTIONS[@]}"; do
     IFS=$'\t' read -r label icon _ <<< "$a"
     printf '%s\0icon\x1f%s/%s.png\n' "$label" "$ICONS" "$icon"
-done | fuzzel --dmenu --index --lines ${#ACTIONS[@]}) || exit 0
+done | rustbar pick power Power --index) || exit 0
 [[ $IDX =~ ^[0-9]+$ ]] || exit 0
 exec ${ACTIONS[IDX]##*$'\t'}

@@ -76,8 +76,10 @@ step() {
 
 case $1 in
     toggle)
-        if [[ -n $focused ]]; then hide "$focused"
-        elif [[ -n $here ]]; then show "$here"
+        # hidden: show it; shown here, focused or not: hide it — a click
+        # on the bar never focuses it, so "focused" alone would show it
+        # again (resized to this output) instead of hiding it
+        if [[ -n ${focused:-$here} ]]; then hide "${focused:-$here}"
         else show "$last"
         fi ;;
     next) step 1 ;;

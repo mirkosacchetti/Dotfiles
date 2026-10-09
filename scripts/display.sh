@@ -1,58 +1,26 @@
 #!/bin/bash
-# Display indicator for the eww bar, and the screen the other modules
-# act on. The icon turns red when an output runs below the best refresh
-# rate it offers at its current resolution, e.g. the Dell stuck at 60 Hz
-# after a hotplug (see output-watch.sh).
-#   (none)  JSON, long-running: the icon, the info text as a second key
-#   info    the same, with the picked output as text: "DP-7 DELL U2725QE",
-#           then "3840x2160 @ 60 Hz, scale 1.5" on a second line
+# The screen the other modules act on: the bar's display and brightness
+# modules (rustbar) show the picked output, brightness.sh sets its level.
 #   next    pick the next screen. The pick is a file, what brightness.sh acts
-#           on too, so the middle click on either module moves both drawers.
-# The long-running instances follow sway's output events, plus the tick
-# event next sends through sway.
+#           on too, so the middle click on either module moves both cards.
+# rustbar reads the outputs itself; the tick sent through sway tells it the
+# pick changed.
 PICK=$XDG_RUNTIME_DIR/screen-pick
 
-# active outputs as a JSON array of {name, line, low}, the focused one
-# first, then rotated so the picked one (if still there) leads: the drawer
-# shows it, next takes the one after. The label is the name plus the model,
-# except for the panel, whose model is a bare code.
-outputs() {
-    swaymsg -t get_outputs | jq -c --arg pick "$(cat "$PICK" 2>/dev/null)" '
-        [.[] | select(.active)] | sort_by(.focused | not)
-        | map(.current_mode as $m
-              | ([.modes[] | select(.width == $m.width and .height == $m.height).refresh] | max) as $best
-              | (if .name | startswith("eDP") then .name else "\(.name) \(.model)" end) as $label
-              | { name,
-                  low: ($m.refresh < $best - 1000),
-                  line: "\($label)\n\($m.width)x\($m.height) @ \($m.refresh / 1000 | round) Hz, scale \(.scale)" }
-              | .line += (if .low then " (below max)" else "" end))
-        | (map(.name) | index($pick)) as $i
-        | if $i == null then . else .[$i:] + .[:$i] end'
-}
-
-emit() {
-    outputs | jq -c --arg icon $'󰍹' --arg mode "$1" '
-        {
-          text: (if $mode == "info" then .[0].line else $icon end),
-          info: .[0].line,
-          class: (if any(.[]; .low) then "degraded" else "" end)
-        }'
-}
-
 case $1 in
-    next)
-        # the one after the current; with a single screen, no pick at all
-        # (read before writing: the redirection would empty the file first)
-        pick=$(outputs | jq -r '.[1].name // empty')
-        echo "$pick" > "$PICK"
-        eww poll brightness
-        swaymsg -t send_tick screen-pick > /dev/null
-        exit
-        ;;
-    info|'') mode=$1 ;;
-    *) echo "usage: ${0##*/} [info|next]" >&2; exit 1 ;;
+    next) ;;
+    *) echo "usage: ${0##*/} next" >&2; exit 1 ;;
 esac
 
-# exit once the bar is gone (write fails) instead of lingering
-emit "$mode" || exit
-swaymsg -rm -t subscribe '["output", "tick"]' | while read -r _; do emit "$mode" || exit; done
+# the active outputs, the focused one first, then rotated so the picked one
+# (if still there) leads, as the bar orders them; the next is the one after
+# it, and with a single screen there is no pick at all (read before writing:
+# the redirection would empty the file first)
+pick=$(swaymsg -t get_outputs | jq -r --arg pick "$(cat "$PICK" 2>/dev/null)" '
+    [.[] | select(.active)] | sort_by(.focused | not) | map(.name)
+    | index($pick) as $i
+    | (if $i == null then . else .[$i:] + .[:$i] end)
+    | .[1] // empty')
+echo "$pick" > "$PICK"
+rustbar refresh brightness
+swaymsg -t send_tick screen-pick > /dev/null

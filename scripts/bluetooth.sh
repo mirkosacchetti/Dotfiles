@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bluetooth for the eww bar: the picked connected device with its battery;
+# Bluetooth for the bar (rustbar): the picked connected device with its battery;
 # the middle click (`next`) picks the next one.
 #   info   JSON: "HHKB-Hybrid_1", then "Battery: 85%"; or no device, or off
 #   status the icon (off, on, connected) with that text as info key
@@ -37,7 +37,7 @@ case $1 in
     next)
         # the second of the list, which starts with the current one
         devices | awk 'NR == 2 { print $1 }' > "$PICK"
-        eww poll bluetooth
+        rustbar refresh bluetooth
         ;;
     *) echo "usage: ${0##*/} info|next" >&2; exit 1 ;;
 esac

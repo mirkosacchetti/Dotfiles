@@ -1,14 +1,17 @@
 # Default startup scripts: sync env vars with systemd/D-Bus for proper session integration
 include /etc/sway/config.d/*
-# Xwayland stays enabled: lightweight, and some apps (Steam, VLC) still need X11
-# xwayland disable
+# Xwayland off: everything here runs native Wayland; the Electron apps
+# (Bitwarden, Obsidian) take --ozone-platform-hint=auto from their own
+# launchers, Steam is the known casualty — start it in gamescope or X if
+# ever needed again
+xwayland disable
 set $mod Mod4
 set $alt Mod1
 
 floating_modifier $mod normal
 tiling_drag disabled
 focus_follows_mouse no
-set $menu /home/m/Dotfiles/scripts/launcher.sh
+set $menu /home/m/.local/bin/rustbar launch
 set $term alacritty
 set $browser chromium
 
@@ -60,8 +63,6 @@ output "LG Electronics LG HDR 4K 0x00006D62" {
 # suspends standalone; logind lid handling is off (systemd/logind-lid.conf).
 # output-watch.sh re-runs the same decision on monitor hotplug, so undocking
 # with the lid already closed suspends instead of leaving the machine awake.
-# It also re-applies the Dell's 120 Hz mode when amdgpu drops the first
-# modeset after a plug and sway falls back to 60 Hz.
 bindswitch --reload --locked lid:on exec /home/m/Dotfiles/scripts/lid-eval.sh
 bindswitch --reload --locked lid:off output $laptop_display enable
 exec /home/m/Dotfiles/scripts/output-watch.sh
@@ -78,10 +79,10 @@ bindsym $mod+Return exec $term
 bindsym $mod+g exec $browser
 bindsym $mod+space exec $menu
 # modifier-only chord, either press order; --release so $mod+control+<key> combos keep working
-# bindsym --release $mod+Control_L exec /home/m/Dotfiles/scripts/window-switcher.sh
-# bindsym --release control+Super_L exec /home/m/Dotfiles/scripts/window-switcher.sh
+# bindsym --release $mod+Control_L exec /home/m/.local/bin/rustbar windows
+# bindsym --release control+Super_L exec /home/m/.local/bin/rustbar windows
 # laptop CapsLock is caps:ctrl_modifier: Control modifier but Caps_Lock keysym
-#bindsym --release $mod+Caps_Lock exec /home/m/Dotfiles/scripts/window-switcher.sh
+#bindsym --release $mod+Caps_Lock exec /home/m/.local/bin/rustbar windows
 # omarchy-style app launches
 bindsym $mod+shift+f exec nautilus
 bindsym $mod+shift+n exec $term -e nvim
@@ -166,6 +167,11 @@ bindsym $mod+l exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh prev --else 'focu
 bindsym $mod+control+l move up
 bindsym $mod+semicolon focus right
 bindsym $mod+control+semicolon move right
+# the arrows too, focus only
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
 
 bindsym $mod+m focus output left
 bindsym $mod+control+m move container to output left
@@ -209,10 +215,11 @@ assign [app_id="sublime_merge"] workspace $ws_stuff
 # float-toggle.sh. NautilusPreviewer is sushi, the file preview in nautilus.
 for_window [app_id="^(org.pulseaudio.pavucontrol|nwg-displays)$" tiling] floating enable, border normal, resize set 88 ppt 88 ppt, move position center
 for_window [app_id="^(blueman-manager|org.gnome.Calculator|org.gnome.NautilusPreviewer)$"] floating enable, border normal
-# music players, bitwarden and telegram live in the scratchpad (scripts/scratchpad-ctl.sh);
-# only while still tiling, i.e. new: after a reload sway runs for_window again
-# on the next title change, which would pop the player up at every new song
-for_window [app_id="^(cmus|spotify|Bitwarden|org\.telegram\.desktop)$" tiling] move scratchpad, scratchpad show, border normal, resize set 88 ppt 88 ppt, move position center
+# music players, bitwarden, telegram and jarvis (scripts/jarvis.sh) live in
+# the scratchpad (scripts/scratchpad-ctl.sh); only while still tiling, i.e.
+# new: after a reload sway runs for_window again on the next title change,
+# which would pop the player up at every new song
+for_window [app_id="^(cmus|spotify|Bitwarden|org\.telegram\.desktop|jarvis)$" tiling] move scratchpad, scratchpad show, border normal, resize set 88 ppt 88 ppt, move position center
 
 ###########  
 ### style
@@ -252,14 +259,21 @@ set $purple               #8bc9eb
 ###########  
 ### bar
 ###########  
-# eww (linux/eww; the daemon and the windows are the eww and eww-bar user
-# services, which also follow hotplugs): one bar per output, re-done on reload
-exec_always /home/m/Dotfiles/scripts/bar.sh
+# rustbar (~/Projects/rustbar, config in linux/rustbar, the rustbar user
+# service): one bar per output, it follows hotplugs by itself. The exec
+# below only runs when sway starts: it imports the compositor's sockets
+# into the manager's environment first, synchronously — so the bar never
+# inherits a previous session's dead SWAYSOCK at a relogin, nor crashes
+# GTK on a missing WAYLAND_DISPLAY — then clears any start limit the
+# pre-session attempts may have left (tolerated: a fresh session has
+# nothing to clear) and starts the service. exec_always just makes sure
+# it runs after a reload too, where starting an active service is a no-op.
+exec sh -c 'systemctl --user import-environment SWAYSOCK WAYLAND_DISPLAY && { systemctl --user reset-failed rustbar.service || true; } && systemctl --user start rustbar.service'
+exec_always systemctl --user start rustbar.service
 
 ###########  
 ### apps
 ###########  
-exec dunst
 exec chromium
 exec betterbird
 exec Telegram
@@ -271,9 +285,9 @@ exec wl-paste --type text --watch cliphist store
 exec wl-paste --type image --watch cliphist store
 bindsym $mod+control+v exec /home/m/Dotfiles/scripts/clipboard-picker.sh
 # omarchy-style notification controls: dismiss / dismiss all / invoke / history replay / DND
-bindsym $mod+shift+comma exec dunstctl close
-bindsym $mod+shift+control+comma exec dunstctl close-all
-bindsym $mod+alt+comma exec dunstctl action
-bindsym $mod+shift+alt+comma exec dunstctl history-pop
-bindsym $mod+control+alt+comma exec /home/m/Dotfiles/scripts/notify-ctl.sh toggle
+bindsym $mod+shift+comma exec /home/m/.local/bin/rustbar notifications close
+bindsym $mod+shift+control+comma exec /home/m/.local/bin/rustbar notifications close-all
+bindsym $mod+alt+comma exec /home/m/.local/bin/rustbar notifications action
+bindsym $mod+shift+alt+comma exec /home/m/.local/bin/rustbar notifications pop
+bindsym $mod+control+alt+comma exec /home/m/.local/bin/rustbar notifications toggle
 

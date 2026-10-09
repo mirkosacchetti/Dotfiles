@@ -1,5 +1,5 @@
 #!/bin/bash
-# Night light: gammastep's user service, switched from the eww bar. gammastep follows the sun at the location in
+# Night light: gammastep's user service, switched from the bar (rustbar). gammastep follows the sun at the location in
 # ~/.config/gammastep/config.ini, so while on it only tints the screen at night.
 #
 #   status   JSON: filled lamp when running, outline when not, and as info
@@ -29,7 +29,7 @@ toggle)
     else
         systemctl --user start $UNIT
     fi
-    eww poll nightlight
+    rustbar refresh nightlight
     ;;
 *) echo "usage: ${0##*/} status|info|toggle" >&2; exit 1 ;;
 esac
