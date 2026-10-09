@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Jarvis
+GenericName=Desktop assistant
+Comment=Claude Code in ~/Agents/Jarvis, with eyes on the bar, sway and the journal (opens in the scratchpad)
+Exec=/home/m/Dotfiles/scripts/jarvis.sh
+Icon=/home/m/Dotfiles/applications/icons/jarvis.png
+Terminal=false
+StartupWMClass=jarvis
+SingleMainWindow=true
+Keywords=claude;claudio;agent;ai;assistant;debug;sway;rustbar;
+Categories=Development;
