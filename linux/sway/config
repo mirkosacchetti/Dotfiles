@@ -147,7 +147,7 @@ bindsym $mod+s layout toggle splitv splith
 bindsym $mod+d layout toggle stacking tabbed
 bindsym $mod+f fullscreen toggle
 
-bindsym $mod+z resize shrink width 10 px or 10 ppt
+bindsym $mod+z exec /home/m/.local/bin/lintel zen toggle
 bindsym $mod+x resize shrink height 10 px or 10 ppt
 bindsym $mod+c resize grow height 10 px or 10 ppt
 bindsym $mod+v resize grow width 10 px or 10 ppt
