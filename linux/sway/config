@@ -139,8 +139,8 @@ bindsym $mod+q kill
 bindsym $mod+w focus mode_toggle
 bindsym $mod+e exec /home/m/Dotfiles/scripts/float-toggle.sh
 bindsym $mod+r sticky toggle
-bindsym $mod+control+minus move scratchpad
-bindsym $mod+minus exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh toggle
+bindsym $mod+control+h move scratchpad
+bindsym $mod+h exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh toggle
 
 bindsym $mod+a split vertical
 bindsym $mod+s layout toggle splitv splith
@@ -182,7 +182,6 @@ bindsym $mod+control+period move workspace next
 bindsym $mod+slash focus output right
 bindsym $mod+control+slash move workspace to output right
 
-
 ###########  
 ### containers
 ###########  
@@ -215,12 +214,13 @@ assign [app_id="sublime_merge"] workspace $ws_stuff
 # float-toggle.sh. NautilusPreviewer is sushi, the file preview in nautilus.
 for_window [app_id="^(org.pulseaudio.pavucontrol|nwg-displays)$" tiling] floating enable, border normal, resize set 88 ppt 88 ppt, move position center
 for_window [app_id="^(blueman-manager|org.gnome.Calculator|org.gnome.NautilusPreviewer)$"] floating enable, border normal
-# music players, bitwarden, telegram and jarvis (scripts/jarvis.sh) live in
+# music players, bitwarden, telegram, obsidian, jarvis and the coder
+# assistant (scripts/jarvis.sh, scripts/coder.sh) live in
 # the scratchpad (scripts/scratchpad-ctl.sh), with a border but no title
 # bar (the bar shows the title, with the scratchpad's icon); only while
 # still tiling, i.e. new: after a reload sway runs for_window again on the
 # next title change, which would pop the player up at every new song
-for_window [app_id="^(cmus|spotify|Bitwarden|org\.telegram\.desktop|jarvis)$" tiling] move scratchpad, scratchpad show, border pixel 1, resize set 88 ppt 88 ppt, move position center
+for_window [app_id="^(cmus|Bitwarden|org\.telegram\.desktop|jarvis|coder|md\.obsidian\.Obsidian)$" tiling] move scratchpad, scratchpad show, border pixel 1, resize set 88 ppt 88 ppt, move position center
 
 ###########  
 ### style

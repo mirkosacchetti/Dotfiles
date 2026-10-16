@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Coder Assistant
+GenericName=Coding assistant
+Comment=opencode in ~/Agents/Coder on the Mac's local model (opens in the scratchpad)
+Exec=/home/m/Dotfiles/scripts/coder.sh
+Icon=/home/m/Dotfiles/applications/icons/coder.png
+Terminal=false
+StartupWMClass=coder
+SingleMainWindow=true
+Keywords=opencode;code;coder;agent;ai;assistant;ollama;
+Categories=Development;

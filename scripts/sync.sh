@@ -1,8 +1,10 @@
 #!/bin/bash
 # Sync: Tailscale and Syncthing, a switch each in the bar's toggles card
-# (lintel). Tailscale off is `tailscale down` (the daemon stays,
-# disconnected), Syncthing off is its user service stopped. tailscale
-# up/down needs this user as the daemon's operator, set once:
+# (lintel). Both switches hold across logins: Tailscale off is `tailscale
+# down` (the daemon stays, disconnected, and remembers), Syncthing off is
+# its user service stopped and disabled, so it does not come back at the
+# next login. tailscale up/down needs this user as the daemon's operator,
+# set once:
 #   sudo tailscale set --operator=$USER
 #
 #   status                  JSON {tailscale: {on, info}, syncthing: {on, info}}
@@ -36,8 +38,8 @@ case $1:$2 in
 status:) status ;;
 tailscale:on) run tailscale up ;;
 tailscale:off) run tailscale down ;;
-syncthing:on) run systemctl --user start syncthing.service ;;
-syncthing:off) run systemctl --user stop syncthing.service ;;
+syncthing:on) run systemctl --user enable --now syncthing.service ;;
+syncthing:off) run systemctl --user disable --now syncthing.service ;;
 *) echo "usage: ${0##*/} status | tailscale|syncthing on|off" >&2; exit 1 ;;
 esac
 [[ $1 == status ]] || lintel refresh sync
