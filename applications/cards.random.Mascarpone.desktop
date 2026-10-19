@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Mascarpone
+GenericName=Music player
+Comment=mpd client (opens in the scratchpad)
+Exec=/home/m/.local/bin/mascarpone
+Icon=/home/m/Dotfiles/applications/icons/mascarpone.png
+Terminal=false
+StartupWMClass=cards.random.Mascarpone
+SingleMainWindow=true
+Keywords=music;mpd;player;audio;
+Categories=AudioVideo;Audio;Player;

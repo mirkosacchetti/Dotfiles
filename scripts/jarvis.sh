@@ -8,14 +8,12 @@
 # .claude/settings.json there turns off). It starts there, so --continue
 # picks up Jarvis's own last conversation and no other Claude session's. lintel's MCP server gives it eyes and hands: the
 # bar's widgets, sway's windows, workspaces and outputs, screenshots,
-# sway commands, the journal. Launched again while running, it brings the
-# window up instead.
+# sway commands, the journal.
+#
+# tmux-launch.sh runs it in a tmux session: closing the window only
+# detaches, launched again it brings the window up or reopens one on the
+# running conversation.
 HOME_DIR=$HOME/Agents/Jarvis
-
-id=$(swaymsg -t get_tree | jq -r 'first(.. | objects | select(.app_id? == "jarvis") | .id) // empty')
-if [ -n "$id" ]; then
-    exec /home/m/Dotfiles/scripts/scratchpad-ctl.sh show "$id"
-fi
 
 # sway's own PATH may lack ~/.local/bin, where claude and lintel are
 export PATH="$HOME/.local/bin:$PATH"
@@ -28,7 +26,8 @@ if compgen -G "$HOME/.claude/projects/${HOME_DIR//[\/.]/-}/*.jsonl" > /dev/null;
     args+=(--continue)
 fi
 
-exec alacritty --class jarvis --title Jarvis -e claude "${args[@]}" \
+exec /home/m/Dotfiles/scripts/tmux-launch.sh jarvis Jarvis "$HOME_DIR" -- \
+    claude "${args[@]}" \
     --dangerously-skip-permissions \
     --name jarvis \
     --append-system-prompt "$(cat "$HOME_DIR/character")" \
