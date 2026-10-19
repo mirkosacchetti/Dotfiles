@@ -169,9 +169,10 @@ info = "{scratchpad.info}"
 class = "{scratchpad.class}"
 middle = "$S/scratchpad-ctl.sh move"
 right = "$S/scratchpad-ctl.sh toggle"
+card_on_right = true
 scroll_up = "$S/scratchpad-ctl.sh prev"
 scroll_down = "$S/scratchpad-ctl.sh next"
-hints = [["M 2", "move in / out"], ["R 3", "show / hide"], ["⇅ 4/5", "previous / next"]]
+hints = [["L 1", "show / hide"], ["M 2", "move in / out"], ["⇅ 4/5", "previous / next"]]
 
 [[module.buttons]]
 items = [{ text = "Close the window", command = "$S/scratchpad-ctl.sh close" }]
