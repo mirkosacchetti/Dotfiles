@@ -91,34 +91,6 @@ function sanitize_title
     echo $clean
 end
 
-function dl_audio
-    set rawtitle (yt-dlp --get-title $argv[1] 2>/dev/null)
-    if test $status -ne 0
-        echo "Error: Could not get video title"
-        return 1
-    end
-    set title (sanitize_title $rawtitle)
-    yt-dlp -f "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio" \
-        --extract-audio \
-        --audio-format opus \
-        --audio-quality 0 \
-        -o "~/Audio/dl_audio/$title.%(ext)s" \
-        $argv[1]
-end
-
-function dl_video
-    set rawtitle (yt-dlp --get-title $argv[1] 2>/dev/null)
-    if test $status -ne 0
-        echo "Error: Could not get video title"
-        return 1
-    end
-    set title (sanitize_title $rawtitle)
-    yt-dlp -f "bestvideo+bestaudio/best" \
-        --merge-output-format mp4 \
-        -o "~/Videos/dl_video/$title.%(ext)s" \
-        $argv[1]
-end
-
 function convert_audio_to_opus
     if test (count $argv) -lt 1
         echo "no input file"
