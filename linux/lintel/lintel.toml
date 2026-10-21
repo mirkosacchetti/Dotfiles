@@ -22,6 +22,11 @@ icon_size = 24
 terminal = "alacritty -e"             # for the entries that want one
 scratchpad = "$S/scratchpad-ctl.sh show {id}"   # a scratchpad window, placed the script's way
 
+[notifications]
+# seconds on screen per urgency (defaults 4 and 6); critical stays until closed
+timeout_low = 2
+timeout_normal = 3
+
 [pomodoro]
 work_minutes = 25
 short_break_minutes = 5
@@ -140,7 +145,7 @@ triggers = ["hover"]
 [[source]]
 name = "clock"
 kind = "clock"
-format = "%y-%m-%d %a %H:%M"
+format = "%a %d %b %H:%M"
 info_format = "%A %d %B %Y%nWeek %V, day %j"
 
 [[source]]
@@ -244,8 +249,8 @@ name = "title"
 title = "Window"
 # the scratchpad's icon instead of the window's while a scratchpad window
 # has the focus
-text = "| {scratchpad.class|if:󰄷|or:} {sway.title}"
-hide_when = "|  "
+text = "{scratchpad.class|if:󰄷|or:} {sway.title}"
+hide_when = " "
 max_chars = 60
 info = "{sway.title}"
 right = "$S/float-toggle.sh"
@@ -264,20 +269,20 @@ name = "mpris"
 side = "right"
 title = "Player"
 markup = true
-# a separator from the title, gone with the player
-text = "| {mpris.text}"
-hide_when = "| "
+text = "{mpris.text}"
 max_chars = 60
 info = "{mpris.info}"
 class = "{mpris.class}"
-middle = "playerctl next"
+# middle: the next player (a source, never a play); the next track in
+# the card
+middle = "playerctld shift"
 right = "playerctl play-pause"
 scroll_up = "$S/mpris.sh volume 5%+"
 scroll_down = "$S/mpris.sh volume 5%-"
-hints = [["M 2", "next track"], ["R 3", "play / pause"], ["⇅ 4/5", "volume"]]
+hints = [["M 2", "next player"], ["R 3", "play / pause"], ["⇅ 4/5", "volume"]]
 
 [[module.buttons]]
-items = [{ text = "Next player", command = "playerctld shift" }]
+items = [{ text = "Next track", command = "playerctl next" }]
 
 [[module]]
 name = "recording"
@@ -368,9 +373,22 @@ text = "{battery.text}"
 info = "{battery.info}"
 class = "{battery.class}"
 
-# the system's controls in one card: the uptime, the power actions, the
-# CPU's power profile (the one in use is marked), and switches for
-# Tailscale, Syncthing and the night light
+# the date and time; the card carries the month's calendar (the old deca
+# window, rebuilt inside): ‹ and › or a scroll change the month, the month
+# name returns to today, q or Escape closes
+[[module]]
+name = "clock"
+kind = "calendar"
+side = "right"
+title = "Calendar"
+text = "{clock.text}"
+info = "{clock.info}"
+hints = [["‹ ›", "month"], ["L 1", "today"]]
+
+# the system's controls in one card: the power actions under the title,
+# the uptime, the CPU's power profile (the one in use is marked),
+# switches for Tailscale, Syncthing, the night light and zen, and the
+# last five notifications
 [[module]]
 name = "controls"
 side = "right"
@@ -379,11 +397,11 @@ text = ""
 info = "{power-info}"
 
 [[module.buttons]]
-label = "Power"
+top = true
 items = [
+  { text = "󰍃 Logout", command = "swaymsg exit" },
   { text = "󰌾 Lock", command = "swaylock" },
   { text = "󰤄 Suspend", command = "systemctl suspend" },
-  { text = "󰍃 Logout", command = "swaymsg exit" },
   { text = "󰜉 Reboot", command = "systemctl reboot" },
   { text = "󰐥 Off", command = "systemctl poweroff" },
 ]
@@ -425,14 +443,9 @@ state = "{zen.active}"
 on = "lintel zen on"
 off = "lintel zen off"
 
-# the date and time; the card carries the month's calendar (the old deca
-# window, rebuilt inside): ‹ and › or a scroll change the month, the month
-# name returns to today, q or Escape closes
-[[module]]
-name = "clock"
-kind = "calendar"
-side = "right"
-title = "Calendar"
-text = "{clock.text}"
-info = "{clock.info}"
-hints = [["‹ ›", "month"], ["L 1", "today"]]
+[module.rows]
+label = "Notifications"
+items = "notifications.recent"
+max = 5
+title = "{clock}  {app}"
+detail = "{text}"
