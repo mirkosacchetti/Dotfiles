@@ -164,7 +164,7 @@ kind = "list"
 items = "sway.workspaces"
 item_text = "{name}"
 item_class = "{focused|if:focused} {urgent|if:urgent} {visible|if:visible}"
-item_click = "swaymsg workspace '{name}'"
+item_click = "swaymsg 'workspace \"{name}\"'"
 
 [[module]]
 name = "scratchpad"
