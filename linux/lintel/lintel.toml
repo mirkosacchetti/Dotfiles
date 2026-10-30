@@ -159,14 +159,6 @@ kind = "timer"
 # ---- modules: left -----------------------------------------------------
 
 [[module]]
-name = "workspaces"
-kind = "list"
-items = "sway.workspaces"
-item_text = "{name}"
-item_class = "{focused|if:focused} {urgent|if:urgent} {visible|if:visible}"
-item_click = "swaymsg 'workspace \"{name}\"'"
-
-[[module]]
 name = "scratchpad"
 title = "Scratchpad"
 text = "{scratchpad.text}"
@@ -181,6 +173,14 @@ hints = [["L 1", "show / hide"], ["M 2", "move in / out"], ["⇅ 4/5", "previous
 
 [[module.buttons]]
 items = [{ text = "Close the window", command = "$S/scratchpad-ctl.sh close" }]
+
+[[module]]
+name = "workspaces"
+kind = "list"
+items = "sway.workspaces"
+item_text = "{name}"
+item_class = "{focused|if:focused} {urgent|if:urgent} {visible|if:visible}"
+item_click = "swaymsg 'workspace \"{name}\"'"
 
 [[module]]
 name = "mode"
