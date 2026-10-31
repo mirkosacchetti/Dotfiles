@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Mascarpone TV
+GenericName=Media center
+Comment=Series, films, music, podcasts and books from the shared folder
+Exec=/home/m/.local/bin/mascarpone-tv
+Icon=/home/m/Dotfiles/applications/icons/mascarpone.png
+Terminal=false
+StartupWMClass=cards.random.MascarponeTV
+SingleMainWindow=true
+Keywords=video;film;series;tv;mpv;music;podcast;book;
+Categories=AudioVideo;Video;Player;
